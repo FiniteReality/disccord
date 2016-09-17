@@ -1,3 +1,7 @@
+# vscode database stuff
+*.db
+*.db-wal
+
 # Object files
 *.o
 *.ko
