@@ -12,7 +12,7 @@ Join the development server: [![Discord](https://discordapp.com/api/guilds/22669
 
 On Debian Jessie you can retrieve these using:
 ```shell
-sudo apt-get install libwbesockets-dev libcurl4-openssl-dev libssl-dev \
+sudo apt-get install libwebsockets-dev libcurl4-openssl-dev libssl-dev \
 libsodium-dev
 ``` 
 
