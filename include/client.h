@@ -15,5 +15,6 @@ LIB_EXPORT discord_client_t* client_create(const char* token);
 LIB_EXPORT void client_free(discord_client_t* client);
 
 LIB_EXPORT void client_connect(discord_client_t* client);
+LIB_EXPORT void client_disconnect(discord_client_t* client);
 
 #endif /* _client_h_ */
