@@ -2,6 +2,12 @@
 *.db
 *.db-wal
 
+# Build directory
+bin/*
+
+# Test files
+test/*_test
+
 # Object files
 *.o
 *.ko
