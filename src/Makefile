@@ -4,20 +4,23 @@
 CC=gcc
 AR=ar
 # Compiler flags
-CFLAGS=-I.
+FLAGS=-std=gnu99 -I../include
+CFLAGS=-fPIC -Wpedantic -Wall -Wextra -march=native
+LDFLAGS=-shared
+ARFLAGS=-rv
 
-SOURCES=discord.c
+SOURCES=client.c
 OBJECTS=$(SOURCES:.c=.o)
-LIBRARY=disccord
+TARGET=libdisccord.so
 
 .c.o:
-	$(CC) -c -o $@ $< $(CLFAGS)
+	$(CC) $(FLAGS) $(CFLAGS) -c -o $@ $<
 
-lib$(LIBRARY).a: $(OBJECTS)
-	$(AR) -cvq $@ $(OBJECTS)
+$(TARGET): $(OBJECTS)
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $<
 
 clean:
 	rm -rf *.o
-	rm -rf *.a
+	rm -rf *.so
 
-all: $(SOURCES) lib$(LIBRARY).a
+all: $(SOURCES) $(TARGET)
