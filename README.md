@@ -1,6 +1,8 @@
 # disccord #
 A discord library written in C
 
+Join the development server: [![Discord](https://discordapp.com/api/guilds/226692368148070420/widget.png)](https://discord.gg/syNMXxM)
+
 ## Dependencies ##
 
 - [libwebsockets](https://libwebsockets.org/)
