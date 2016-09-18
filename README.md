@@ -5,16 +5,17 @@ Join the development server: [![Discord](https://discordapp.com/api/guilds/22669
 
 ## Dependencies ##
 
-- [libwebsockets](https://libwebsockets.org/)
+- [libwebsockets 2.0](https://libwebsockets.org/)
 - [libcurl](https://curl.haxx.se/libcurl/)
 - [openssl](https://www.openssl.org/)
 - [libsodium](https://download.libsodium.org/doc/)
 
 On Debian Jessie you can retrieve these using:
 ```shell
-sudo apt-get install libwebsockets-dev libcurl4-openssl-dev libssl-dev \
+sudo apt-get install libcurl4-openssl-dev libssl-dev \
 libsodium-dev
-``` 
+```
+You may have to build libwebsockets yourself if you do not have a package for it.
 
 ## Building ##
 Building should be as simple as using the included makefile:

@@ -3,12 +3,14 @@
 
 #include <pthread.h>
 
+#include "websocket.h"
 #include "discord.h"
 
 typedef struct {
-	const char* _token;
+	char* _token;
 	/* TODO: fill this out with stuff */
-	pthread_t *_gateway_thread;
+	pthread_t* _gateway_thread;
+	client_websocket_t* _client_socket; 
 } discord_client_t;
 
 LIB_EXPORT discord_client_t* client_create(const char* token);

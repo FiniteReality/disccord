@@ -2,19 +2,18 @@
 
 # C compiler
 CC=gcc
-FLAGS=-I../include -L../bin -ldisccord
+FLAGS=-I../include -ldisccord
 CFLAGS=-fPIC -Wpedantic -Wall -Wextra -march=native
 
-SOURCES=create_client.c
+SOURCES=client_create.c client_connect.c
 TESTS=$(SOURCES:.c=_test)
 
+%_test: %.c
+	$(CC) $(FLAGS) $(CFLAGS) -o $@ $<
+	valgrind ./$@
 
 clean:
-	rm -rf *_test
+	rm -rf *.test
 	rm -rf *.so
-
-$(TESTS): $(SOURCES)
-	$(CC) $(FLAGS) $(CFLAGS) -o $@ $<
-	export LD_LIBRARY_PATH=../bin && valgrind ./$@
 
 all: $(TESTS)

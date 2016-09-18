@@ -1,33 +1,34 @@
-.PHONY: all clean install
+.PHONY: all clean install uninstall
 
 # C compiler
 CC=gcc
 AR=ar
 # Compiler flags
-FLAGS=-std=gnu99 -I../include -lpthread
+FLAGS=-std=gnu99 -I../include -lpthread -lwebsockets
 CFLAGS=-fPIC -Wpedantic -Wall -Wextra -march=native
 LDFLAGS=-shared
 ARFLAGS=-rv
 
-SOURCES=client.c
+SOURCES=websocket.c client.c
 OBJECTS=$(SOURCES:.c=.o)
 TARGET=libdisccord.so
 
-INSTALL=../bin/
+INSTALL=/usr/local/lib/
 
 .c.o:
 	$(CC) $(FLAGS) $(CFLAGS) -c -o $@ $<
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $<
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $(OBJECTS)
 
 install: $(TARGET)
-	if [ ! -d "$(INSTALL)" ]; then mkdir $(INSTALL); fi
 	cp $(TARGET) $(INSTALL)$(TARGET)
+
+uninstall: $(INSTALL)$(TARGET)
+	rm $(INSTALL)$(TARGET)
 
 clean:
 	rm -rf *.o
 	rm -rf *.so
-	rm -rf $(INSTALL)
 
-all: $(SOURCES) $(TARGET) install
+all: $(SOURCES) $(TARGET)

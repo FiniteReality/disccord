@@ -1,4 +1,4 @@
-.PHONY: all src clean test
+.PHONY: all src clean test install
 
 clean:
 	make -C src clean
@@ -11,3 +11,9 @@ all: src
 
 test: all
 	make -C test all
+
+install:
+	make -C src install
+
+uninstall:
+	make -C src uninstall
