@@ -46,9 +46,7 @@ void client_free(discord_client_t* client) {
 }
 
 void client_connect(discord_client_t* client) {
-	/* Connecting using libwebsocket is strange.
-	 * If anybody wants to figure this out, I'd be glad.
-	 */
+	
 }
 
 void client_disconnect(discord_client_t* client) {
@@ -58,7 +56,7 @@ void client_disconnect(discord_client_t* client) {
 	if (client->_gateway_thread != NULL) {
 		pthread_cancel(*client->_gateway_thread);
 		pthread_join(client->_gateway_thread, NULL);
-		
+
 		free(client->_gateway_thread);
 	}
 }

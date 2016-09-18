@@ -1,6 +1,7 @@
 # vscode database stuff
 *.db
 *.db-wal
+*.db-shm
 
 # Build directory
 bin/*
