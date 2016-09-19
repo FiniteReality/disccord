@@ -33,12 +33,13 @@ discord_client_t* client_create(const char* token) {
 }
 
 void client_free(discord_client_t* client) {
-	/* do not try to free if we haven't tried to connect yet */
+	/* do not try to free if we don't exist */
 	if (client->_gateway_thread != NULL) {
 		pthread_cancel(*client->_gateway_thread);
 		pthread_join(*client->_gateway_thread, NULL);
 
 		free(client->_gateway_thread);
+		client->_gateway_thread = NULL;
 	}
 
 	free(client->_token);
@@ -47,23 +48,28 @@ void client_free(discord_client_t* client) {
 
 void *client_listen(void* arg) {
 	discord_client_t* client = arg;
+	client->_client_socket = websocket_create();
+	websocket_connect(client->_client_socket, "wss://gateway.discord.gg/");
 	return NULL;
 }
 
 void client_connect(discord_client_t* client) {
-	client->_client_socket = websocket_create();
-	pthread_create(client->_gateway_thread, NULL, client_listen, &client);
-	websocket_connect(client->_client_socket, "wss://gateway.discord.gg/");
+	pthread_t *gateway_thread = malloc(sizeof(pthread_t));
+	pthread_create(gateway_thread, NULL, client_listen, client);
+	client->_gateway_thread = gateway_thread;
 }
 
 void client_disconnect(discord_client_t* client) {
-	/* TODO: implement this after client_connect */
+	websocket_disconnect(client->_client_socket);
 
-	// cancel the gateway thread if it exists
+	/* cancel the gateway thread if it exists */
 	if (client->_gateway_thread != NULL) {
 		pthread_cancel(*client->_gateway_thread);
 		pthread_join(*client->_gateway_thread, NULL);
 
 		free(client->_gateway_thread);
+		client->_gateway_thread = NULL;
 	}
+
+	websocket_free(client->_client_socket);
 }
