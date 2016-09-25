@@ -63,23 +63,32 @@ static char* callback_reasons[] = {
 static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons reason,
 		void* user, void* in, size_t len)
 {
+	printf("Callback %s (%i)\n", callback_reasons[reason], reason);
 	switch (reason) {
+		case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
+			if (in != NULL && len > 0) {
+				printf("Connection error: (%zu) %s\n", len, (char*)in);
+			} else {
+				printf("Unknown connection error\n");
+			}
+			break;
 		case LWS_CALLBACK_CLIENT_ESTABLISHED:
-			printf("Client established\n");
+			printf("Connection established\n");
 			break;
 		case LWS_CALLBACK_CLOSED:
 			printf("Session closed\n");
 			break;
 		case LWS_CALLBACK_RECEIVE:
+			lws_callback_on_writable(wsi);
 		case LWS_CALLBACK_CLIENT_RECEIVE:
-			printf("Data received\n");
 			((char*)in)[len] = '\0';
-			printf("Received data: %zu bytes\n%s", len, (char*)in);
+			printf("Received data: %zu bytes\n%s\n", len, (char*)in);
 			break;
 		case LWS_CALLBACK_GET_THREAD_ID:
 			return pthread_self();
+		case LWS_CALLBACK_CLIENT_CONFIRM_EXTENSION_SUPPORTED:
+			return 1;
 		default:
-			printf("Unknown callback %s (%i)\n", callback_reasons[reason], reason);
 			break;
 	}
 
@@ -92,10 +101,21 @@ static struct lws_protocols protocols[] = {
 };
 
 static struct lws_extension exts[] = {
-	{ NULL, NULL, NULL } /* no exts */
+	{ 
+		"permessage-deflate",
+		lws_extension_callback_pm_deflate,
+		"permessage-deflate; client_no_context_takeover; client_max_window_bits"
+	},
+	{
+		"deflate-frame",
+		lws_extension_callback_pm_deflate,
+		"deflate_frame"
+	},
+	{ NULL, NULL, NULL } /* end */
 };
 
 client_websocket_t* websocket_create() {
+	lws_set_log_level(1023, NULL); // bitwise OR of all of the LLL_ constants
 	struct lws_context_creation_info info;
 	memset(&info, 0, sizeof(info));
 
@@ -103,7 +123,7 @@ client_websocket_t* websocket_create() {
 	info.gid = -1;
 	info.uid = -1;
 	info.protocols = protocols;
-	info.options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+	info.options |= LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
 
 	client_websocket_t *client = malloc(sizeof(client_websocket_t));
 	
@@ -145,13 +165,15 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 	info.ietf_version_or_minus_one = -1;
 	info.client_exts = exts;
 
+	printf("protocol: %s\naddress: %s\nport: %i\npath: %s\nhost: %s\norigin: %s\n", prot, info.address, info.port, info.path, info.host, info.origin);
+
 	free(address_internal);
 
 	lws_client_connect_via_info(&info);
 	client->_connect = 1;
 
 	while (client->_connect) {
-		lws_service(client->_context, 500);
+		lws_service(client->_context, 20);
 	}
 }
 

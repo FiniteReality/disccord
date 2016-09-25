@@ -45,7 +45,7 @@ void client_free(discord_client_t* client) {
 void *client_listen(void* arg) {
 	discord_client_t* client = arg;
 	client->_client_socket = websocket_create();
-	websocket_connect(client->_client_socket, "wss://gateway.discord.gg/");
+	websocket_connect(client->_client_socket, "wss://gateway.discord.gg");
 	return NULL;
 }
 
