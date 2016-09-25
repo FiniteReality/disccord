@@ -2,7 +2,7 @@
 
 # C compiler
 CC=gcc
-FLAGS=-I../include -L../src -ldisccord
+FLAGS=-I../include -L../src -ldisccord -lssl -lcrypto
 CFLAGS=-fPIC -Wpedantic -Wall -Wextra -march=native
 
 SOURCES=client_create.c client_connect.c
@@ -16,4 +16,4 @@ clean:
 	rm -rf *_test
 	rm -rf *.so
 
-all: $(TESTS)
+all: clean $(TESTS)

@@ -33,13 +33,9 @@ discord_client_t* client_create(const char* token) {
 }
 
 void client_free(discord_client_t* client) {
-	/* do not try to free if we don't exist */
+	/* disconnect the websocket if we are connected */
 	if (client->_gateway_thread != NULL) {
-		pthread_cancel(*client->_gateway_thread);
-		pthread_join(*client->_gateway_thread, NULL);
-
-		free(client->_gateway_thread);
-		client->_gateway_thread = NULL;
+		client_disconnect(client);
 	}
 
 	free(client->_token);

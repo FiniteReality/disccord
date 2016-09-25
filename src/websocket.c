@@ -2,7 +2,63 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <openssl/ssl.h>
+#include <pthread.h>
+
 #include "websocket.h"
+
+/* This is here purely for debugging reasons. */
+static char* callback_reasons[] = {
+	"LWS_CALLBACK_ESTABLISHED",
+	"LWS_CALLBACK_CLIENT_CONNECTION_ERROR",
+	"LWS_CALLBACK_CLIENT_FILTER_PRE_ESTABLISH",
+	"LWS_CALLBACK_CLIENT_ESTABLISHED",
+	"LWS_CALLBACK_CLOSED",
+	"LWS_CALLBACK_CLOSED_HTTP",
+	"LWS_CALLBACK_RECEIVE",
+	"LWS_CALLBACK_RECEIVE_PONG",
+	"LWS_CALLBACK_CLIENT_RECEIVE",
+	"LWS_CALLBACK_CLIENT_RECEIVE_PONG",
+	"LWS_CALLBACK_CLIENT_WRITEABLE",
+	"LWS_CALLBACK_SERVER_WRITEABLE",
+	"LWS_CALLBACK_HTTP",
+	"LWS_CALLBACK_HTTP_BODY",
+	"LWS_CALLBACK_HTTP_BODY_COMPLETION",
+	"LWS_CALLBACK_FILE_COMPLETION",
+	"LWS_CALLBACK_HTTP_WRITEABLE",
+	"LWS_CALLBACK_FILTER_NETWORK_CONNECTION",
+	"LWS_CALLBACK_FILTER_HTTP_CONNECTION",
+	"LWS_CALLBACK_SERVER_NEW_CLIENT_INSTANTIATED",
+	"LWS_CALLBACK_FILTER_PROTOCOL_CONNECTION",
+	"LWS_CALLBACK_OPENSSL_LOAD_EXTRA_CLIENT_VERIFY_CERTS",
+	"LWS_CALLBACK_OPENSSL_LOAD_EXTRA_SERVER_VERIFY_CERTS",
+	"LWS_CALLBACK_OPENSSL_PERFORM_CLIENT_CERT_VERIFICATION",
+	"LWS_CALLBACK_CLIENT_APPEND_HANDSHAKE_HEADER",
+	"LWS_CALLBACK_CONFIRM_EXTENSION_OKAY",
+	"LWS_CALLBACK_CLIENT_CONFIRM_EXTENSION_SUPPORTED",
+	"LWS_CALLBACK_PROTOCOL_INIT",
+	"LWS_CALLBACK_PROTOCOL_DESTROY",
+	"LWS_CALLBACK_WSI_CREATE",
+	"LWS_CALLBACK_WSI_DESTROY",
+	"LWS_CALLBACK_GET_THREAD_ID",
+	"LWS_CALLBACK_ADD_POLL_FD",
+	"LWS_CALLBACK_DEL_POLL_FD",
+	"LWS_CALLBACK_CHANGE_MODE_POLL_FD",
+	"LWS_CALLBACK_LOCK_POLL",
+	"LWS_CALLBACK_UNLOCK_POLL",
+	"LWS_CALLBACK_OPENSSL_CONTEXT_REQUIRES_PRIVATE_KEY",
+	"LWS_CALLBACK_WS_PEER_INITIATED_CLOSE",
+	"LWS_CALLBACK_WS_EXT_DEFAULTS",
+	"LWS_CALLBACK_CGI",
+	"LWS_CALLBACK_CGI_TERMINATED",
+	"LWS_CALLBACK_CGI_STDIN_DATA",
+	"LWS_CALLBACK_CGI_STDIN_COMPLETED",
+	"LWS_CALLBACK_ESTABLISHED_CLIENT_HTTP",
+	"LWS_CALLBACK_CLOSED_CLIENT_HTTP",
+	"LWS_CALLBACK_RECEIVE_CLIENT_HTTP",
+	"LWS_CALLBACK_COMPLETED_CLIENT_HTTP",
+	"LWS_CALLBACK_RECEIVE_CLIENT_HTTP_READ"
+};
 
 static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons reason,
 		void* user, void* in, size_t len)
@@ -11,33 +67,19 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 		case LWS_CALLBACK_CLIENT_ESTABLISHED:
 			printf("Client established\n");
 			break;
-		case LWS_CALLBACK_ESTABLISHED:
-			printf("Client connection established\n");
-			break;
 		case LWS_CALLBACK_CLOSED:
 			printf("Session closed\n");
 			break;
 		case LWS_CALLBACK_RECEIVE:
 		case LWS_CALLBACK_CLIENT_RECEIVE:
 			printf("Data received\n");
+			((char*)in)[len] = '\0';
+			printf("Received data: %zu bytes\n%s", len, (char*)in);
 			break;
-		case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
-			printf("Connection error\n");
-			break;
-		case LWS_CALLBACK_CLIENT_CONFIRM_EXTENSION_SUPPORTED:
-			printf("Confirm extension\n");
-			break;
-		case LWS_CALLBACK_RECEIVE_CLIENT_HTTP:
-			printf("Receive client HTTP\n");
-			break;
-		case LWS_CALLBACK_COMPLETED_CLIENT_HTTP:
-			printf("Completed client HTTP\n");
-			break;
-		case LWS_CALLBACK_OPENSSL_LOAD_EXTRA_CLIENT_VERIFY_CERTS:
-			printf("Verify certs\n");
-			break;
+		case LWS_CALLBACK_GET_THREAD_ID:
+			return pthread_self();
 		default:
-			printf("Unknown callback %i\n", reason);
+			printf("Unknown callback %s (%i)\n", callback_reasons[reason], reason);
 			break;
 	}
 
@@ -50,9 +92,8 @@ static struct lws_protocols protocols[] = {
 };
 
 static struct lws_extension exts[] = {
-	{ NULL, NULL, NULL }
+	{ NULL, NULL, NULL } /* no exts */
 };
-
 
 client_websocket_t* websocket_create() {
 	struct lws_context_creation_info info;
@@ -62,6 +103,7 @@ client_websocket_t* websocket_create() {
 	info.gid = -1;
 	info.uid = -1;
 	info.protocols = protocols;
+	info.options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
 
 	client_websocket_t *client = malloc(sizeof(client_websocket_t));
 	
@@ -77,6 +119,7 @@ void websocket_free(client_websocket_t* client) {
 		websocket_disconnect(client);
 	}
 
+	/* free the context */
 	lws_context_destroy(client->_context);
 
 	free(client);
@@ -84,6 +127,7 @@ void websocket_free(client_websocket_t* client) {
 
 void websocket_connect(client_websocket_t* client, const char* address) {
 	struct lws_client_connect_info info;
+	memset(&info, 0, sizeof(info));
 
 	info.context = client->_context;
 	info.ssl_connection = 1;
@@ -102,7 +146,6 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 	info.client_exts = exts;
 
 	free(address_internal);
-	free(prot);
 
 	lws_client_connect_via_info(&info);
 	client->_connect = 1;
