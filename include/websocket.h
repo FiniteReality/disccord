@@ -7,6 +7,7 @@
 
 typedef struct {
 	struct lws_context* _context;
+	char* _address;
 	int _connect;
 } client_websocket_t;
 

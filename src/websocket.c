@@ -142,6 +142,7 @@ void websocket_free(client_websocket_t* client) {
 	/* free the context */
 	lws_context_destroy(client->_context);
 
+	free(client->_address);
 	free(client);
 }
 
@@ -152,12 +153,12 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 	info.context = client->_context;
 	info.ssl_connection = 1;
 
-	char* address_internal = malloc(strlen(address) + 1);
-	memcpy(address_internal, address, strlen(address));
+	client->_address = malloc(strlen(address) + 1);
+	memcpy(client->_address, address, strlen(address));
 
 	const char* prot;
 
-	if (lws_parse_uri(address_internal, &prot, &info.address, &info.port, &info.path))
+	if (lws_parse_uri(client->_address, &prot, &info.address, &info.port, &info.path))
 		return;
 
 	info.host = info.address;
@@ -166,8 +167,6 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 	info.client_exts = exts;
 
 	printf("protocol: %s\naddress: %s\nport: %i\npath: %s\nhost: %s\norigin: %s\n", prot, info.address, info.port, info.path, info.host, info.origin);
-
-	free(address_internal);
 
 	lws_client_connect_via_info(&info);
 	client->_connect = 1;
