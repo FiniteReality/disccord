@@ -4,7 +4,7 @@
 CC=gcc
 AR=ar
 # Compiler flags
-FLAGS=-std=gnu11 -I. -I../include -lpthread -lwebsockets -lssl -lcrypto
+FLAGS=-std=gnu11 -I. -I../include -lpthread -lcjson -lwebsockets -lssl -lcrypto
 CFLAGS=-fPIC -Wpedantic -Wall -Wextra -march=native
 LDFLAGS=-shared
 ARFLAGS=-rv

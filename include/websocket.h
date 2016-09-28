@@ -16,7 +16,7 @@ typedef struct {
 	uint8_t _connection_attempts;
 } client_websocket_t;
 
-client_websocket_t* websocket_create(struct lws_context* parent);
+client_websocket_t* websocket_create();
 void websocket_free(client_websocket_t* client);
 
 void websocket_connect(client_websocket_t* client, const char* address);
