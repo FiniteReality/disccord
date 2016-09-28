@@ -63,6 +63,7 @@ static char* callback_reasons[] = {
 static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons reason,
 		void* user, void* in, size_t len)
 {
+	client_websocket_t* client = (client_websocket_t*)user;
 	printf("Callback %s (%i)\n", callback_reasons[reason], reason);
 	switch (reason) {
 		case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
@@ -71,9 +72,12 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 			} else {
 				printf("Unknown connection error\n");
 			}
+			client->_connection_attempts++;
+			client->_connected = 0;
 			break;
 		case LWS_CALLBACK_CLIENT_ESTABLISHED:
 			printf("Connection established\n");
+			client->_connected = 2;
 			break;
 		case LWS_CALLBACK_CLOSED:
 			printf("Session closed\n");
@@ -96,7 +100,7 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 }
 
 static struct lws_protocols protocols[] = {
-	{ "test-protocol", callback_test_protocol, 0, 20 },
+	{ "test-protocol", callback_test_protocol, 0, 1024 },
 	{ NULL, NULL, 0, 0 } /* end */
 };
 
@@ -115,7 +119,7 @@ static struct lws_extension exts[] = {
 };
 
 client_websocket_t* websocket_create() {
-	lws_set_log_level(1023, NULL); // bitwise OR of all of the LLL_ constants
+	lws_set_log_level(1023 ^ LLL_PARSER ^ LLL_EXT, NULL); // bitwise OR of all of the LLL_ constants
 	struct lws_context_creation_info info;
 	memset(&info, 0, sizeof(info));
 
@@ -126,6 +130,7 @@ client_websocket_t* websocket_create() {
 	info.options |= LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
 
 	client_websocket_t *client = malloc(sizeof(client_websocket_t));
+	info.user = client;
 	
 	struct lws_context* context = lws_create_context(&info);
 	client->_context = context;
@@ -141,8 +146,10 @@ void websocket_free(client_websocket_t* client) {
 
 	/* free the context */
 	lws_context_destroy(client->_context);
+	ERR_remove_thread_state(NULL);
 
 	free(client->_address);
+	free(client->_path);
 	free(client);
 }
 
@@ -152,15 +159,24 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 
 	info.context = client->_context;
 	info.ssl_connection = 1;
+	info.userdata = client;
 
-	client->_address = malloc(strlen(address) + 1);
-	memcpy(client->_address, address, strlen(address));
+	size_t s = strlen(address);
+	client->_address = malloc(s + 1);
+	memcpy(client->_address, address, s);
 
 	const char* prot;
+	const char* path;
 
-	if (lws_parse_uri(client->_address, &prot, &info.address, &info.port, &info.path))
+	if (lws_parse_uri(client->_address, &prot, &info.address, &info.port, &path))
 		return;
 
+	s = strlen(path);
+	client->_path = malloc(s + 2);
+	client->_path[0] = '/';
+	memcpy(client->_path + 1, path, s);
+
+	info.path = client->_path;
 	info.host = info.address;
 	info.origin = info.address;
 	info.ietf_version_or_minus_one = -1;
@@ -169,13 +185,17 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 	printf("protocol: %s\naddress: %s\nport: %i\npath: %s\nhost: %s\norigin: %s\n", prot, info.address, info.port, info.path, info.host, info.origin);
 
 	lws_client_connect_via_info(&info);
-	client->_connect = 1;
+	client->_remain_connected = 1;
 
-	while (client->_connect) {
-		lws_service(client->_context, 20);
+	while (client->_remain_connected) {
+		if (client->_connection_attempts < MAX_CONNECT_ATTEMPTS && !client->_connected) {
+			lws_client_connect_via_info(&info);
+			client->_connected = 1;
+		}
+		lws_service(client->_context, 500);
 	}
 }
 
 void websocket_disconnect(client_websocket_t* client) {
-	client->_connect = 0;
+	client->_remain_connected = 0;
 }

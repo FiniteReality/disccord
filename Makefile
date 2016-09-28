@@ -1,13 +1,13 @@
-.PHONY: all src clean test install
+.PHONY: all lib clean test install
 
 clean:
-	make -C src clean
-	make -C test clean 
+	make -C lib clean
+	make -C test clean
 
-src:
-	make -C src all
+lib:
+	make -C lib all
 
-all: src
+all: lib
 
 test: all
 	make -C test all

@@ -5,17 +5,22 @@
 
 #include "discord.h"
 
+#define MAX_CONNECT_ATTEMPTS 3
+
 typedef struct {
 	struct lws_context* _context;
 	char* _address;
-	int _connect;
+	char* _path;
+	uint8_t _remain_connected;
+	uint8_t _connected;
+	uint8_t _connection_attempts;
 } client_websocket_t;
 
-LIB_EXPORT client_websocket_t* websocket_create();
-LIB_EXPORT void websocket_free(client_websocket_t* client);
+client_websocket_t* websocket_create(struct lws_context* parent);
+void websocket_free(client_websocket_t* client);
 
-LIB_EXPORT void websocket_connect(client_websocket_t* client, const char* address);
+void websocket_connect(client_websocket_t* client, const char* address);
 
-LIB_EXPORT void websocket_disconnect(client_websocket_t* client);
+void websocket_disconnect(client_websocket_t* client);
 
 #endif /* _websocket_h_ */

@@ -1,5 +1,3 @@
-/* TODO: put stuff in this */
-
 #define LIB_EXPORT __attribute__((__visibility__("default")))
 
 #define DISCCORD_PROJECT_URL ("https://github.com/FiniteReality/disccord")
@@ -13,3 +11,6 @@
 	("https://discordapp.com/api/v" DISCCORD_API_VERSION "/")
 #define DISCORD_CDN_URL ("https://discordcdn.com/")
 #define DISCORD_INVITE_URL ("https://discord.gg/")
+
+LIB_EXPORT void disccord_init();
+LIB_EXPORT void disccord_cleanup();

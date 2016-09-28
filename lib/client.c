@@ -45,7 +45,10 @@ void client_free(discord_client_t* client) {
 void *client_listen(void* arg) {
 	discord_client_t* client = arg;
 	client->_client_socket = websocket_create();
-	websocket_connect(client->_client_socket, "wss://gateway.discord.gg");
+#define CONNECT_TO "wss://gateway.discord.gg/?v=6&encoding=json"
+//#define CONNECT_TO "ws://localhost:5000"
+	websocket_connect(client->_client_socket, CONNECT_TO);
+#undef CONNECT_TO
 	return NULL;
 }
 
