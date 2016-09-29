@@ -67,32 +67,47 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 	printf("Callback %s (%i)\n", callback_reasons[reason], reason);
 	switch (reason) {
 		case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
+		{
 			if (in != NULL && len > 0) {
 				printf("Connection error: (%zu) %s\n", len, (char*)in);
 			} else {
 				printf("Unknown connection error\n");
 			}
-			client->_connection_attempts++;
 			client->_connected = 0;
 			break;
+		}
 		case LWS_CALLBACK_CLIENT_ESTABLISHED:
+		{
 			printf("Connection established\n");
 			break;
+		}
 		case LWS_CALLBACK_CLOSED:
+		{
 			printf("Session closed\n");
 			break;
-		case LWS_CALLBACK_RECEIVE:
-			lws_callback_on_writable(wsi);
+		}
 		case LWS_CALLBACK_CLIENT_RECEIVE:
-			((char*)in)[len] = '\0';
-			printf("Received data: %zu bytes\n%s\n", len, (char*)in);
+		{
+			char* data = (char*)in;
+			data[len] = '\0';
+
+			if (client->_callbacks->on_receive)
+				return client->_callbacks->on_receive(client, data, len);
+
 			break;
+		}
 		case LWS_CALLBACK_GET_THREAD_ID:
+		{
 			return pthread_self();
+		}
 		case LWS_CALLBACK_CLIENT_CONFIRM_EXTENSION_SUPPORTED:
+		{
 			return 1;
+		}
 		default:
+		{
 			break;
+		}
 	}
 
 	return 0;
@@ -100,7 +115,7 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 
 static struct lws_protocols protocols[] = {
 	{ "test-protocol", callback_test_protocol, 0, 1024 },
-	{ NULL, NULL, 0, 0 } /* end */
+	{ NULL, NULL, NULL, NULL } /* end */
 };
 
 static struct lws_extension exts[] = {
@@ -117,7 +132,7 @@ static struct lws_extension exts[] = {
 	{ NULL, NULL, NULL } /* end */
 };
 
-client_websocket_t* websocket_create() {
+client_websocket_t* websocket_create(client_websocket_callbacks* callbacks) {
 	lws_set_log_level(1023 ^ LLL_PARSER ^ LLL_EXT, NULL); // bitwise OR of all of the LLL_ constants
 	struct lws_context_creation_info info;
 	memset(&info, 0, sizeof(info));
@@ -134,8 +149,19 @@ client_websocket_t* websocket_create() {
 	struct lws_context* context = lws_create_context(&info);
 	client->_context = context;
 	client->_remain_connected = 0;
+	client->_callbacks = callbacks;
 
 	return client;
+}
+
+void* websocket_set_userdata(client_websocket_t* client, void* userdata) {
+	void* old = client->_userdata;
+	client->_userdata = userdata;
+	return old;
+}
+
+void* websocket_get_userdata(client_websocket_t* client) {
+	return client->_userdata;
 }
 
 void websocket_free(client_websocket_t* client) {
@@ -186,7 +212,7 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 	client->_remain_connected = 1;
 
 	while (client->_remain_connected) {
-		if (!client->_connected && client->_connection_attempts < MAX_CONNECT_ATTEMPTS) {
+		if (!client->_connected) {
 			lws_client_connect_via_info(&info);
 			client->_connected = 1;
 		}

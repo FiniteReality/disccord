@@ -15,6 +15,15 @@ void realloc_copy(char** dest, const char* src) {
 	strcpy(*dest, src);
 }
 
+int client_receive_callback(client_websocket_t* socket, char* data, size_t length) {
+	discord_client_t* client = (discord_client_t*)websocket_get_userdata(socket);
+
+	/* data is null-terminated */
+	printf("Received data: (%zu)\n%s\n", length, data);
+
+	return 0;
+}
+
 
 discord_client_t* client_create(const char* token) {
 	if (token == NULL || !validateToken(token)) {
@@ -44,11 +53,20 @@ void client_free(discord_client_t* client) {
 
 void *client_listen(void* arg) {
 	discord_client_t* client = arg;
-	client->_client_socket = websocket_create();
+
+	client_websocket_callbacks callbacks;
+	memset(&callbacks, 0, sizeof(callbacks));
+
+	callbacks.on_receive = client_receive_callback;
+
+	client->_client_socket = websocket_create(&callbacks);
+	websocket_set_userdata(client->_client_socket, client);
+
 #define CONNECT_TO "wss://gateway.discord.gg/?v=6&encoding=json"
 //#define CONNECT_TO "ws://localhost:5000"
 	websocket_connect(client->_client_socket, CONNECT_TO);
 #undef CONNECT_TO
+
 	return NULL;
 }
 
