@@ -18,6 +18,8 @@ void disccord_cleanup() {
 	CONF_modules_unload(1);
 	CONF_modules_free();
 	COMP_zlib_cleanup();
-	SSL_COMP_free_compression_methods();
+	/* TODO: figure out what ssl define this is behind */
+	/* SSL_COMP_free_compression_methods(); */
+	sk_SSL_COMP_free(SSL_COMP_get_compression_methods());
 	RAND_cleanup();
 }

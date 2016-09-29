@@ -77,7 +77,6 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 			break;
 		case LWS_CALLBACK_CLIENT_ESTABLISHED:
 			printf("Connection established\n");
-			client->_connected = 2;
 			break;
 		case LWS_CALLBACK_CLOSED:
 			printf("Session closed\n");
@@ -134,13 +133,13 @@ client_websocket_t* websocket_create() {
 	
 	struct lws_context* context = lws_create_context(&info);
 	client->_context = context;
-	client->_connect = 0;
+	client->_remain_connected = 0;
 
 	return client;
 }
 
 void websocket_free(client_websocket_t* client) {
-	if (client->_connect) {
+	if (client->_remain_connected) {
 		websocket_disconnect(client);
 	}
 
@@ -184,11 +183,10 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 
 	printf("protocol: %s\naddress: %s\nport: %i\npath: %s\nhost: %s\norigin: %s\n", prot, info.address, info.port, info.path, info.host, info.origin);
 
-	lws_client_connect_via_info(&info);
 	client->_remain_connected = 1;
 
 	while (client->_remain_connected) {
-		if (client->_connection_attempts < MAX_CONNECT_ATTEMPTS && !client->_connected) {
+		if (!client->_connected && client->_connection_attempts < MAX_CONNECT_ATTEMPTS) {
 			lws_client_connect_via_info(&info);
 			client->_connected = 1;
 		}
