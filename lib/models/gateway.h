@@ -2,8 +2,8 @@
  * Models wrapping the gateway API
  */
 
-#ifndef _models_h_
-#define _models_h_
+#ifndef _gateway_h_
+#define _gateway_h_
 
 #include <stdint.h>
 
@@ -78,42 +78,4 @@ enum DISPATCH_TYPE {
 	DISPATCH_TYPE_COUNT
 };
 
-/* op 0 is handled specially (see above enum) */
-
-/*
- * op: 1 (HEARTBEAT)
- */
-struct model_heartbeat {
-	uint32_t sequence;
-};
-
-/*
- * op: 2 (IDENTIFY)
- */
-struct model_identify {
-	char* token;
-
-	/* properties */
-	char* os;
-	char* browser;
-	char* device;
-	char* referrer;
-	char* referring_domain;
-
-	uint8_t compress;
-	uint8_t threshold;
-
-	uint32_t shard_id;
-	uint32_t shard_count;
-};
-
-/*
- * op: 10 (HELLO)
- */
-struct model_hello {
-	uint32_t heartbeat_interval;
-	size_t gateway_server_count;
-	char** gateway_servers;
-};
-
-#endif /* _models_h_ */
+#endif /* _gateway_h_ */

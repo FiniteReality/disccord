@@ -8,7 +8,10 @@
 
 typedef struct {
 	char* _token;
-	/* TODO: fill this out with stuff */
+	int _heartbeat_interval;
+	int _seq;
+	time_t* _heartbeat_start_time;
+	pthread_t* _heartbeat_thread;
 	pthread_t* _gateway_thread;
 	client_websocket_t* _client_socket; 
 } discord_client_t;

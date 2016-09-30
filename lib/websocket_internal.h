@@ -3,4 +3,4 @@
 
 #include <pthread.h>
 
-#endif /* _websocket_internal_h_
+#endif /* _websocket_internal_h_ */

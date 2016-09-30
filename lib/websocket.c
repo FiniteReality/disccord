@@ -3,7 +3,6 @@
 #include <stdio.h>
 
 #include <openssl/ssl.h>
-#include <pthread.h>
 
 #include "websocket.h"
 
@@ -68,22 +67,22 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 	switch (reason) {
 		case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
 		{
-			if (in != NULL && len > 0) {
-				printf("Connection error: (%zu) %s\n", len, (char*)in);
-			} else {
-				printf("Unknown connection error\n");
+			if (client->_callbacks->on_connection_error) {
+				if (in && len)
+					client->_callbacks->on_connection_error(client, (char*)in, len);
+				else
+					client->_callbacks->on_connection_error(client, "Unknown", 7);
 			}
+
 			client->_connected = 0;
 			break;
 		}
 		case LWS_CALLBACK_CLIENT_ESTABLISHED:
 		{
-			printf("Connection established\n");
 			break;
 		}
 		case LWS_CALLBACK_CLOSED:
 		{
-			printf("Session closed\n");
 			break;
 		}
 		case LWS_CALLBACK_CLIENT_RECEIVE:
@@ -132,7 +131,7 @@ static struct lws_extension exts[] = {
 	{ NULL, NULL, NULL } /* end */
 };
 
-client_websocket_t* websocket_create(client_websocket_callbacks* callbacks) {
+client_websocket_t* websocket_create(client_websocket_callbacks_t* callbacks) {
 	lws_set_log_level(1023 ^ LLL_PARSER ^ LLL_EXT, NULL); // bitwise OR of all of the LLL_ constants
 	struct lws_context_creation_info info;
 	memset(&info, 0, sizeof(info));
@@ -150,6 +149,9 @@ client_websocket_t* websocket_create(client_websocket_callbacks* callbacks) {
 	client->_context = context;
 	client->_remain_connected = 0;
 	client->_callbacks = callbacks;
+
+	client->_write_mutex = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(client->_write_mutex, NULL);
 
 	return client;
 }
@@ -173,8 +175,13 @@ void websocket_free(client_websocket_t* client) {
 	lws_context_destroy(client->_context);
 	ERR_remove_thread_state(NULL);
 
+	/* clean up mutexes */
+	pthread_mutex_destroy(client->_write_mutex);
+
+	/* free alloc'd data */
 	free(client->_address);
 	free(client->_path);
+	free(client->_write_mutex);
 	free(client);
 }
 
@@ -213,7 +220,7 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 
 	while (client->_remain_connected) {
 		if (!client->_connected) {
-			lws_client_connect_via_info(&info);
+			client->_wsi = lws_client_connect_via_info(&info);
 			client->_connected = 1;
 		}
 		lws_service(client->_context, 500);
@@ -222,4 +229,28 @@ void websocket_connect(client_websocket_t* client, const char* address) {
 
 void websocket_disconnect(client_websocket_t* client) {
 	client->_remain_connected = 0;
+}
+
+int websocket_send(client_websocket_t* client, char* data, size_t len, int mode) {
+	pthread_mutex_lock(client->_write_mutex);
+	/* it is safe to write at this point */
+
+	int status;
+	switch (mode) {
+		case 1:
+			status = lws_write(client->_wsi, data, len, LWS_WRITE_BINARY);
+			break;
+		case 2:
+			status = lws_write(client->_wsi, data, len, LWS_WRITE_PING);
+			break;
+		case 0:
+		default:
+			status = lws_write(client->_wsi, data, len, LWS_WRITE_TEXT);
+			break;
+	}
+
+	/* ensure we unlock the mutex to prevent deadlocks */
+	pthread_mutex_unlock(client->_write_mutex);
+
+	return status;
 }

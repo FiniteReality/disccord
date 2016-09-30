@@ -16,7 +16,7 @@ int main() {
 	client_connect(client);
 	printf("Connected!\n");
 
-	sleep(10);
+	sleep(120);
 
 	printf("Disconnecting...\n");
 	client_disconnect(client);

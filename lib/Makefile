@@ -9,7 +9,7 @@ CFLAGS=-fPIC -Wpedantic -Wall -Wextra -march=native
 LDFLAGS=-shared
 ARFLAGS=-rv
 
-SOURCES=websocket.c client.c discord.c
+SOURCES=websocket.c client.c discord.c client_internal.c websocket_internal.c
 OBJECTS=$(SOURCES:.c=.o)
 TARGET=libdisccord.so
 
