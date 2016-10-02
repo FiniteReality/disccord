@@ -9,6 +9,7 @@ Join the development server: [![Discord](https://discordapp.com/api/guilds/22669
 - [libcurl](https://curl.haxx.se/libcurl/)
 - [openssl](https://www.openssl.org/)
 - [libsodium](https://download.libsodium.org/doc/)
+- pthreads
 
 On Debian Jessie you can retrieve these using:
 ```shell
