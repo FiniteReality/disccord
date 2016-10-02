@@ -47,7 +47,7 @@ void client_send_identify(discord_client_t* client) {
 		cJSON_AddItemToObject(data, "properties", data_properties = cJSON_CreateObject());
 			cJSON_AddStringToObject(data_properties, "$browser", DISCCORD_VERSION_STRING);
 		cJSON_AddNumberToObject(data, "large_threshold", 50);
-	cJSON_AddBoolToObject(data, "compress", 0);
+	cJSON_AddBoolToObject(data, "compress", 0); /* TODO: compression support */
 
 	char* packet = cJSON_PrintUnformatted(root);
 	size_t len = strlen(packet);
@@ -57,7 +57,6 @@ void client_send_identify(discord_client_t* client) {
 	}
 
 	cJSON_Delete(root);
-	free(packet);
 }
 
 
