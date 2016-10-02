@@ -66,6 +66,7 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 {
 	client_websocket_t* client = (client_websocket_t*)user;
 	printf("Callback %s (%i)\n", callback_reasons[reason], reason);
+
 	switch (reason) {
 		case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
 		{
@@ -92,19 +93,42 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 			uint16_t close_reason = ntohs(*(uint16_t*)in);
 
 			char buffer[50];
-			size_t len = sprintf(buffer, "Server sent close %hu", close_reason);
+			size_t close_len = sprintf(buffer, "Server sent close %hu", close_reason);
 
-			client->_callbacks->on_connection_error(client, buffer, len);
+			client->_callbacks->on_connection_error(client, buffer, close_len);
 
 			break;
 		}
 		case LWS_CALLBACK_CLIENT_RECEIVE:
 		{
-			char* data = (char*)in;
-			data[len] = '\0';
+			size_t old_length = client->_current_packet_length;
+			size_t new_length = old_length + len;
+			void* new_data = realloc(client->_current_packet, new_length);
+			if (new_data) {
+				client->_current_packet = (char*)new_data;
+				client->_current_packet_length = new_length;
+			} else {
+				return 1;
+			}
 
-			if (client->_callbacks->on_receive)
-				return client->_callbacks->on_receive(client, data, len);
+			memcpy(client->_current_packet + old_length, in, len);
+			
+			if (lws_is_final_fragment(wsi)) {
+				char* data = client->_current_packet;
+				size_t data_len = client->_current_packet_length;
+				data[data_len] = '\0';
+
+				int success = 0;
+
+				if (client->_callbacks->on_receive)
+					success = client->_callbacks->on_receive(client, data, data_len);
+
+				free(client->_current_packet);
+				client->_current_packet = NULL;
+				client->_current_packet_length = 0;
+
+				return success;
+			}
 
 			break;
 		}

@@ -25,6 +25,9 @@ struct websocket_client {
 	char* _address;
 	char* _path;
 
+	char* _current_packet;
+	size_t _current_packet_length;
+
 	uint8_t _remain_connected;
 	uint8_t _connected;
 
