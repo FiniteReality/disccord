@@ -39,6 +39,7 @@ void *client_listen(void* arg) {
 	memset(&callbacks, 0, sizeof(callbacks));
 
 	callbacks.on_receive = client_receive_callback;
+	callbacks.on_connection_error = client_connection_error_callback;
 
 	client->_client_socket = websocket_create(&callbacks);
 	websocket_set_userdata(client->_client_socket, client);
@@ -63,13 +64,11 @@ void client_disconnect(discord_client_t* client) {
 	/* cancel the gateway thread if it exists */
 	if (client->_gateway_thread) {
 		if (client->_heartbeat_thread) {
+			client->_send_heartbeats = 0;
 			pthread_cancel(*client->_heartbeat_thread);
 			pthread_join(*client->_heartbeat_thread, NULL);
 			client->_heartbeat_thread = NULL;
 		}
-
-		free(client->_heartbeat_start_time);
-		client->_heartbeat_start_time = NULL;
 
 		pthread_cancel(*client->_gateway_thread);
 		pthread_join(*client->_gateway_thread, NULL);

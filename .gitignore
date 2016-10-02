@@ -8,6 +8,7 @@ bin/*
 
 # Test files
 test/*_test
+test/*.data.txt
 
 # Object files
 *.o

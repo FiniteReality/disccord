@@ -6,10 +6,22 @@
 #include "client.h"
 
 int main() {
+
+	FILE* fp = fopen("token.data.txt", "r");
+
+	if (!fp) {
+		perror("fopen");
+		return 0;
+	}
+
+	char token[128];
+	fgets(token, 128, fp);
+	fclose(fp);
+
 	disccord_init();
 
 	printf("Creating client...\n");
-	discord_client_t* client = client_create("");
+	discord_client_t* client = client_create(token);
 	printf("Successfully created client!\n");
 
 	printf("Connecting...\n");

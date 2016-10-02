@@ -5,7 +5,7 @@ Join the development server: [![Discord](https://discordapp.com/api/guilds/22669
 
 ## Dependencies ##
 
-- [libwebsockets 2.0](https://libwebsockets.org/)
+- [libwebsockets master](https://libwebsockets.org/)
 - [libcurl](https://curl.haxx.se/libcurl/)
 - [openssl](https://www.openssl.org/)
 - [libsodium](https://download.libsodium.org/doc/)

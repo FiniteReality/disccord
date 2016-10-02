@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <arpa/inet.h>
+
 #include <openssl/ssl.h>
 
 #include "websocket.h"
@@ -83,6 +85,17 @@ static int callback_test_protocol(struct lws* wsi, enum lws_callback_reasons rea
 		}
 		case LWS_CALLBACK_CLOSED:
 		{
+			break;
+		}
+		case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
+		{
+			uint16_t close_reason = ntohs(*(uint16_t*)in);
+
+			char buffer[50];
+			size_t len = sprintf(buffer, "Server sent close %hu", close_reason);
+
+			client->_callbacks->on_connection_error(client, buffer, len);
+
 			break;
 		}
 		case LWS_CALLBACK_CLIENT_RECEIVE:
