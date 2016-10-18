@@ -4,6 +4,22 @@
 
 #include "discord.h"
 #include "client.h"
+#include "message.h"
+
+int client_message_received(discord_client_t* client, message_t* message) {
+	printf("\nMessage received: %s\n", message->_contents); /* TODO: provide better methods for this */
+	if (strstr(message->_contents, "!ping") == message->_contents) {
+		printf("Received ping command!\n");
+
+		char data[256];
+		sprintf(data, "Hello, world, from C!\nUsing %s at <%s>!", DISCCORD_VERSION_STRING, DISCCORD_PROJECT_URL);
+
+		printf("Sending %s\n", data);
+
+		client_send_message(client, message->_channel_id, data);
+	}
+	return 0;
+}
 
 int main() {
 
@@ -11,7 +27,7 @@ int main() {
 
 	if (!fp) {
 		perror("fopen");
-		return 0;
+		return 1;
 	}
 
 	char token[128];
@@ -20,19 +36,27 @@ int main() {
 
 	disccord_init();
 
+	discord_client_callbacks_t callbacks;
+	callbacks.on_message_receive = client_message_received;
+
 	printf("Creating client...\n");
-	discord_client_t* client = client_create(token);
-	printf("Successfully created client!\n");
+	discord_client_t* client = client_create(&callbacks, token);
+	if (client) {
+		printf("Successfully created client!\n");
+	} else {
+		fprintf(stderr, "Failed to create discord client!\n");
+		return 1;
+	}
 
 	printf("Connecting...\n");
 	client_connect(client);
-	printf("Connected!\n");
 
 	sleep(120);
 
 	printf("Disconnecting...\n");
 	client_disconnect(client);
-	printf("Disconnected!\n");
+
+	sleep(3); /* ensure there's enough time to disconnect cleanly */
 
 	printf("Freeing client...\n");
 	client_free(client);

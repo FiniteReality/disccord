@@ -1,10 +1,11 @@
 #include <openssl/ssl.h>
+#include <curl/curl.h>
 
 #include "discord.h"
 
 /* Initializes disccord, calling all prerequesite functions. */
 void disccord_init() {
-	/* no-op as of right now */
+	curl_global_init(CURL_GLOBAL_ALL);
 }
 
 /* Cleans up all resources created by disccord */
@@ -22,4 +23,6 @@ void disccord_cleanup() {
 	/* SSL_COMP_free_compression_methods(); */
 	sk_SSL_COMP_free(SSL_COMP_get_compression_methods());
 	RAND_cleanup();
+
+	curl_global_cleanup();
 }

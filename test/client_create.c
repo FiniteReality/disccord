@@ -8,7 +8,7 @@ int main() {
 	disccord_init();
 
 	printf("Creating client...\n");
-	discord_client_t* client = client_create("");
+	discord_client_t* client = client_create(NULL, "");
 	printf("Successfully created client!\n");
 
 	printf("Freeing client...\n");

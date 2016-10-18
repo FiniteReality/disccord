@@ -6,9 +6,11 @@
 
 #include <cJSON/cJSON.h>
 
-#include "models/gateway.h"
 #include "client_internal.h"
 
+#include "user.h"
+#include "message.h"
+#include "models/gateway.h"
 #include "models/dispatches.h"
 
 /* validates a token, ensuring it has at least three "sections". */
@@ -106,9 +108,16 @@ void client_handle_dispatch(discord_client_t* client, const enum DISPATCH_TYPE d
 		}
 		case DISPATCH_MESSAGE_CREATE:
 		{
-			char* message_id = cJSON_GetObjectItem(d, "id")->valuestring;
-			char* content = cJSON_GetObjectItem(d, "content")->valuestring;
-			printf("Received message %s with contents '%s'\n", message_id, content);
+			message_t message;
+			sscanf(cJSON_GetObjectItem(d, "id")->valuestring, "%llu", &message._message_id);
+			message._contents = cJSON_GetObjectItem(d, "content")->valuestring;
+			sscanf(cJSON_GetObjectItem(d, "channel_id")->valuestring, "%llu", &message._channel_id);
+
+			/*message._sender = create_user(cJSON_GetObjectIdem(d, "author")); /* TODO: user impl. */
+			
+			if (client->_callbacks && client->_callbacks->on_message_receive)
+				client->_callbacks->on_message_receive(client, &message);
+			
 			break;
 		}
 		default:
@@ -190,4 +199,5 @@ int client_connection_error_callback(client_websocket_t* socket, char* reason, s
 	printf("Connection error: %s (%u)\n", reason, length);
 
 	client_disconnect(client);
+	return 0;
 }

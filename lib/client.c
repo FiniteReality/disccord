@@ -6,7 +6,7 @@
 #include "client.h"
 #include "client_internal.h"
 
-discord_client_t* client_create(const char* token) {
+discord_client_t* client_create(discord_client_callbacks_t* callbacks, const char* token) {
 	if (!token || !validateToken(token)) {
 		/* invalid token */
 		return NULL;
@@ -15,6 +15,11 @@ discord_client_t* client_create(const char* token) {
 	discord_client_t* client = malloc(sizeof(discord_client_t));
 	client->_token = NULL;
 	client->_gateway_thread = NULL;
+	client->_callbacks = callbacks;
+
+	/* if cURL fails to init, then we can't do anything! */
+	if (!(client->_curl_handle = curl_multi_init()))
+		return NULL;
 
 	realloc_copy(&client->_token, token);
 
@@ -27,6 +32,8 @@ void client_free(discord_client_t* client) {
 	if (client->_gateway_thread) {
 		client_disconnect(client);
 	}
+
+	curl_multi_cleanup(client->_curl_handle);
 
 	free(client->_token);
 	free(client);
@@ -45,8 +52,15 @@ void *client_listen(void* arg) {
 	websocket_set_userdata(client->_client_socket, client);
 
 #define CONNECT_TO "wss://gateway.discord.gg/?v=6&encoding=json"
-//#define CONNECT_TO "ws://localhost:5000"
 	websocket_connect(client->_client_socket, CONNECT_TO);
+
+	/* TODO: don't use internal fields */
+	while (client->_client_socket->_remain_connected) {
+		if (!client->_client_socket->_connected) {
+			websocket_connect(client->_client_socket, CONNECT_TO);
+		}
+		websocket_think(client->_client_socket);
+	}
 #undef CONNECT_TO
 
 	return NULL;

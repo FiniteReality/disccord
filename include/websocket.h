@@ -30,6 +30,7 @@ struct websocket_client {
 
 	uint8_t _remain_connected;
 	uint8_t _connected;
+	/*uint8_t _disconnect; */
 
 	void* _userdata;
 
@@ -44,6 +45,7 @@ void* websocket_get_userdata(client_websocket_t* client);
 void websocket_free(client_websocket_t* client);
 void websocket_connect(client_websocket_t* client, const char* address);
 void websocket_disconnect(client_websocket_t* client);
+void websocket_think(client_websocket_t* websocket);
 
 int websocket_send(client_websocket_t* client, char* data, size_t len, int mode);
 
