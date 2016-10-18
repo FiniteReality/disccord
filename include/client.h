@@ -20,6 +20,7 @@ typedef struct {
 struct discord_client {
 	char* _token;
 
+	double _latency;
 	int _heartbeat_interval;
 	int _seq;
 	struct timespec* _heartbeat_start;

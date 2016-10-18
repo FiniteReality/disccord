@@ -179,6 +179,8 @@ int client_receive_callback(client_websocket_t* socket, char* data, size_t lengt
 					timespec_diff(client->_heartbeat_start, &now, &diff);
 					double latency = (double)diff.tv_sec + 1.0e-9*diff.tv_nsec;
 
+					client->_latency = latency * 1000;
+
 					printf("Latency: %fms\n\n", latency * 1000);
 					break;
 				}

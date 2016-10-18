@@ -12,7 +12,7 @@ int client_message_received(discord_client_t* client, message_t* message) {
 		printf("Received ping command!\n");
 
 		char data[256];
-		sprintf(data, "Hello, world, from C!\nUsing %s at <%s>!", DISCCORD_VERSION_STRING, DISCCORD_PROJECT_URL);
+		sprintf(data, "Hello, world, from C!\nUsing %s at <%s>!\nCurrent Gateway Latency: %1.0fms", DISCCORD_VERSION_STRING, DISCCORD_PROJECT_URL, client->_latency);
 
 		printf("Sending %s\n", data);
 

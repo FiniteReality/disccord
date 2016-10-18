@@ -51,7 +51,16 @@ static char* callback_reasons[] = {
 	"LWS_CALLBACK_CLOSED_CLIENT_HTTP",
 	"LWS_CALLBACK_RECEIVE_CLIENT_HTTP",
 	"LWS_CALLBACK_COMPLETED_CLIENT_HTTP",
-	"LWS_CALLBACK_RECEIVE_CLIENT_HTTP_READ"
+	"LWS_CALLBACK_RECEIVE_CLIENT_HTTP_READ",
+	"LWS_CALLBACK_HTTP_BIND_PROTOCOL",
+	"LWS_CALLBACK_HTTP_DROP_PROTOCOL",
+	"LWS_CALLBACK_CHECK_ACCESS_RIGHTS",
+	"LWS_CALLBACK_PROCESS_HTML",
+	"LWS_CALLBACK_ADD_HEADERS",
+	"LWS_CALLBACK_SESSION_INFO",
+	"LWS_CALLBACK_GS_EVENT",
+	"LWS_CALLBACK_HTTP_PMO",
+	"LWS_CALLBACK_CLIENT_HTTP_WRITEABLE"
 };
 
 int discord_protocol(struct lws* wsi, enum lws_callback_reasons reason,
@@ -59,7 +68,7 @@ int discord_protocol(struct lws* wsi, enum lws_callback_reasons reason,
 
 	client_websocket_t* client = (client_websocket_t*)user;
 
-	printf("Callback %s (%i)\n", callback_reasons[reason], reason);
+	printf("Callback %i (%s)\n", reason, callback_reasons[reason]);
 
 	/* TODO: figure out what's causing this to degfault */
 	/*
