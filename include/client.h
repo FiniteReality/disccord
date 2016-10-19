@@ -11,9 +11,15 @@ typedef struct discord_client discord_client_t;
 #include "message.h"
 #include "discord.h"
 
+typedef void (*client_connected_callback)(discord_client_t* client);
+typedef int (*client_connection_error_callback)(discord_client_t* client, uint16_t code, const char* reason);
+typedef int (*client_latency_updated_callback)(discord_client_t* client, double oldLatency, double newLatency);
 typedef int (*client_message_receive_callback)(discord_client_t* client, message_t* message);
 
 typedef struct {
+	client_connected_callback on_connect;
+	client_connection_error_callback on_connection_error;
+	client_latency_updated_callback on_latency_update;
 	client_message_receive_callback on_message_receive;
 } discord_client_callbacks_t;
 

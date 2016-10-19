@@ -1,11 +1,21 @@
 #include <openssl/ssl.h>
+#include <openssl/engine.h>
+#include <openssl/conf.h>
+
 #include <curl/curl.h>
+#include <libwebsockets.h>
 
 #include "discord.h"
 
 /* Initializes disccord, calling all prerequesite functions. */
 void disccord_init() {
 	curl_global_init(CURL_GLOBAL_ALL);
+#ifdef LIBWEBSOCKET_DEBUG
+	/* enable debugging of libwebsockets in case of errors */
+	lws_set_log_level(1023 ^ LLL_PARSER ^ LLL_EXT, NULL);
+#else
+	lws_set_log_level(0, NULL);
+#endif
 }
 
 /* Cleans up all resources created by disccord */
@@ -16,8 +26,8 @@ void disccord_cleanup() {
 	ERR_free_strings();
 	CRYPTO_cleanup_all_ex_data();
 	ENGINE_cleanup();
+	CONF_modules_finish();
 	CONF_modules_unload(1);
-	CONF_modules_free();
 	COMP_zlib_cleanup();
 	/* TODO: figure out what ssl define this is behind */
 	/* SSL_COMP_free_compression_methods(); */

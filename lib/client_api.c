@@ -20,29 +20,37 @@ struct curl_req {
 	struct curl_slist* headers;
 };
 
-struct curl_req* setup_request(discord_client_t* client, char* endpoint) {
+
+static size_t curl_header_callback(char* buffer, size_t size, size_t nitems, void* userdata) {
+	(void)buffer;
+	(void)userdata;
+
+	return size * nitems;
+}
+
+
+struct curl_req* setup_request(discord_client_t* client, char* endpoint, size_t len) {
 	CURL* handle = curl_easy_init();
 
 	if (!handle)
 		return NULL;
 
-	char url[256];
+	struct curl_req* req = malloc(sizeof(struct curl_req));
 
+	char url[sizeof(DISCORD_API_URL) + len];
 	sprintf(url, "%s%s", DISCORD_API_URL, endpoint);
-
-	printf("Request to: %s\n", url);
 
 	curl_easy_setopt(handle, CURLOPT_URL, url);
 	curl_easy_setopt(handle, CURLOPT_USERAGENT, DISCCORD_USER_AGENT);
+
+	curl_easy_setopt(handle, CURLOPT_HEADERFUNCTION, curl_header_callback);
+	curl_easy_setopt(handle, CURLOPT_HEADERDATA, req);
 
 	char auth[128];
 	sprintf(auth, "Authorization: %s %s", "Bot", client->_token);
 
 	struct curl_slist* ext_headers = curl_slist_append(NULL, auth);
 
-	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, ext_headers);
-
-	struct curl_req* req = malloc(sizeof(struct curl_req));
 	req->handle = handle;
 	req->headers = ext_headers;
 
@@ -55,12 +63,23 @@ void exec_request(discord_client_t* client, struct curl_req* req, enum http_meth
 	switch(method) {
 		case HTTP_POST:
 		{
-			if (type == CONTENT_JSON) {
-				curl_easy_setopt(handle, CURLOPT_POSTFIELDS, body);
-			} /* multipart requests are handled per-endpoint */
+			curl_easy_setopt(handle, CURLOPT_POSTFIELDS, body);
+			switch (type) {
+				case CONTENT_JSON:
+					req->headers = curl_slist_append(req->headers, "Content-Type: application/json");
+					break;
+				default:
+					break;
+			} 
 			break;
 		}
+		case HTTP_GET:
+		{
+			curl_easy_setopt(handle, CURLOPT_HTTPGET, 1);
+		}
 	}
+
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, req->headers);
 
 	/* curl_multi_add_handle(client->_curl_handle, handle); */
 	curl_easy_perform(handle);
@@ -69,15 +88,17 @@ void exec_request(discord_client_t* client, struct curl_req* req, enum http_meth
 	curl_slist_free_all(req->headers);
 	
 	free(req);
+
+	(void)client;
 }
 
 
 
 void client_send_message(discord_client_t* client, uint64_t channel_id, const char* contents) {
 	char endpoint[38]; /* TODO: should we allocate more than this? */
-	sprintf(endpoint, "channels/%llu/messages", channel_id);
+	sprintf(endpoint, "channels/%lu/messages", channel_id);
 
-	struct curl_req* req = setup_request(client, endpoint);
+	struct curl_req* req = setup_request(client, endpoint, 38);
 
 	if (!req)
 		return;

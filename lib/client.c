@@ -45,8 +45,8 @@ void *client_listen(void* arg) {
 	client_websocket_callbacks_t callbacks;
 	memset(&callbacks, 0, sizeof(callbacks));
 
-	callbacks.on_receive = client_receive_callback;
-	callbacks.on_connection_error = client_connection_error_callback;
+	callbacks.on_receive = client_ws_receive_callback;
+	callbacks.on_connection_error = client_ws_connection_error_callback;
 
 	client->_client_socket = websocket_create(&callbacks);
 	websocket_set_userdata(client->_client_socket, client);

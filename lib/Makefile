@@ -16,10 +16,10 @@ TARGET=libdisccord.so
 INSTALL=/usr/local/lib/
 
 .c.o:
-	$(CC) $(FLAGS) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $< $(FLAGS)
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $(OBJECTS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(FLAGS)
 
 install: $(TARGET)
 	cp $(TARGET) $(INSTALL)$(TARGET)

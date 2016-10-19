@@ -5,8 +5,26 @@
 #include "websocket.h"
 #include "websocket_internal.h"
 
+static struct lws_protocols protocols[] = {
+	{ "discord-protocol", discord_protocol, 0, 1024, 0, NULL },
+	{ NULL, NULL, 0, 0, 0, NULL } /* end */
+};
+
+static struct lws_extension exts[] = {
+	{ 
+		"permessage-deflate",
+		lws_extension_callback_pm_deflate,
+		"permessage-deflate; client_no_context_takeover; client_max_window_bits"
+	},
+	{
+		"deflate-frame",
+		lws_extension_callback_pm_deflate,
+		"deflate_frame"
+	},
+	{ NULL, NULL, NULL } /* end */
+};
+
 client_websocket_t* websocket_create(client_websocket_callbacks_t* callbacks) {
-	lws_set_log_level(1023 ^ LLL_PARSER ^ LLL_EXT, NULL); // bitwise OR of all of the LLL_ constants
 	struct lws_context_creation_info info;
 	memset(&info, 0, sizeof(info));
 
@@ -110,20 +128,22 @@ int websocket_send(client_websocket_t* client, char* data, size_t len, int mode)
 	pthread_mutex_lock(client->_write_mutex);
 	/* it is safe to write at this point */
 
-	char cdata[LWS_PRE + len];
+	unsigned char cdata[LWS_PRE + len];
 	memcpy(&cdata[LWS_PRE], data, len);
+
+	unsigned char* ptr = &cdata[LWS_PRE];
 
 	int status;
 	switch (mode) {
 		case 1:
-			status = lws_write(client->_wsi, &cdata[LWS_PRE], len, LWS_WRITE_BINARY);
+			status = lws_write(client->_wsi, ptr, len, LWS_WRITE_BINARY);
 			break;
 		case 2:
-			status = lws_write(client->_wsi, &cdata[LWS_PRE], len, LWS_WRITE_PING);
+			status = lws_write(client->_wsi, ptr, len, LWS_WRITE_PING);
 			break;
 		case 0:
 		default:
-			status = lws_write(client->_wsi, &cdata[LWS_PRE], len, LWS_WRITE_TEXT);
+			status = lws_write(client->_wsi, ptr, len, LWS_WRITE_TEXT);
 			break;
 	}
 

@@ -7,7 +7,7 @@
 #include "message.h"
 
 int client_message_received(discord_client_t* client, message_t* message) {
-	printf("\nMessage received: %s\n", message->_contents); /* TODO: provide better methods for this */
+	printf("Message received: %s\n", message->_contents); /* TODO: provide better methods for this */
 	if (strstr(message->_contents, "!ping") == message->_contents) {
 		printf("Received ping command!\n");
 

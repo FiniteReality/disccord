@@ -13,6 +13,10 @@
 #include "models/gateway.h"
 #include "models/dispatches.h"
 
+#define CALLBACK(c, cb, ...) \
+	if (c->_callbacks && c->_callbacks->on_ ## cb) \
+		c->_callbacks->on_ ## cb (c, __VA_ARGS__)
+
 /* validates a token, ensuring it has at least three "sections". */
 int validateToken(const char* token) {
 	return sscanf(token, "%*s.%*s.%*s");
@@ -109,15 +113,14 @@ void client_handle_dispatch(discord_client_t* client, const enum DISPATCH_TYPE d
 		case DISPATCH_MESSAGE_CREATE:
 		{
 			message_t message;
-			sscanf(cJSON_GetObjectItem(d, "id")->valuestring, "%llu", &message._message_id);
+			sscanf(cJSON_GetObjectItem(d, "id")->valuestring, "%lu", &message._message_id);
 			message._contents = cJSON_GetObjectItem(d, "content")->valuestring;
-			sscanf(cJSON_GetObjectItem(d, "channel_id")->valuestring, "%llu", &message._channel_id);
+			sscanf(cJSON_GetObjectItem(d, "channel_id")->valuestring, "%lu", &message._channel_id);
 
-			/*message._sender = create_user(cJSON_GetObjectIdem(d, "author")); /* TODO: user impl. */
-			
-			if (client->_callbacks && client->_callbacks->on_message_receive)
-				client->_callbacks->on_message_receive(client, &message);
-			
+			/*message._sender = create_user(cJSON_GetObjectIdem(d, "author")); */ /* TODO: user impl. */
+
+			CALLBACK(client, message_receive, &message);
+
 			break;
 		}
 		default:
@@ -125,12 +128,11 @@ void client_handle_dispatch(discord_client_t* client, const enum DISPATCH_TYPE d
 	}
 }
 
-int client_receive_callback(client_websocket_t* socket, char* data, size_t length) {
+int client_ws_receive_callback(client_websocket_t* socket, char* data, size_t length) {
 	discord_client_t* client = (discord_client_t*)websocket_get_userdata(socket);
 
-	//printf("Received data: %s\n", data);
+	(void)length; /* unused as data is null-terminated */
 
-	/* TODO: handle this */
 	cJSON* root = cJSON_Parse(data);
 
 	if (root) {
@@ -159,7 +161,6 @@ int client_receive_callback(client_websocket_t* socket, char* data, size_t lengt
 
 					if (_heartbeat_interval) {
 						client->_heartbeat_interval = _heartbeat_interval->valueint;
-						printf("New heartbeat interval: %i\n", client->_heartbeat_interval);
 						client->_send_heartbeats = 1;
 
 						pthread_t* heartbeat_thread = malloc(sizeof(pthread_t));
@@ -179,13 +180,15 @@ int client_receive_callback(client_websocket_t* socket, char* data, size_t lengt
 					timespec_diff(client->_heartbeat_start, &now, &diff);
 					double latency = (double)diff.tv_sec + 1.0e-9*diff.tv_nsec;
 
-					client->_latency = latency * 1000;
+					latency = latency * 1000;
 
-					printf("Latency: %fms\n\n", latency * 1000);
+					CALLBACK(client, latency_update, client->_latency, latency);
+
+					client->_latency = latency;
 					break;
 				}
 				default:
-					printf("Unhandled opcode: %u\n", opcode);
+					fprintf(stderr, "Unhandled opcode: %u\n", opcode);
 			}
 		}
 	}
@@ -195,10 +198,10 @@ int client_receive_callback(client_websocket_t* socket, char* data, size_t lengt
 	return 0;
 }
 
-int client_connection_error_callback(client_websocket_t* socket, char* reason, size_t length) {
+int client_ws_connection_error_callback(client_websocket_t* socket, char* reason, size_t length) {
 	discord_client_t* client = (discord_client_t*)websocket_get_userdata(socket);
 
-	printf("Connection error: %s (%u)\n", reason, length);
+	printf("Connection error: %s (%zu)\n", reason, length);
 
 	client_disconnect(client);
 	return 0;
