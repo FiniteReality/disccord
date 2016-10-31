@@ -3,8 +3,8 @@
 *.db-wal
 *.db-shm
 
-# Build directory
-bin/*
+# Build outputs
+build/*
 
 # Test files
 test/*_test
