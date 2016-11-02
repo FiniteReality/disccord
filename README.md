@@ -7,3 +7,6 @@ something?) check out the `old` branch.
 Join the development server: [![Discord](https://discordapp.com/api/guilds/226692368148070420/widget.png)](https://discord.gg/syNMXxM)
 
 
+## Dependencies ##
+
+- [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
