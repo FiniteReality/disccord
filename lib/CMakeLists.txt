@@ -1,6 +1,5 @@
-# Likewise, absolutely no idea what I'm doing.
-# YOLO, I guess.
+set(SOURCE_FILES client.cpp)
 
-add_library(disccord client.cpp)
+add_library(disccord SHARED ${SOURCE_FILES})
 
-target_include_directories (disccord PUBLIC ../include)
+target_include_directories(disccord PUBLIC ../include)
