@@ -2,6 +2,7 @@
 
 namespace disccord
 {
-	Client::Client()
-	{ }
+    Client::Client()
+        : websocket()
+    { }
 }

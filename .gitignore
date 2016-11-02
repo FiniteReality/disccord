@@ -1,4 +1,5 @@
 # vscode database stuff
+.vscode/*
 *.db
 *.db-wal
 *.db-shm

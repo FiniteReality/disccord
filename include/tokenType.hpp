@@ -1,8 +1,8 @@
 namespace disccord
 {
-	enum class TokenType {
-		User,
-		Bot,
-		Bearer
-	};
+    enum class TokenType {
+        User,
+        Bot,
+        Bearer
+    };
 }
