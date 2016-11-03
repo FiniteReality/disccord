@@ -1,3 +1,6 @@
+#ifndef _tokenType_hpp_
+#define _tokenType_hpp_
+
 namespace disccord
 {
     enum class TokenType {
@@ -6,3 +9,5 @@ namespace disccord
         Bearer
     };
 }
+
+#endif /* _tokenType_hpp_ */

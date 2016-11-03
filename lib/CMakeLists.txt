@@ -2,7 +2,7 @@ find_package(cpprest REQUIRED)
 include_directories(${cpprestsdk_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${cpprestsdk_LIBRARIES})
 
-set(SOURCE_FILES client.cpp)
+set(SOURCE_FILES client.cpp REST/client.cpp REST/REST.cpp)
 
 if (DISCCORD_BUILD_STATIC)
     add_library(disccord STATIC ${SOURCE_FILES})
