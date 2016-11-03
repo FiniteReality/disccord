@@ -10,7 +10,7 @@ namespace disccord
         pplx::task<json_value> getGateway(discord_rest_client& client, std::string& encoding)
         {
             return client.request("GET", "/gateway").then([](http_response response){
-                return response.extract_json().get();
+                return response.extract_json();
             });
         }
     }
