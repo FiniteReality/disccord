@@ -11,3 +11,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(DISCCORD_BUILD_STATIC "build disccord as a static library" OFF)
 
 add_subdirectory(lib)
+add_subdirectory(tests)
+enable_testing ()
+
+## add all relevant unit tests here
+add_test (NAME libdisscord_test COMMAND DisccordTest)
+
+
+

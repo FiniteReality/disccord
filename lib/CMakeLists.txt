@@ -16,6 +16,11 @@ endif()
 
 target_include_directories(disccord PUBLIC ../include)
 
-add_executable(letestty disccord.cpp)
+## For shared builds
+set_target_properties(disccord PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-target_link_libraries(letestty ${LIBS} disccord)
+target_link_libraries(disccord ${LIBS})
+
+install(TARGETS disccord DESTINATION /usr/local/lib)
+
+
