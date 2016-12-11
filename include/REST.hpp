@@ -14,7 +14,7 @@ namespace disccord
 {
     namespace REST
     {
-        pplx::task<web::json::value> getGateway(discord_rest_client& client, std::string& encoding);
+        pplx::task<std::string> getGateway(discord_rest_client& client, std::string& encoding);
     }
 }
 

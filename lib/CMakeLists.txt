@@ -4,6 +4,8 @@ set(LIBS ${LIBS} ${cpprestsdk_LIBRARIES})
 
 set(SOURCE_FILES client.cpp REST/client.cpp REST/REST.cpp)
 
+include_directories(../include ./include)
+
 if (DISCCORD_BUILD_STATIC)
     add_library(disccord STATIC ${SOURCE_FILES})
 else()
