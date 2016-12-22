@@ -16,6 +16,3 @@ enable_testing ()
 
 ## add all relevant unit tests here
 add_test (NAME libdisscord_test COMMAND DisccordTest)
-
-
-

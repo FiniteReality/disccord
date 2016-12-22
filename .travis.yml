@@ -1,0 +1,23 @@
+dist: trusty
+sudo: required
+language: cpp
+
+cache:
+  directories:
+  - casablanca
+
+compiler:
+  - clang
+  - gcc
+
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libboost-all-dev libssl-dev gcc-4.9 g++-4.9
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
+  - export CXXFLAGS=-fPIC
+
+install: ./install-dependencies.sh
+
+script:
+  - mkdir build && cd build && cmake .. && make && make test

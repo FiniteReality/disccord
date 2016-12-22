@@ -1,5 +1,5 @@
 find_package(cpprest REQUIRED)
-find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
+find_package(Boost 1.54.0 REQUIRED COMPONENTS system filesystem)
 find_library(SSL_LIB libssl.a REQUIRED)
 find_library(CRYPTO_LIB libcrypto.a REQUIRED)
 
@@ -14,15 +14,12 @@ if (DISCCORD_BUILD_STATIC)
     add_library(disccord STATIC ${SOURCE_FILES})
 else()
     add_library(disccord SHARED ${SOURCE_FILES})
+
+    set_target_properties(disccord PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
 target_include_directories(disccord PUBLIC ../include)
 
-## For shared builds
-set_target_properties(disccord PROPERTIES POSITION_INDEPENDENT_CODE ON)
-
 target_link_libraries(disccord ${LIBS})
 
 install(TARGETS disccord DESTINATION /usr/local/lib)
-
-
