@@ -7,7 +7,6 @@ cache:
   - casablanca
 
 compiler:
-  - clang
   - gcc
 
 before_install:
