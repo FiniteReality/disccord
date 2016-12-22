@@ -23,3 +23,4 @@ target_include_directories(disccord PUBLIC ../include)
 target_link_libraries(disccord ${LIBS})
 
 install(TARGETS disccord DESTINATION /usr/local/lib)
+install(DIRECTORY ../include DESTINATION /usr/local/include/disccord)
