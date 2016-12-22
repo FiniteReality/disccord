@@ -14,6 +14,6 @@ option(DISCCORD_BUILD_TESTS "build and run disccord tests" ON)
 add_subdirectory(lib)
 
 if(DISCCORD_BUILD_TESTS)
-    add_subdirectory(tests)
     enable_testing()
+    add_subdirectory(tests)
 endif()
