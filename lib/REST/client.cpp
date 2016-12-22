@@ -19,6 +19,9 @@ namespace disccord
             setup_discord_handler();
         }
 
+        discord_rest_client::~discord_rest_client()
+        { }
+
         void discord_rest_client::setup_discord_handler()
         {
             // Set user-agent on a request
