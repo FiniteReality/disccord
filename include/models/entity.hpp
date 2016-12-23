@@ -21,5 +21,5 @@ namespace disccord
     }
 }
 
-#include "models/entity.tpp"
+#include <entity.tpp>
 #endif /* _entity_hpp_ */

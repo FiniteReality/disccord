@@ -4,4 +4,4 @@ add_executable(test_memory disccord_test.cpp)
 add_dependencies(test_memory disccord)
 target_link_libraries(test_memory disccord)
 
-add_test(NAME memory COMMAND valgrind $<TARGET_FILE:test_memory>)
+add_test(NAME memory COMMAND test_memory)
