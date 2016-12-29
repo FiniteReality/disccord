@@ -5,11 +5,11 @@ DISCCORD LIB - UNIT TEST
 #include <string>
 #include <iostream>
 
-#include <REST/route.hpp>
+#include <rest/route.hpp>
 
-using namespace disccord::REST;
+using namespace disccord::rest;
 
-std::ostream& operator<< (std::ostream& stream, const RouteInfo& info)
+std::ostream& operator<< (std::ostream& stream, const route_info& info)
 {
 	return stream << "[bucket " << info.method << " " << info.bucket_url << "] " << info.full_url;
 }

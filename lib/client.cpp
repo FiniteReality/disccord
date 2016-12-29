@@ -1,6 +1,6 @@
 #include <client.hpp>
 
-#include <REST.hpp>
+#include <rest.hpp>
 
 namespace disccord
 {

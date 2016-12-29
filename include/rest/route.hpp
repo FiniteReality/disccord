@@ -5,9 +5,9 @@
 
 namespace disccord
 {
-    namespace REST
+    namespace rest
     {
-        struct RouteInfo
+        struct route_info
         {
             std::string method;
             std::string full_url;
@@ -16,10 +16,7 @@ namespace disccord
 
         namespace internal
         {
-            std::string RouteString(std::string url)
-            {
-                return url;
-            }
+            std::string RouteString(std::string url);
 
             template<class TFirst, class... TArgs>
             std::string RouteString(std::string base, TFirst first, TArgs... args)
@@ -31,18 +28,10 @@ namespace disccord
             }
         }
 
-        RouteInfo Route(std::string method, std::string url)
-        {
-            RouteInfo info;
-            info.method = method;
-            info.full_url = url;
-            info.bucket_url = url;
-
-            return info;
-        }
+        route_info Route(std::string method, std::string url);
 
         template<class TFirst, class... TArgs>
-        RouteInfo Route(std::string method, std::string base, TFirst first, TArgs... args)
+        route_info Route(std::string method, std::string base, TFirst first, TArgs... args)
         {
 
             size_t start = base.find('{');
@@ -56,7 +45,7 @@ namespace disccord
             }
             else
             {
-                RouteInfo info;
+                route_info info;
                 info.method = method;
                 info.bucket_url = base;
                 info.full_url = internal::RouteString(base.replace(start, end, first), args...);
