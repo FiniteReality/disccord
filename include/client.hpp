@@ -6,14 +6,14 @@
 
 #include <tokenType.hpp>
 
-#include <REST/client.hpp>
+#include <rest/client.hpp>
 
 namespace disccord
 {
     class Client {
         private:
             web::websockets::client::websocket_client websocket;
-            disccord::REST::discord_rest_client rest_client;
+            disccord::rest::discord_rest_client rest_client;
         public:
             Client();
             virtual ~Client();
