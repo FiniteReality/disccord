@@ -1,5 +1,5 @@
-#ifndef _endpoint_hpp_
-#define _endpoint_hpp_
+#ifndef _route_hpp_
+#define _route_hpp_
 
 #include <string>
 
@@ -55,4 +55,4 @@ namespace disccord
         }
     }
 }
-#endif /* _endpoint_hpp_ */
+#endif /* _route_hpp_ */

@@ -5,15 +5,15 @@ find_package(OpenSSL REQUIRED)
 include_directories(${CPPREST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${CPPREST_LIBRARIES} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${CMAKE_DL_LIBS})
 
-set(SOURCE_FILES client.cpp rest/client.cpp rest/route.cpp api/bucket_info.cpp)
+set(SOURCE_FILES client.cpp rest/api_client.cpp rest/route.cpp api/bucket_info.cpp rest/client.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 if(DISCCORD_BUILD_STATIC)
-    message("Building disccord as a static library")
+    message("-- Building disccord as a static library")
     add_library(disccord STATIC ${SOURCE_FILES})
 else()
-    message("Building disccord as a shared library")
+    message("-- Building disccord as a shared library")
     add_library(disccord SHARED ${SOURCE_FILES})
     
     set_target_properties(disccord PROPERTIES POSITION_INDEPENDENT_CODE ON)
