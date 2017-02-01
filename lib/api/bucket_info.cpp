@@ -2,14 +2,12 @@
 
 namespace disccord
 {
-	namespace api
-	{
-		bucket_info::bucket_info(std::string bucket_url)
-		{
+    namespace api
+    {
+        bucket_info::bucket_info(std::string bucket_url)
+        { }
 
-		}
-
-		bucket_info::~bucket_info()
-		{ }
-	}
+        bucket_info::~bucket_info()
+        { }
+    }
 }

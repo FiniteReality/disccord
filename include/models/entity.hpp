@@ -8,8 +8,11 @@ namespace disccord
         template<typename T>
         class entity
         {
+            private:
+                entity();
+                
             public:
-                entity(T id, bool attached)
+                entity(T id, bool attached);
                 virtual ~entity();
 
                 T getId();
@@ -21,5 +24,5 @@ namespace disccord
     }
 }
 
-#include <entity.tpp>
+#include <models/entity.tpp>
 #endif /* _entity_hpp_ */

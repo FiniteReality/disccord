@@ -5,14 +5,9 @@
 namespace disccord
 {
     Client::Client()
-        : websocket(), rest_client(web::uri(DISCORD_BASE_URL))
+        : websocket(), rest_client()
     { }
 
     Client::~Client()
     { }
-
-    void Connect(std::string token, TokenType tokenType)
-    {
-        // TODO: this
-    }
 }
