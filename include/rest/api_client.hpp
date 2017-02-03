@@ -25,7 +25,6 @@ namespace disccord
                     discord_rest_api_client(const web::uri& base_uri, const web::http::client::http_client_config& client_config);
                     virtual ~discord_rest_api_client();
 
-                    // TODO: request info class
                     pplx::task<disccord::models::entity<uint64_t>> request(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                 protected:

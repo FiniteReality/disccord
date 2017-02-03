@@ -9,5 +9,16 @@ namespace disccord
 
         bucket_info::~bucket_info()
         { }
+
+
+        pplx::task<bool> bucket_info::enter(web::http::client::http_client& client, std::string url)
+        {
+            // check current count vs maximum count
+            // update current count
+            // request url
+            // check headers + update maximum count
+            // update current cont
+            return pplx::create_task([]{ return false; });
+        }
     }
 }

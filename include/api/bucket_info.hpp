@@ -1,12 +1,9 @@
-#ifndef _bucket_hpp_
-#define _bucket_hpp_
+#ifndef _bucket_info_hpp_
+#define _bucket_info_hpp_
 
-#include <pplx/pplxtasks.h>
+#include <cpprest/http_client.h>
 
 #include <string>
-#include <atomic>
-#include <mutex>
-#include <condition_variable>
 
 namespace disccord
 {
@@ -18,10 +15,10 @@ namespace disccord
                 bucket_info(std::string bucket_url);
                 virtual ~bucket_info();
 
-                pplx::task<void> enter();
+                pplx::task<bool> enter(web::http::client::http_client& client, std::string url);
         };
     }
 }
 
 
-#endif /* _bucket_hpp_ */
+#endif /* _bucket_info_hpp_ */
