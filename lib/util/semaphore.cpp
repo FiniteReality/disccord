@@ -19,6 +19,11 @@ namespace disccord
             return current_count;
         }
 
+        void semaphore::set_maximum_count(int new_maximum)
+        {
+            maximum_count = new_maximum;
+        }
+
         pplx::task<bool> semaphore::enter()
         {
             return enter(NO_TIMEOUT);

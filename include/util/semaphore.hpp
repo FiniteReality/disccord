@@ -23,6 +23,7 @@ namespace disccord
                 virtual ~semaphore();
 
                 int get_current_count();
+                void set_maximum_count(int new_maximum);
 
                 pplx::task<bool> enter();
                 pplx::task<bool> enter(int timeout_millis);

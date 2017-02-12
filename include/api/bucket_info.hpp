@@ -3,6 +3,8 @@
 
 #include <cpprest/http_client.h>
 
+#include <util/semaphore.hpp>
+
 #include <string>
 
 namespace disccord
@@ -12,10 +14,18 @@ namespace disccord
         class bucket_info
         {
             public:
-                bucket_info(std::string bucket_url);
+                bucket_info(std::string method);
                 virtual ~bucket_info();
 
-                pplx::task<bool> enter(web::http::client::http_client& client, std::string url);
+                pplx::task<web::json::value> request(web::http::client::http_client& client, std::string url, pplx::cancellation_token token = pplx::cancellation_token::none());
+                pplx::task<web::json::value> request(web::http::client::http_client& client, std::string url, web::json::value body, pplx::cancellation_token token = pplx::cancellation_token::none());
+
+            private:
+                void parse_headers(web::http::http_headers headers);
+
+                std::string http_method;
+                disccord::util::semaphore entry_semaphore;
+                uint64_t reset_in;
         };
     }
 }

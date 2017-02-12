@@ -18,21 +18,20 @@ namespace disccord
     {
         namespace internal
         {
-            class discord_rest_api_client
+            class rest_api_client
             {
                 public:
-                    discord_rest_api_client(const web::uri& base_uri);
-                    discord_rest_api_client(const web::uri& base_uri, const web::http::client::http_client_config& client_config);
-                    virtual ~discord_rest_api_client();
+                    rest_api_client(const web::uri& base_uri, std::string token, disccord::token_type type);
+                    rest_api_client(const web::uri& base_uri, std::string token, disccord::token_type type, const web::http::client::http_client_config& client_config);
+                    virtual ~rest_api_client();
 
-                    pplx::task<disccord::models::entity<uint64_t>> request(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-
-                protected:
-                    disccord::api::bucket_info get_bucket(std::string bucket_url);
+                    pplx::task<disccord::models::entity<uint64_t>> request(route_info& route, pplx::cancellation_token token = pplx::cancellation_token::none());
 
                 private:
+                    disccord::api::bucket_info* get_bucket(route_info& route);
+
                     web::http::client::http_client http_client;
-                    std::unordered_map<std::string, disccord::api::bucket_info> buckets;
+                    std::unordered_map<std::string, disccord::api::bucket_info*> buckets;
                     std::string token;
                     disccord::token_type token_type;
                     void setup_discord_handler();

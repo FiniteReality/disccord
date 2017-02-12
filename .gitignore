@@ -9,7 +9,7 @@ build/*
 
 # Test files
 test/*_test
-test/*.data.txt
+test_data/*
 
 # Object files
 *.o

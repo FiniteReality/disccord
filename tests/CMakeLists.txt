@@ -13,3 +13,4 @@ endmacro(add_test_executable)
 
 add_test_executable(routes routes.cpp)
 add_test_executable(semaphores semaphores.cpp)
+add_test_executable(rest rest.cpp)

@@ -8,8 +8,18 @@ namespace disccord
         { }
         
         template <typename T>
-        entity<T>::entity(T id, bool attached)
-            : id(id), attached(attached)
+        entity<T> entity<T>::create(T id, bool attached)
+        {
+            auto result = entity<T>();
+
+            result.id = id;
+            result.attached = attached;
+
+            return result;
+        }
+
+        template <typename T>
+        entity<T>::~entity()
         { }
         
         template <typename T>

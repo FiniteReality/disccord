@@ -8,11 +8,10 @@ namespace disccord
         template<typename T>
         class entity
         {
-            private:
-                entity();
-                
             public:
-                entity(T id, bool attached);
+                entity();
+
+                static entity<T> create(T id, bool attached);
                 virtual ~entity();
 
                 T getId();

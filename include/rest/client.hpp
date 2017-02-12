@@ -13,7 +13,7 @@ namespace disccord
                 discord_rest_client();
                 virtual ~discord_rest_client();
             private:
-                disccord::rest::internal::discord_rest_api_client api_client;
+                disccord::rest::internal::rest_api_client api_client;
         };
     }
 }
