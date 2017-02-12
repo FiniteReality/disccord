@@ -2,6 +2,10 @@ dist: trusty
 sudo: required
 language: cpp
 
+env:
+  global:
+    - secure: "OfPj2Z1jMzljqRkp0W1IomDkBQYn6vfr5Bqp4PP2MCu+A/9MedWUydbV8rzTSsU6pyGHXsGYP98v2ng9Aegz70nq//y+Hf9y5P8MPh1jJykBBN0AGyuMLfH691qzcQQBV6w9BSp4DDulkVQ1oHYGwUGvEUpP7Ku3TUbGnPQcpqMEnkX2lwW5Qs6fln8ANhOBwTQQYARzR+tO4eFiqMjdtCm/cKm7QEdcPq6MUe9UAxdU/vneyjW3g9B2cJxfdW6MjZFZKKv6E0K2pPfbX0rJ/sLbPk/MdFCqNQuBms+PmzL7uWiJul1lg/a2adJCwR13bJv6fB9hEqMXWCtByg5KcCS3AHRRruIvDNaOEeGA5L7a9d4Bz9jq/LX+lAr0959zfvHvVSrVeINAj8ekRllhUNDef+ph2huSr0xRsraBO2UJ4ZxSfIb/dSGA0LrkBz0ibdfv4ghTcRSZRgWG5YDFSnpgdMPyp3YaXpO49MJ4X+/djj1f4hMiV9/Zxe0+O91CM7x82eRgF+7HMl2sPUWafJ+bHWb9SqYn85ftNXiw+gIf4cC7oLSFimrVM8PDwvHXkrCh2zCwDPY4C56fQM/RsjIPAlFlYQg944NP9aWoLj6hJChRHvGD/i0jNWVUML4krlQ+8OJqC4PwWFD/BKtWZhMOgY64mEo+ZsQKw5p8fRU="
+
 cache:
   directories:
   - casablanca

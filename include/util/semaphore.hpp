@@ -1,8 +1,3 @@
-/*
- * Semaphore implementation based on C#'s SemaphoreSlim class:
- * https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Threading/SemaphoreSlim.cs
- */
-
 #ifndef _semaphore_hpp_
 #define _semaphore_hpp_
 

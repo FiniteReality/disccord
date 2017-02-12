@@ -1,6 +1,8 @@
 #ifndef _entity_hpp_
 #define _entity_hpp_
 
+#include <json.h>
+
 namespace disccord
 {
     namespace models
@@ -13,6 +15,8 @@ namespace disccord
 
                 static entity<T> create(T id, bool attached);
                 virtual ~entity();
+
+                static entity<T> decode(web::json::value json, bool attached);
 
                 T getId();
             

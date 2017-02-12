@@ -7,24 +7,42 @@
 #include <iostream>
 #include <fstream>
 
-#include <execinfo.h>
+#include <cstdlib>
 
 using namespace disccord::rest::internal;
 
+using entity_t = disccord::models::entity<uint64_t>;
+
+std::string environment_variable(std::string name)
+{
+	if (const char* contents = std::getenv(name.c_str()))
+		return std::string(contents);
+	else
+		return "";
+}
+
 TEST_CASE( "Correct entity ids are returned" ) {
-	std::string token;
+	std::string token = environment_variable("DISCCORD_TEST_TOKEN");
+	std::string user_id = environment_variable("DISCCORD_TEST_USER_ID");
 
-	std::ifstream file("test_data/token.data.txt");
-	std::getline(file, token);
+	if (token.empty())
+	{
+		FAIL("Pass a **BOT** token through the environment variable `DISCCORD_TEST_TOKEN`");
+	}
 
-	REQUIRE(!token.empty());
+	if (user_id.empty())
+	{
+		WARN("No userid was passed, using default");
+		user_id = "257584807716978688";
+	}
+
+	uint64_t id = std::stoull(user_id);
 
 	auto api_client = rest_api_client(web::uri("https://discordapp.com/api/v6"), token, disccord::token_type::Bot);
 	auto route = disccord::rest::Route("GET", "/users/@me");
 
-	api_client.request(route).then([](pplx::task<disccord::models::entity<uint64_t>> entity_task){
-		auto entity = entity_task.get();
-		std::cout << "Got entity ID: " << entity.getId() << std::endl;
-		REQUIRE(entity.getId() == 257584807716978688);
+	api_client.request<entity_t>(route).then([=](entity_t entity){
+		CAPTURE(entity.getId());
+		REQUIRE(entity.getId() == id);
 	}).wait();
 }

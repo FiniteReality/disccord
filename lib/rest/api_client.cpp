@@ -1,10 +1,8 @@
 #include <rest/api_client.hpp>
-
 #include <models/entity.hpp>
-
 #include <rest.hpp>
 
-#include <iostream>
+#include <type_traits>
 
 namespace disccord
 {
@@ -48,19 +46,6 @@ namespace disccord
                     buckets.emplace(info.bucket_url, bucket);
                     return bucket;
                 }
-            }
-
-            pplx::task<disccord::models::entity<uint64_t>> rest_api_client::request(route_info& route,
-                pplx::cancellation_token token)
-            {
-                auto bucket = get_bucket(route);
-
-                auto base_url = http_client.base_uri().to_string();
-                
-                return bucket->request(http_client, route.full_url).then([=](web::json::value content){
-                    uint64_t id = std::stoull(content.as_object().at("id").as_string());
-                    return disccord::models::entity<uint64_t>::create(id, true);
-                });
             }
 
             void rest_api_client::setup_discord_handler()
