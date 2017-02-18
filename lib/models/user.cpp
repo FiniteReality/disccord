@@ -35,8 +35,8 @@ namespace disccord
                 }
 
             get_field(avatar, as_string);
+            // TODO: transition this to use the macro
             bot = json.at("bot").as_bool();
-            //get_field(bot, as_bool);
             get_field(mfa_enabled, as_bool);
             get_field(verified, as_bool);
             get_field(email, as_string);
