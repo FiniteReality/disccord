@@ -1,31 +1,33 @@
 #ifndef _entity_hpp_
 #define _entity_hpp_
 
+#include <string>
+#include <unordered_map>
+
 #include <json.h>
 
 namespace disccord
 {
     namespace models
     {
-        template<typename T>
         class entity
         {
             public:
                 entity();
-
-                static entity<T> create(T id, bool attached);
                 virtual ~entity();
 
-                static entity<T> decode(web::json::value json, bool attached);
+                void decode(web::json::value json);
+                web::json::value encode();
 
-                T getId();
-            
+                uint64_t get_id();
+
             protected:
-                T id;
-                bool attached;
+                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info);
+
+            private:
+                uint64_t id;
         };
     }
 }
 
-#include <models/entity.tpp>
 #endif /* _entity_hpp_ */

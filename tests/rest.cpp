@@ -10,8 +10,7 @@
 #include <cstdlib>
 
 using namespace disccord::rest::internal;
-
-using entity_t = disccord::models::entity<uint64_t>;
+using namespace disccord::models;
 
 std::string environment_variable(std::string name)
 {
@@ -41,8 +40,8 @@ TEST_CASE( "Correct entity ids are returned" ) {
 	auto api_client = rest_api_client(web::uri("https://discordapp.com/api/v6"), token, disccord::token_type::Bot);
 	auto route = disccord::rest::Route("GET", "/users/@me");
 
-	api_client.request<entity_t>(route).then([=](entity_t entity){
-		CAPTURE(entity.getId());
-		REQUIRE(entity.getId() == id);
+	api_client.request<entity>(route).then([=](entity ent){
+		CAPTURE(ent.get_id());
+		REQUIRE(ent.get_id() == id);
 	}).wait();
 }

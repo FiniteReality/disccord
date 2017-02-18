@@ -32,7 +32,9 @@ namespace disccord
                         auto base_url = http_client.base_uri().to_string();
                         
                         return bucket->request(http_client, route.full_url).then([=](web::json::value content){
-                            return T::decode(content, false);
+                            T value;
+                            value.decode(content);
+                            return value;
                         });
                     }
 
