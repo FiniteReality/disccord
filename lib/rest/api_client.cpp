@@ -1,5 +1,4 @@
 #include <rest/api_client.hpp>
-#include <models/entity.hpp>
 #include <rest.hpp>
 
 #include <type_traits>

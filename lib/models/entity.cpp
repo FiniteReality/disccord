@@ -1,8 +1,7 @@
 #include <models/entity.hpp>
 
 #include <vector>
-#include <cstdlib>
-#include <iostream>
+#include <boost/lexical_cast.hpp>
 
 namespace disccord
 {
@@ -17,7 +16,7 @@ namespace disccord
 
         void entity::decode(web::json::value json)
         {
-            id = std::stoull(json.at("id").as_string());
+            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
         }
 
         web::json::value entity::encode()

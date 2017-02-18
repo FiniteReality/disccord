@@ -4,6 +4,8 @@
 #include <rest/api_client.hpp>
 #include <rest/route.hpp>
 
+#include <models/user.hpp>
+
 #include <iostream>
 #include <fstream>
 
@@ -40,7 +42,7 @@ TEST_CASE( "Correct entity ids are returned" ) {
 	auto api_client = rest_api_client(web::uri("https://discordapp.com/api/v6"), token, disccord::token_type::Bot);
 	auto route = disccord::rest::Route("GET", "/users/@me");
 
-	api_client.request<entity>(route).then([=](entity ent){
+	api_client.request<user>(route).then([=](user ent){
 		CAPTURE(ent.get_id());
 		REQUIRE(ent.get_id() == id);
 	}).wait();

@@ -5,7 +5,6 @@
 
 #include <rest/route.hpp>
 #include <api/bucket_info.hpp>
-#include <models/entity.hpp>
 #include <token_type.hpp>
 
 #include <unordered_map>

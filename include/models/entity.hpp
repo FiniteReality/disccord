@@ -1,8 +1,11 @@
 #ifndef _entity_hpp_
 #define _entity_hpp_
 
+#include <util/optional.hpp>
+
 #include <string>
 #include <unordered_map>
+#include <cstdint>
 
 #include <json.h>
 
@@ -16,7 +19,7 @@ namespace disccord
                 entity();
                 virtual ~entity();
 
-                void decode(web::json::value json);
+                virtual void decode(web::json::value json);
                 web::json::value encode();
 
                 uint64_t get_id();
