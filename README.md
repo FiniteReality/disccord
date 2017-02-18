@@ -10,3 +10,4 @@ Join the development server: [![Discord](https://discordapp.com/api/guilds/22669
 ## Dependencies ##
 
 - [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
+- GCC 6 (May compile on earlier versions, not tested)
