@@ -7,7 +7,7 @@ using namespace disccord::rest;
 
 SCENARIO("correct route info is returned") {
     WHEN("we provide no parameters") {
-        auto myRoute = Route("GET", "/gateway");
+        auto myRoute = get_route("GET", "/gateway");
 
         REQUIRE(myRoute.method == "GET");
         REQUIRE(myRoute.full_url == "/gateway");
@@ -15,7 +15,7 @@ SCENARIO("correct route info is returned") {
     }
 
     WHEN("we provide no parameters but a different method") {
-        auto myRoute = Route("POST", "/gateway");
+        auto myRoute = get_route("POST", "/gateway");
 
         REQUIRE(myRoute.method == "POST");
         REQUIRE(myRoute.full_url == "/gateway");
@@ -23,7 +23,7 @@ SCENARIO("correct route info is returned") {
     }
 
     WHEN("we provide a single major parameter") {
-        auto myRoute = Route("GET", "/guilds/{guild.id}", "1234567890");
+        auto myRoute = get_route("GET", "/guilds/{guild.id}", "1234567890");
 
         REQUIRE(myRoute.method == "GET");
         REQUIRE(myRoute.full_url == "/guilds/1234567890");
@@ -31,7 +31,7 @@ SCENARIO("correct route info is returned") {
     }
 
     WHEN("we provide multiple major parameters") {
-        auto myRoute = Route("GET",
+        auto myRoute = get_route("GET",
             "/guilds/{guild.id}/channels/{channel.id}",
             "1234567890", "0987654321");
 
@@ -42,7 +42,7 @@ SCENARIO("correct route info is returned") {
     }
 
     WHEN("we provide a single major parameter and a minor parameter") {
-        auto myRoute = Route("GET", "/guilds/{guild.id}/emojis/{emoji.id}",
+        auto myRoute = get_route("GET", "/guilds/{guild.id}/emojis/{emoji.id}",
             "1234567890", "0987654321");
 
         REQUIRE(myRoute.method == "GET");
@@ -51,7 +51,7 @@ SCENARIO("correct route info is returned") {
     }
 
     WHEN("we provide a single minor parameter") {
-        auto myRoute = Route("GET", "/emojis/{emoji.id}", "1234567890");
+        auto myRoute = get_route("GET", "/emojis/{emoji.id}", "1234567890");
 
         REQUIRE(myRoute.method == "GET");
         REQUIRE(myRoute.full_url == "/emojis/1234567890");
@@ -59,7 +59,7 @@ SCENARIO("correct route info is returned") {
     }
 
     WHEN("we provide multiple minor parameters") {
-        auto myRoute = Route("GET", "/roles/{role.id}/emojis/{emoji.id}",
+        auto myRoute = get_route("GET", "/roles/{role.id}/emojis/{emoji.id}",
             "1234567890", "0987654321");
 
         REQUIRE(myRoute.method == "GET");

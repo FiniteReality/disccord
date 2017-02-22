@@ -7,6 +7,8 @@
 #include <api/bucket_info.hpp>
 #include <token_type.hpp>
 
+#include <models/user.hpp>
+
 #include <unordered_map>
 
 namespace disccord
@@ -36,6 +38,8 @@ namespace disccord
                             return value;
                         });
                     }
+
+                    pplx::task<disccord::models::user> get_current_user(pplx::cancellation_token token = pplx::cancellation_token::none());
 
                 private:
                     disccord::api::bucket_info* get_bucket(route_info& route);

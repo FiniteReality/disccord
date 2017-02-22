@@ -6,13 +6,13 @@ namespace disccord
     {
         namespace internal
         {
-            std::string RouteString(std::string url)
+            std::string get_route_string(std::string url)
             {
                 return url;
             }
         }
 
-        route_info Route(std::string method, std::string url)
+        route_info get_route(std::string method, std::string url)
         {
             route_info info;
             info.method = method;

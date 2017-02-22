@@ -40,9 +40,8 @@ TEST_CASE( "Correct entity ids are returned" ) {
 	uint64_t id = std::stoull(user_id);
 
 	auto api_client = rest_api_client(web::uri("https://discordapp.com/api/v6"), token, disccord::token_type::Bot);
-	auto route = disccord::rest::Route("GET", "/users/@me");
 
-	api_client.request<user>(route).then([=](user ent){
+	api_client.get_current_user().then([=](user ent){
 		CAPTURE(ent.get_id());
 		REQUIRE(ent.get_id() == id);
 	}).wait();

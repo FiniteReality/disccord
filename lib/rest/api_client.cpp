@@ -32,6 +32,12 @@ namespace disccord
                 buckets.clear();
             }
 
+            pplx::task<disccord::models::user> rest_api_client::get_current_user(pplx::cancellation_token token)
+            {
+                auto route = get_route("GET", "/users/@me");
+                return request<disccord::models::user>(route, token);
+            }
+
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
