@@ -7,7 +7,7 @@ set(LIBS ${LIBS} ${CPPREST_LIBRARIES} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${
 
 set(SOURCE_FILES client.cpp rest/api_client.cpp rest/route.cpp
 api/bucket_info.cpp rest/client.cpp util/semaphore.cpp models/entity.cpp
-models/user.cpp)
+models/user.cpp models/user_guild.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
