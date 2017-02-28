@@ -32,7 +32,7 @@ namespace disccord
 
             get_field(url, as_string);
             get_field(icon_url, as_string);
-			get_field(proxy_icon_url, as_string);
+            get_field(proxy_icon_url, as_string);
 
             #undef get_field
         }

@@ -17,8 +17,8 @@ namespace disccord
 
                 std::string get_url();
                 util::optional<std::string> get_proxy_url();
-				util::optional<int> get_height();
-				util::optional<int> get_width();
+                util::optional<int> get_height();
+                util::optional<int> get_width();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
@@ -26,7 +26,7 @@ namespace disccord
             private:
                 std::string url;
                 util::optional<std::string> proxy_url;
-				util::optional<int> height, width;
+                util::optional<int> height, width;
         };
     }
 }

@@ -32,7 +32,7 @@ namespace disccord
 
             get_field(proxy_url, as_string);
             get_field(height, as_integer);
-			get_field(width, as_integer);
+            get_field(width, as_integer);
 
             #undef get_field
         }
@@ -46,7 +46,7 @@ namespace disccord
                 info["proxy_url"] = web::json::value(get_proxy_url().get_value());
             if (get_height().is_specified())
                 info["height"] = web::json::value(get_height().get_value());
-			if (get_width().is_specified())
+            if (get_width().is_specified())
                 info["width"] = web::json::value(get_width().get_value());
         }
 
@@ -62,7 +62,7 @@ namespace disccord
         {
             return height;
         }
-		util::optional<int> embed_image::get_width()
+        util::optional<int> embed_image::get_width()
         {
             return width;
         }

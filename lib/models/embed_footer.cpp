@@ -31,7 +31,7 @@ namespace disccord
                 }
 
             get_field(icon_url, as_string);
-			get_field(proxy_icon_url, as_string);
+            get_field(proxy_icon_url, as_string);
 
             #undef get_field
         }
@@ -55,7 +55,7 @@ namespace disccord
         {
             return icon_url;
         }
-		util::optional<std::string> embed_footer::get_proxy_icon_url()
+        util::optional<std::string> embed_footer::get_proxy_icon_url()
         {
             return proxy_icon_url;
         }

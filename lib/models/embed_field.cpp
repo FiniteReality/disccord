@@ -17,7 +17,7 @@ namespace disccord
 
             // will never throw exceptions
             name = json.at("name").as_string();
-			value = json.at("value").as_string();
+            value = json.at("value").as_string();
 
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
@@ -32,7 +32,7 @@ namespace disccord
                 }
 
             _inline = json.at("inline").as_bool();
-			//get_field(_inline, as_bool); won't work, "_inline" isnt a key
+            //get_field(_inline, as_bool); won't work, "_inline" isnt a key
             #undef get_field
         }
 
@@ -41,8 +41,8 @@ namespace disccord
             entity::encode_to(info);
 
             info["name"] = web::json::value(get_name());
-			info["value"] = web::json::value(get_value());
-			info["inline"] = web::json::value(get_inline().get_value());
+            info["value"] = web::json::value(get_value());
+            info["inline"] = web::json::value(get_inline().get_value());
         }
 
         std::string embed_field::get_name()

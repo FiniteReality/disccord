@@ -18,7 +18,7 @@ namespace disccord
                 std::string get_name();
                 util::optional<std::string> get_url();
                 util::optional<std::string> get_icon_url();
-				util::optional<std::string> get_proxy_icon_url();
+                util::optional<std::string> get_proxy_icon_url();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;

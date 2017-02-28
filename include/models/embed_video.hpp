@@ -16,15 +16,15 @@ namespace disccord
                 virtual void decode(web::json::value json) override;
 
                 std::string get_url();
-				util::optional<int> get_height();
-				util::optional<int> get_width();
+                util::optional<int> get_height();
+                util::optional<int> get_width();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
                 std::string url;
-				util::optional<int> height, width;
+                util::optional<int> height, width;
         };
     }
 }
