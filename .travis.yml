@@ -2,6 +2,15 @@ dist: trusty
 sudo: required
 language: cpp
 
+addons:
+  apt:
+    sources:
+    - sourceline: 'ppa:ubuntu-toolchain-r/test'
+    packages:
+    - gcc-6
+    - g++-6
+    - libboost-all-dev
+
 env:
   global:
     - secure: "cG3bH7OEAdhmWKsNLf2zHNYyNeJ63NeJS9DUawpVCsp1t9s85V9XeT/n/NmAPAhh+NhwOzr8gHcSqsHYUvK20VdVsxy3KI2IFaTXeFgtuJ/vty2RHfPpI+VLG7EmFgmPZGz5aXW+Hw7oULckROb+T0EryRg45SNncKB3wA/Y/GcXM3JdiSpwh6Fi0C8F4zQ2kVTMmM/fxmgVvdEnvha2OdWxR2zdFv6rZDjSPWdtKwqimfIusAwPGzb32Bi/nu0fNCDRPJreayQwS2yOrQdsoDvA28gEx82i1J21JjSvWK3OankroOXxuUtYJWYXvqaqPxhoEJrI9oemW4rOKAYejPrXBqp989OYdS8Tq0FjNvO+iLrXIjEATM0hbCuyWJ0BcK319gfl3twy1VFcVIkeQoVYZ1EU2dm8Dj5fJ8TzKgLGwlMOvGRpFprRWqk1bQvdTBj2zT+FWK7mWhYEP5JGM8Ac1zxN+nqQ97LFz1+6RxEm63kbeYjqSTsfCj0ZWmQ3h7vfFOQW+Y24yltZGZROLBvH8nbu/MCpC+nhghOfwAZ2FELf7rqC+sRR+kcfUg5GjDksWPmSt9jOWuia2s/qySCZ8nCWsrPm2XSOOLEaZUWo14vqbPS79vdWmYpbUXjXxNj2FVONU7vLhfd1zPiWdI9f4SQR011QKaPnrPmp9tc="
@@ -21,5 +30,4 @@ before_install:
 
 install: ./install-dependencies.sh
 
-script:
-  - mkdir build && cd build && cmake .. && make && ctest -VV
+script: ./build.sh
