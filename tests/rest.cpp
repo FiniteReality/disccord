@@ -6,6 +6,7 @@
 
 #include <models/user.hpp>
 
+#include <exception>
 #include <iostream>
 #include <fstream>
 
@@ -22,13 +23,13 @@ std::string environment_variable(std::string name)
 		return "";
 }
 
-TEST_CASE( "Correct entity ids are returned" ) {
+TEST_CASE( "Correct entity ids are returned", "[!throws]" ) {
 	std::string token = environment_variable("DISCCORD_TEST_TOKEN");
 	std::string user_id = environment_variable("DISCCORD_TEST_USER_ID");
 
 	if (token.empty())
 	{
-		FAIL("Pass a **BOT** token through the environment variable `DISCCORD_TEST_TOKEN`");
+		throw std::runtime_error("Pass a **BOT** token through the environment variable `DISCCORD_TEST_TOKEN`");
 	}
 
 	if (user_id.empty())

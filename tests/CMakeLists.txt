@@ -8,7 +8,12 @@ macro(add_test_executable name source)
   add_executable("${name}_test" "${source}")
   add_dependencies("${name}_test" disccord)
   target_link_libraries("${name}_test" disccord ${LIBS})
-  add_test(NAME "${name}" COMMAND "${name}_test")
+  
+  if(DISCCORD_IGNORE_UNSAFE_TESTS)
+    add_test(NAME "${name}" COMMAND "${name}_test" -e)
+  else()
+    add_test(NAME "${name}" COMMAND "${name}_test")
+  endif()
 endmacro(add_test_executable)
 
 add_test_executable(routes routes.cpp)
