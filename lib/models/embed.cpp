@@ -1,5 +1,16 @@
 #include <models/embed.hpp>
 
+#include <vector>
+
+#include <models/entity.hpp>
+#include <models/embed_author.hpp>
+#include <models/embed_field.hpp>
+#include <models/embed_footer.hpp>
+#include <models/embed_image.hpp>
+#include <models/embed_video.hpp>
+#include <models/embed_thumbnail.hpp>
+#include <models/embed_provider.hpp>
+
 namespace disccord
 {
     namespace models
@@ -58,118 +69,106 @@ namespace disccord
 			//can refactor these, seems a bit clunky
 			if (get_footer().is_specified()){
 				web::json::value obj;
-				obj["text"] = web::json::value(get_footer().get_text());
-				if (get_footer().get_icon_url().is_specified())
-					obj["icon_url"] = web::json::value(get_footer().get_icon_url());
-				if (get_footer().get_proxy_icon_url().is_specified())
-					obj["proxy_icon_url"] = web::json::value(get_footer().get_proxy_icon_url());
+				obj["text"] = web::json::value(get_footer().get_value().get_text());
+				if (get_footer().get_value().get_icon_url().is_specified())
+					obj["icon_url"] = web::json::value(get_footer().get_value().get_icon_url().get_value());
+				if (get_footer().get_value().get_proxy_icon_url().is_specified())
+					obj["proxy_icon_url"] = web::json::value(get_footer().get_value().get_proxy_icon_url().get_value());
 				info["footer"] = obj;
 			}
 			if (get_image().is_specified()){
 				web::json::value obj;
-				obj["url"] = web::json::value(get_image().get_url());
-				if (get_image().get_proxy_url().is_specified())
-					obj["proxy_url"] = web::json::value(get_image().get_proxy_url());
-				if (get_image().get_height().is_specified())
-					obj["height"] = web::json::value(get_image().get_height());
-				if (get_image().get_width().is_specified())
-					obj["width"] = web::json::value(get_image().get_width());
+				obj["url"] = web::json::value(get_image().get_value().get_url());
+				if (get_image().get_value().get_proxy_url().is_specified())
+					obj["proxy_url"] = web::json::value(get_image().get_value().get_proxy_url().get_value());
+				if (get_image().get_value().get_height().is_specified())
+					obj["height"] = web::json::value(get_image().get_value().get_height().get_value());
+				if (get_image().get_value().get_width().is_specified())
+					obj["width"] = web::json::value(get_image().get_value().get_width().get_value());
 				info["image"] = obj;
 			}
 			if (get_thumbnail().is_specified()){
 				web::json::value obj;
-				obj["url"] = web::json::value(get_thumbnail().get_url());
-				if (get_thumbnail().get_proxy_url().is_specified())
-					obj["proxy_url"] = web::json::value(get_thumbnail().get_proxy_url());
-				if (get_thumbnail().get_height().is_specified())
-					obj["height"] = web::json::value(get_thumbnail().get_height());
-				if (get_thumbnail().get_width().is_specified())
-					obj["width"] = web::json::value(get_thumbnail().get_width());
+				obj["url"] = web::json::value(get_thumbnail().get_value().get_url());
+				if (get_thumbnail().get_value().get_proxy_url().is_specified())
+					obj["proxy_url"] = web::json::value(get_thumbnail().get_value().get_proxy_url().get_value());
+				if (get_thumbnail().get_value().get_height().is_specified())
+					obj["height"] = web::json::value(get_thumbnail().get_value().get_height().get_value());
+				if (get_thumbnail().get_value().get_width().is_specified())
+					obj["width"] = web::json::value(get_thumbnail().get_value().get_width().get_value());
 				info["thumbnail"] = obj;
 			}
 			if (get_video().is_specified()){
 				web::json::value obj;
-				obj["url"] = web::json::value(get_video().get_url());
-				if (get_video().get_height().is_specified())
-					obj["height"] = web::json::value(get_video().get_height());
-				if (get_video().get_width().is_specified())
-					obj["width"] = web::json::value(get_video().get_width());
+				obj["url"] = web::json::value(get_video().get_value().get_url());
+				if (get_video().get_value().get_height().is_specified())
+					obj["height"] = web::json::value(get_video().get_value().get_height().get_value());
+				if (get_video().get_value().get_width().is_specified())
+					obj["width"] = web::json::value(get_video().get_value().get_width().get_value());
 				info["video"] = obj;
 			}
 			if (get_provider().is_specified()){
 				web::json::value obj;
-				obj["name"] = web::json::value(get_provider().get_name());
-				if (get_provider().get_url().is_specified())
-					obj["url"] = web::json::value(get_provider().get_url());
+				obj["name"] = web::json::value(get_provider().get_value().get_name());
+				if (get_provider().get_value().get_url().is_specified())
+					obj["url"] = web::json::value(get_provider().get_value().get_url().get_value());
 				info["provider"] = obj;
 			}
 			
 			if (get_fields().is_specified()){
 				std::vector<web::json::value> field_array;
-				for (unsigned int i = 0; i < get_fields().size(); i++){
+				for (unsigned int i = 0; i < get_fields().get_value().size(); i++){
 					web::json::value obj;
-					obj["name"] = web::json::value(get_fields()[i].get_name());
-					obj["value"] = web::json::value(get_fields()[i].get_value());
-					if (get_fields()[i].get_inline().is_specified())
-						obj["inline"] = web::json::value(get_fields()[i].get_inline());
+					obj["name"] = web::json::value(get_fields().get_value()[i].get_name());
+					obj["value"] = web::json::value(get_fields().get_value()[i].get_value());
+					if (get_fields().get_value()[i].get_inline().is_specified())
+						obj["inline"] = web::json::value(get_fields().get_value()[i].get_inline().get_value());
 					field_array.push_back(obj);
 				}
 				info["fields"] = web::json::value::array(field_array);
 			}
 			if (get_author().is_specified()){
 				web::json::value obj;
-				obj["name"] = web::json::value(get_author().get_name());
-				if (get_author().get_url().is_specified())
-					obj["url"] = web::json::value(get_author().get_url());
-				if (get_author().get_icon_url().is_specified())
-					obj["icon_url"] = web::json::value(get_author().get_icon_url());
-				if (get_author().get_proxy_icon_url().is_specified())
-					obj["proxy_icon_url"] = web::json::value(get_author().get_proxy_icon_url());
+				obj["name"] = web::json::value(get_author().get_value().get_name());
+				if (get_author().get_value().get_url().is_specified())
+					obj["url"] = web::json::value(get_author().get_value().get_url().get_value());
+				if (get_author().get_value().get_icon_url().is_specified())
+					obj["icon_url"] = web::json::value(get_author().get_value().get_icon_url().get_value());
+				if (get_author().get_value().get_proxy_icon_url().is_specified())
+					obj["proxy_icon_url"] = web::json::value(get_author().get_value().get_proxy_icon_url().get_value());
 				info["author"] = obj;
 			}
         }
 		
 		void embed::set_footer(web::json::value json)
 		{
-			embed_footer _footer;
-			_footer.decode(json);
-			footer = _footer;
+			get_footer().get_value().decode(json);
 		}
 		void embed::set_image(web::json::value json)
 		{
-			embed_image _image;
-			_image.decode(json);
-			image = _image;
+			get_image().get_value().decode(json);
 		}
 		void embed::set_thumbnail(web::json::value json)
 		{
-			embed_thumbnail _thumbnail;
-			_thumbnail.decode(json);
-			thumbnail = _thumbnail;
+			get_thumbnail().get_value().decode(json);
 		}
 		void embed::set_video(web::json::value json)
 		{
-			embed_video _video;
-			_video.decode(json);
-			video = _video;
+			get_video().get_value().decode(json);
 		}
 		void embed::set_provider(web::json::value json)
 		{
-			embed_provider _provider;
-			_provider.decode(json);
-			provider = _provider;
+			get_provider().get_value().decode(json);
 		}
 		void embed::set_author(web::json::value json)
 		{
-			embed_author _author;
-			_author.decode(json);
-			author = _author;
+			get_author().get_value().decode(json);
 		}
 		void embed::add_field(web::json::value json)
 		{
 			embed_field _field;
 			_field.decode(json);
-			fields.push_back(_fields);
+			get_fields().get_value().push_back(_field);
 		}
 		
 		std::string embed::get_title()
@@ -196,31 +195,31 @@ namespace disccord
         {
             return color;
         }
-        util::optional<embed_footer> user::get_footer()
+        util::optional<embed_footer> embed::get_footer()
         {
-            return get_footer;
+            return footer;
         }
-        util::optional<embed_image> user::get_image()
+        util::optional<embed_image> embed::get_image()
         {
             return image;
         }
-        util::optional<embed_thumbnail> user::get_thumbnail()
+        util::optional<embed_thumbnail> embed::get_thumbnail()
         {
             return thumbnail;
         }
-		util::optional<embed_video> user::get_video()
+		util::optional<embed_video> embed::get_video()
         {
             return video;
         }
-		util::optional<embed_provider> user::get_provider()
+		util::optional<embed_provider> embed::get_provider()
         {
             return provider;
         }
-		util::optional<embed_author> user::get_author()
+		util::optional<embed_author> embed::get_author()
         {
             return author;
         }
-		util::optional<std::vector<embed_field>> user::get_fields()
+		util::optional<std::vector<embed_field>> embed::get_fields()
         {
             return fields;
         }

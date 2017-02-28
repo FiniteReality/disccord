@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <models/entity.hpp>
+#include <models/embed_author.hpp>
 #include <models/embed_field.hpp>
 #include <models/embed_footer.hpp>
 #include <models/embed_image.hpp>
