@@ -4,7 +4,7 @@
 #include <cpprest/ws_client.h>
 #include <string>
 
-#include <tokenType.hpp>
+#include <token_type.hpp>
 
 #include <rest/client.hpp>
 
@@ -17,7 +17,6 @@ namespace disccord
         public:
             Client();
             virtual ~Client();
-            void Connect(std::string token, TokenType tokenType);
     };
 }
 
