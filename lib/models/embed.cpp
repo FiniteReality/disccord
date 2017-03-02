@@ -215,7 +215,7 @@ namespace disccord
         {
             return provider;
         }
-        util::optional<embed_author>& embed::get_author()
+        util::optional<embed_author> embed::get_author()
         {
             return author;
         }
