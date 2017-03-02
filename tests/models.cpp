@@ -70,8 +70,8 @@ TEST_CASE( "Embed model correctly instantiated" ){
     footer_obj["text"] = web::json::value("test_text");
     footer_obj["icon_url"] = web::json::value("test_icon_url");
     test_embed_footer.decode(footer_obj);
-	
-	REQUIRE(test_embed_footer.get_text() == "test_text");
+    
+    REQUIRE(test_embed_footer.get_text() == "test_text");
     REQUIRE(test_embed_footer.get_icon_url().get_value() == "test_icon_url");
     
     //Embed Sub-model: Image
@@ -81,7 +81,7 @@ TEST_CASE( "Embed model correctly instantiated" ){
     image_obj["id"] = web::json::value("4");
     image_obj["url"] = web::json::value("test_url");
     test_embed_image.decode(image_obj);
-	
+    
     REQUIRE(test_embed_image.get_url() == "test_url");
     
     //Embed Sub-model: Provider
@@ -92,9 +92,9 @@ TEST_CASE( "Embed model correctly instantiated" ){
     provider_obj["name"] = web::json::value("test_name");
     provider_obj["url"] = web::json::value("test_url");
     test_embed_provider.decode(provider_obj);
-	
-	REQUIRE(test_embed_provider.get_name() == "test_name");
-	REQUIRE(test_embed_provider.get_url().get_value() == "test_url");
+    
+    REQUIRE(test_embed_provider.get_name() == "test_name");
+    REQUIRE(test_embed_provider.get_url().get_value() == "test_url");
     
     //Embed Sub-model: Thumbnail
     embed_thumbnail test_embed_thumbnail;
@@ -103,8 +103,8 @@ TEST_CASE( "Embed model correctly instantiated" ){
     thumbnail_obj["id"] = web::json::value("6");
     thumbnail_obj["url"] = web::json::value("test_url");
     test_embed_thumbnail.decode(thumbnail_obj);
-	
-	REQUIRE(test_embed_thumbnail.get_url() == "test_url");
+    
+    REQUIRE(test_embed_thumbnail.get_url() == "test_url");
     
     //Embed Sub-model: Video
     embed_video test_embed_video;
@@ -114,7 +114,7 @@ TEST_CASE( "Embed model correctly instantiated" ){
     video_obj["url"] = web::json::value("test_url");
     test_embed_video.decode(video_obj);
 
-	REQUIRE(test_embed_video.get_url() == "test_url");
+    REQUIRE(test_embed_video.get_url() == "test_url");
     
     //Embed Sub-model: Field
     embed_field test_embed_field;
@@ -124,10 +124,10 @@ TEST_CASE( "Embed model correctly instantiated" ){
     field_obj["name"] = web::json::value("test_name");
     field_obj["value"] = web::json::value("test_value");
     test_embed_field.decode(field_obj);
-	
-	REQUIRE(test_embed_field.get_name() == "test_name");
+    
+    REQUIRE(test_embed_field.get_name() == "test_name");
     REQUIRE(test_embed_field.get_value() == "test_value");
-	REQUIRE(test_embed_field.get_inline().get_value() == false);
+    REQUIRE(test_embed_field.get_inline().get_value() == false);
     
     //build embed submodels..
     embed_obj["footer"] = footer_obj;
@@ -142,13 +142,13 @@ TEST_CASE( "Embed model correctly instantiated" ){
     
     test_embed.decode(embed_obj);
 
-	//check all embed members
+    //check all embed members
     REQUIRE( test_embed.get_title() == "test_title" );
     REQUIRE( test_embed.get_type() == "rich" );
     REQUIRE( test_embed.get_color() == 4679 );
-	REQUIRE( test_embed.get_description().get_value() == "test_description" );
-	REQUIRE( test_embed.get_url().get_value() == "test_url" );
-	REQUIRE( test_embed.get_date().get_value() == "test_date" );
+    REQUIRE( test_embed.get_description().get_value() == "test_description" );
+    REQUIRE( test_embed.get_url().get_value() == "test_url" );
+    REQUIRE( test_embed.get_date().get_value() == "test_date" );
 
     REQUIRE( test_embed.get_fields().get_value().empty() == false );
     
