@@ -7,7 +7,7 @@ namespace disccord
         embed_author::embed_author()
             : name(""), url(), icon_url(), proxy_icon_url()
         { }
-
+        
         embed_author::~embed_author()
         { }
 
@@ -36,7 +36,7 @@ namespace disccord
 
             #undef get_field
         }
-
+        
         void embed_author::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);

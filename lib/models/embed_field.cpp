@@ -30,8 +30,10 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-
-            _inline = json.at("inline").as_bool();
+                
+            //_inline is set on constructor, but overwrite it here.
+            if (json.has_field("inline"))
+                _inline = json.at("inline").as_bool();
             //get_field(_inline, as_bool); won't work, "_inline" isnt a key
             #undef get_field
         }

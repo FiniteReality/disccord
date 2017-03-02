@@ -27,12 +27,12 @@ namespace disccord
         void embed::decode(web::json::value json)
         {
             entity::decode(json);
-
+            
             // will never throw exceptions
             title = json.at("title").as_string();
             type = json.at("type").as_string();
             color = json.at("color").as_integer();
-
+            
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -142,33 +142,33 @@ namespace disccord
         
         void embed::set_footer(web::json::value json)
         {
-            get_footer().get_value().decode(json);
+            footer.get_value().decode(json);
         }
         void embed::set_image(web::json::value json)
         {
-            get_image().get_value().decode(json);
+            image.get_value().decode(json);
         }
         void embed::set_thumbnail(web::json::value json)
         {
-            get_thumbnail().get_value().decode(json);
+            thumbnail.get_value().decode(json);
         }
         void embed::set_video(web::json::value json)
         {
-            get_video().get_value().decode(json);
+            video.get_value().decode(json);
         }
         void embed::set_provider(web::json::value json)
         {
-            get_provider().get_value().decode(json);
+            provider.get_value().decode(json);
         }
         void embed::set_author(web::json::value json)
         {
-            get_author().get_value().decode(json);
+            author.get_value().decode(json);
         }
         void embed::add_field(web::json::value json)
         {
-            embed_field _field;
-            _field.decode(json);
-            get_fields().get_value().push_back(_field);
+            embed_field field;
+            field.decode(json);
+            fields.get_value().push_back(field);
         }
         
         std::string embed::get_title()
@@ -215,7 +215,7 @@ namespace disccord
         {
             return provider;
         }
-        util::optional<embed_author> embed::get_author()
+        util::optional<embed_author>& embed::get_author()
         {
             return author;
         }

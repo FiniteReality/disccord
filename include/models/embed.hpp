@@ -43,7 +43,7 @@ namespace disccord
                 util::optional<embed_thumbnail> get_thumbnail();
                 util::optional<embed_video> get_video();
                 util::optional<embed_provider> get_provider();
-                util::optional<embed_author> get_author();
+                util::optional<embed_author>& get_author();
                 util::optional<std::vector<embed_field>> get_fields();
                 
             protected:
