@@ -14,3 +14,4 @@ else
 fi
 
 make
+ctest -VV
