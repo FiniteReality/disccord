@@ -16,27 +16,19 @@ namespace disccord
 {
     namespace models
     {
-        class embed : public entity
+        class embed : public model
         {
             public:
                 embed();
                 virtual ~embed();
 
                 virtual void decode(web::json::value json) override;
-                
-                void set_footer(web::json::value json);
-                void set_image(web::json::value json);
-                void set_thumbnail(web::json::value json);
-                void set_video(web::json::value json);
-                void set_provider(web::json::value json);
-                void set_author(web::json::value json);
-                void add_field(web::json::value json);
 
                 std::string get_title();
                 std::string get_type();
                 util::optional<std::string> get_description();
                 util::optional<std::string> get_url();
-                util::optional<std::string> get_date();
+                util::optional<std::string> get_timestamp();
                 int get_color();
                 util::optional<embed_footer> get_footer();
                 util::optional<embed_image> get_image();
@@ -45,13 +37,13 @@ namespace disccord
                 util::optional<embed_provider> get_provider();
                 util::optional<embed_author> get_author();
                 util::optional<std::vector<embed_field>> get_fields();
-                
+
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
                 std::string title, type;
-                util::optional<std::string> description, url, date;
+                util::optional<std::string> description, url, timestamp;
                 int color;
                 util::optional<embed_footer> footer;
                 util::optional<embed_image> image;

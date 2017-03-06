@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace models
     {
-        class embed_field : public entity
+        class embed_field : public model
         {
             public:
                 embed_field();

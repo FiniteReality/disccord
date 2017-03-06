@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace models
     {
-        class embed_thumbnail : public entity
+        class embed_thumbnail : public model
         {
             public:
                 embed_thumbnail();

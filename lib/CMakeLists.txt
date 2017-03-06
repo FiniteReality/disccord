@@ -1,16 +1,18 @@
 find_package(cpprest REQUIRED)
-find_package(Boost 1.54.0 REQUIRED COMPONENTS system filesystem atomic chrono random regex)
+find_package(Boost 1.54.0 REQUIRED COMPONENTS system filesystem atomic chrono
+    random regex)
 find_package(OpenSSL REQUIRED)
 
 include_directories(${CPPREST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-set(LIBS ${LIBS} ${CPPREST_LIBRARIES} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${CMAKE_DL_LIBS})
+set(LIBS ${LIBS} ${CPPREST_LIBRARIES} ${Boost_LIBRARIES}
+    ${OPENSSL_LIBRARIES} ${CMAKE_DL_LIBS})
 
 set(SOURCE_FILES client.cpp rest/api_client.cpp rest/route.cpp
-api/bucket_info.cpp rest/client.cpp util/semaphore.cpp models/entity.cpp
-models/user.cpp models/user_guild.cpp
-models/embed.cpp models/embed_author.cpp models/embed_field.cpp
-models/embed_footer.cpp models/embed_image.cpp models/embed_provider.cpp
-models/embed_thumbnail.cpp models/embed_video.cpp)
+api/bucket_info.cpp rest/client.cpp util/semaphore.cpp models/model.cpp
+models/entity.cpp models/user.cpp models/user_guild.cpp models/embed.cpp
+models/embed_author.cpp models/embed_field.cpp models/embed_footer.cpp
+models/embed_image.cpp models/embed_provider.cpp models/embed_thumbnail.cpp
+models/embed_video.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
