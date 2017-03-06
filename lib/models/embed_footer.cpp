@@ -13,9 +13,6 @@ namespace disccord
 
         void embed_footer::decode(web::json::value json)
         {
-            entity::decode(json);
-
-            // will never throw exceptions
             text = json.at("text").as_string();
 
             #define get_field(var, conv) \
@@ -38,13 +35,11 @@ namespace disccord
 
         void embed_footer::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            entity::encode_to(info);
-
             info["text"] = web::json::value(get_text());
             if (get_icon_url().is_specified())
-                info["icon_url"] = web::json::value(get_icon_url().get_value());
+                info["icon_url"] = get_icon_url();
             if (get_proxy_icon_url().is_specified())
-                info["proxy_icon_url"] = web::json::value(get_proxy_icon_url().get_value());
+                info["proxy_icon_url"] = get_proxy_icon_url();
         }
 
         std::string embed_footer::get_text()

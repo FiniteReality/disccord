@@ -13,9 +13,6 @@ namespace disccord
 
         void embed_provider::decode(web::json::value json)
         {
-            entity::decode(json);
-
-            // will never throw exceptions
             name = json.at("name").as_string();
 
             #define get_field(var, conv) \
@@ -37,11 +34,9 @@ namespace disccord
 
         void embed_provider::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            entity::encode_to(info);
-
             info["name"] = web::json::value(get_name());
             if (get_url().is_specified())
-                info["url"] = web::json::value(get_url().get_value());
+                info["url"] = get_url();
         }
 
         std::string embed_provider::get_name()

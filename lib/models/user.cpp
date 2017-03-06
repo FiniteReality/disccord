@@ -17,8 +17,7 @@ namespace disccord
         void user::decode(web::json::value json)
         {
             entity::decode(json);
-
-            // will never throw exceptions
+            
             username = json.at("username").as_string();
             discriminator = boost::lexical_cast<uint16_t>(json.at("discriminator").as_string());
 

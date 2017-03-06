@@ -13,9 +13,6 @@ namespace disccord
 
         void embed_image::decode(web::json::value json)
         {
-            entity::decode(json);
-
-            // will never throw exceptions
             url = json.at("url").as_string();
 
             #define get_field(var, conv) \
@@ -39,15 +36,13 @@ namespace disccord
 
         void embed_image::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            entity::encode_to(info);
-
             info["url"] = web::json::value(get_url());
             if (get_proxy_url().is_specified())
-                info["proxy_url"] = web::json::value(get_proxy_url().get_value());
+                info["proxy_url"] = get_proxy_url();
             if (get_height().is_specified())
-                info["height"] = web::json::value(get_height().get_value());
+                info["height"] = get_height();
             if (get_width().is_specified())
-                info["width"] = web::json::value(get_width().get_value());
+                info["width"] = get_width();
         }
 
         std::string embed_image::get_url()

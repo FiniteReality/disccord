@@ -5,7 +5,7 @@ namespace disccord
     namespace models
     {
         embed_field::embed_field()
-            : name(""), value(""), _inline(false) //default inline to false
+            : name(""), value(""), _inline() //default inline to false
         { }
 
         embed_field::~embed_field()
@@ -13,9 +13,6 @@ namespace disccord
 
         void embed_field::decode(web::json::value json)
         {
-            entity::decode(json);
-
-            // will never throw exceptions
             name = json.at("name").as_string();
             value = json.at("value").as_string();
 
@@ -31,18 +28,17 @@ namespace disccord
                     var = decltype(var)(); \
                 }
 
-            _inline = json.at("inline").as_bool();
-            //get_field(_inline, as_bool); won't work, "_inline" isnt a key
+            get_field(_inline, as_bool);
+
             #undef get_field
         }
 
         void embed_field::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            entity::encode_to(info);
-
             info["name"] = web::json::value(get_name());
             info["value"] = web::json::value(get_value());
-            info["inline"] = web::json::value(get_inline().get_value());
+            if (get_inline().is_specified())
+                info["inline"] = get_inline();
         }
 
         std::string embed_field::get_name()
