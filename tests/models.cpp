@@ -2,6 +2,7 @@
 
 #include <models/user.hpp>
 #include <models/embed.hpp>
+#include <models/invite.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -84,3 +85,57 @@ TEST_CASE( "Embed model correctly instantiated" ){
 
     // TODO: put some requires here!!
 }
+
+TEST_CASE( "Invite model correctly instantiated" ){
+    invite test_invite;
+    if (!test_invite.get_code().empty())
+    {
+        FAIL("Default constructor for invite model not correctly instantiated");
+    }
+    std::string json = R"({
+    "code": "asdfh487yed",
+    "guild": {
+        "id" : "165176875973476352",
+        "name" : "CS:GO Fraggers Only",
+        "splash" : null,
+        "icon" : null
+    },
+    "channel": {
+        "id" : "165176875973476352",
+        "name" : "illuminati",
+        "type" : "text"
+    }
+})";
+
+    test_invite.decode(web::json::value::parse(json));
+    
+    // When splash/icon are null
+    REQUIRE(test_invite.get_code() == "asdfh487yed");
+    REQUIRE(test_invite.get_channel().get_value().get_id() == "165176875973476352");
+    REQUIRE(test_invite.get_channel().get_value().get_name() == "illuminati");
+    REQUIRE(test_invite.get_channel().get_value().get_type() == "text");
+    REQUIRE(test_invite.get_guild().get_value().get_id() == "165176875973476352");
+    REQUIRE(test_invite.get_guild().get_value().get_name() == "CS:GO Fraggers Only");
+    
+    std::string json2 = R"({
+    "code": "asdfh487yed",
+    "guild": {
+        "id" : "165176875973476352",
+        "name" : "CS:GO Fraggers Only",
+        "splash" : "9de5c5675676fdabbc54c52ca03860a1",
+        "icon" : "197d87a0caa9ea666b14e0938606aa2d"
+    },
+    "channel": {
+        "id" : "165176875973476352",
+        "name" : "illuminati",
+        "type" : "text"
+    }
+})";
+
+    test_invite.decode(web::json::value::parse(json2));
+    
+    // When splash/icon have values
+    REQUIRE(test_invite.get_guild().get_value().get_splash().get_value() == "9de5c5675676fdabbc54c52ca03860a1");
+    REQUIRE(test_invite.get_guild().get_value().get_icon().get_value() == "197d87a0caa9ea666b14e0938606aa2d");
+}
+
