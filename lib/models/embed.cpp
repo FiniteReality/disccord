@@ -76,6 +76,7 @@ namespace disccord
                         field.decode(_field);
                         return field;
                     });
+                fields = fields_array;
             }
 
             #undef get_field
