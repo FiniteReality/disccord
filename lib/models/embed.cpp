@@ -118,57 +118,25 @@ namespace disccord
                 info["author"] = get_author().get_value().encode();
         }
 
-        std::string embed::get_title()
-        {
-            return title;
-        }
-        std::string embed::get_type()
-        {
-            return type;
-        }
-        util::optional<std::string> embed::get_description()
-        {
-            return description;
-        }
-        util::optional<std::string> embed::get_url()
-        {
-            return url;
-        }
-        util::optional<std::string> embed::get_timestamp()
-        {
-            return timestamp;
-        }
-        int embed::get_color()
-        {
-            return color;
-        }
-        util::optional<embed_footer> embed::get_footer()
-        {
-            return footer;
-        }
-        util::optional<embed_image> embed::get_image()
-        {
-            return image;
-        }
-        util::optional<embed_thumbnail> embed::get_thumbnail()
-        {
-            return thumbnail;
-        }
-        util::optional<embed_video> embed::get_video()
-        {
-            return video;
-        }
-        util::optional<embed_provider> embed::get_provider()
-        {
-            return provider;
-        }
-        util::optional<embed_author> embed::get_author()
-        {
-            return author;
-        }
-        util::optional<std::vector<embed_field>> embed::get_fields()
-        {
-            return fields;
-        }
+        #define define_get_method(field_name) \
+            decltype(embed::field_name) embed::get_##field_name() { \
+                return field_name; \
+            }
+
+        define_get_method(title);
+        define_get_method(type);
+        define_get_method(description);
+        define_get_method(url);
+        define_get_method(timestamp);
+        define_get_method(color);
+        define_get_method(footer);
+        define_get_method(image);
+        define_get_method(thumbnail);
+        define_get_method(video);
+        define_get_method(provider);
+        define_get_method(author);
+        define_get_method(fields);
+
+        #undef define_get_method
     }
 }

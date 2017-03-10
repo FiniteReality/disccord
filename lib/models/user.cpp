@@ -60,33 +60,19 @@ namespace disccord
                 info["email"] = get_email();
         }
 
-        std::string user::get_username()
-        {
-            return username;
-        }
-        uint16_t user::get_discriminator()
-        {
-            return discriminator;
-        }
-        util::optional<std::string> user::get_avatar()
-        {
-            return avatar;
-        }
-        bool user::get_bot()
-        {
-            return bot;
-        }
-        util::optional<bool> user::get_mfa_enabled()
-        {
-            return mfa_enabled;
-        }
-        util::optional<bool> user::get_verified()
-        {
-            return verified;
-        }
-        util::optional<std::string> user::get_email()
-        {
-            return email;
-        }
+        #define define_get_method(field_name) \
+            decltype(user::field_name) user::get_##field_name() { \
+                return field_name; \
+            }
+
+        define_get_method(username);
+        define_get_method(discriminator);
+        define_get_method(avatar);
+        define_get_method(bot);
+        define_get_method(mfa_enabled);
+        define_get_method(verified);
+        define_get_method(email);
+
+        #undef define_get_method
     }
 }
