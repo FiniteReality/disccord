@@ -3,6 +3,7 @@
 #include <models/user.hpp>
 #include <models/embed.hpp>
 #include <models/invite.hpp>
+#include <models/invite_metadata.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -139,3 +140,39 @@ TEST_CASE( "Invite model correctly instantiated" ){
     REQUIRE(test_invite.get_guild().get_value().get_icon().get_value() == "197d87a0caa9ea666b14e0938606aa2d");
 }
 
+TEST_CASE( "Invite Metadata model correctly instantiated" ){
+    invite_metadata test_invite_md;
+    if (!test_invite_md.get_created_at().empty() && test_invite_md.get_uses() != 0 && 
+        !test_invite_md.get_max_uses() != 0 && !test_invite_md.get_max_age() != 0 && 
+        test_invite_md.get_temporary() && test_invite_md.get_revoked())
+    {
+        FAIL("Default constructor for invite model not correctly instantiated");
+    }
+    std::string json = R"({
+    "inviter": {
+        "id": "1234567890",
+        "username": "FiniteReality",
+        "discriminator": "5734",
+        "bot": false
+    },
+    "created_at": "2016-03-31T19:15:39.954000+00:00",
+    "uses" : 42,
+    "max_uses" : 345000,
+    "max_age" : 7200,
+    "temporary" : true,
+    "revoked" : false
+})";
+    
+    test_invite_md.decode(web::json::value::parse(json));
+    
+    REQUIRE(test_invite_md.get_inviter().get_value().get_id() == 1234567890);
+    REQUIRE(test_invite_md.get_inviter().get_value().get_username() == "FiniteReality");
+    REQUIRE(test_invite_md.get_inviter().get_value().get_discriminator() == 5734);
+    REQUIRE(test_invite_md.get_inviter().get_value().get_bot() == false);
+    REQUIRE(test_invite_md.get_created_at() == "2016-03-31T19:15:39.954000+00:00");
+    REQUIRE(test_invite_md.get_uses() == 42);
+    REQUIRE(test_invite_md.get_max_uses() == 345000);
+    REQUIRE(test_invite_md.get_max_age() == 7200);
+    REQUIRE(test_invite_md.get_temporary() == true);
+    REQUIRE(test_invite_md.get_revoked() == false);
+}
