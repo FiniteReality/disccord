@@ -1,4 +1,4 @@
-nclude <models/invite_metadata.hpp>
+#include <models/invite_metadata.hpp>
 
 namespace disccord
 {
