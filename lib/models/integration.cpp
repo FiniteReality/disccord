@@ -1,0 +1,87 @@
+#include <boost/lexical_cast.hpp>
+
+#include <models/integration.hpp>
+
+namespace disccord
+{
+    namespace models
+    {
+        integration::integration()
+            : id(0), role_id(0), name(""), type(""), synced_at(""),
+			expire_behavior(0), expire_grace_period(0), enabled(false),
+			syncing(false), user(), account()
+        { }
+
+        integration::~integration()
+        { }
+
+        void integration::decode(web::json::value json)
+        {
+            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+			role_id = boost::lexical_cast<uint64_t>(json.at("role_id").as_string());
+            name = json.at("name").as_string();
+            type = json.at("type").as_string();
+			synced_at = json.at("synced_at").as_string();
+			expire_behavior = boost::lexical_cast<uint32_t>(json.at("expire_behavior").as_string());
+			expire_grace_period = boost::lexical_cast<uint32_t>(json.at("expire_grace_period").as_string());
+			enabled = json.at("enabled").as_bool();
+			syncing = json.at("syncing").as_bool();
+			
+			#define get_composite_field(var, type) \
+                if (json.has_field(#var)) { \
+                    auto field = json.at(#var); \
+                    if (!field.is_null()) { \
+                        type val; \
+                        val.decode(field); \
+                        var = decltype(var)(val); \
+                    } else { \
+                        var = decltype(var)::no_value(); \
+                    } \
+                } else { \
+                    var = decltype(var)(); \
+                }
+				
+			get_composite_field(user, models::user);
+			get_composite_field(account, integration_account);
+			
+			#undef get_composite_field
+			
+        }
+
+        void integration::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        {
+            info["name"] = web::json::value(name);
+            info["id"] = web::json::value(id);
+			info["role_id"] = web::json::value(role_id);
+			info["synced_at"] = web::json::value(synced_at);
+			info["expire_behavior"] = web::json::value(expire_behavior);
+			info["expire_grace_period"] = web::json::value(expire_grace_period);
+			info["enabled"] = web::json::value(enabled);
+			info["syncing"] = web::json::value(syncing);
+            info["type"] = web::json::value(type);
+			
+			if (user.is_specified())
+                info["user"] = user.get_value().encode();
+            if (account.is_specified())
+                info["account"] = account.get_value().encode();
+        }
+        
+        #define define_get_method(field_name) \
+            decltype(integration::field_name) integration::get_##field_name() { \
+                return field_name; \
+            }
+        define_get_method(name);
+        define_get_method(id);
+        define_get_method(type);
+		define_get_method(role_id);
+		define_get_method(synced_at);
+		define_get_method(expire_behavior);
+		define_get_method(expire_grace_period);
+		define_get_method(enabled);
+		define_get_method(syncing);
+		define_get_method(user);
+		define_get_method(account);
+        
+        #undef define_get_method
+    }
+}
