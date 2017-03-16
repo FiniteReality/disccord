@@ -22,8 +22,8 @@ namespace disccord
             name = json.at("name").as_string();
             type = json.at("type").as_string();
             synced_at = json.at("synced_at").as_string();
-            expire_behavior = boost::lexical_cast<uint32_t>(json.at("expire_behavior").as_string());
-            expire_grace_period = boost::lexical_cast<uint32_t>(json.at("expire_grace_period").as_string());
+            expire_behavior = json.at("expire_behavior").as_integer();
+            expire_grace_period = json.at("expire_grace_period").as_integer();
             enabled = json.at("enabled").as_bool();
             syncing = json.at("syncing").as_bool();
             
