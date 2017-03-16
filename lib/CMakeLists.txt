@@ -16,7 +16,7 @@ models/embed_video.cpp models/guild.cpp
 models/invite.cpp models/invite_channel.cpp models/invite_guild.cpp models/invite_metadata.cpp
 models/attachment.cpp models/emoji.cpp models/reaction.cpp models/role.cpp
 models/message.cpp models/integration_account.cpp models/integration.cpp
-models/channel.cpp)
+models/channel.cpp models/overwrite.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
