@@ -6,6 +6,7 @@
 #include <models/invite_metadata.hpp>
 #include <models/message.hpp>
 #include <models/channel.hpp>
+#include <models/connection.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -390,4 +391,110 @@ TEST_CASE( "Channel model correctly instantiated" ){
     REQUIRE(test_channel3.get_type().get_value() == "voice");
     REQUIRE(test_channel3.get_name().get_value() == "ROCKET CHEESE");
     REQUIRE(test_channel3.get_guild_id().get_value() == 41771983423143937);
+}
+
+TEST_CASE( "Connection model correctly instantiated" ){
+    connection test_connection;
+    if (!test_connection.get_id().empty() && !test_connection.get_name().empty() && 
+        !test_connection.get_type().empty() && !test_connection.get_revoked())
+    {
+        FAIL("Default constructor for connection model not correctly instantiated");
+    }
+    
+    std::string json = R"({
+    "integrations": [
+    {
+        "id" : "155101607195836416",
+        "name" : "IntegrateMeBoi",
+        "type" : "twitch",
+        "enabled" : true,
+        "syncing" : false,
+        "role_id" : "958364161551016071",
+        "expire_behavior" : 12345,
+        "expire_grace_period" : 98345,
+        "user" : {
+            "id": "1234567890",
+            "username": "FiniteReality",
+            "discriminator": "5734",
+            "bot": false
+        },
+        "account" : {
+            "id" : "9998",
+            "name" : "IamAccount"
+        },
+        "synced_at" : "2016-03-31T19:15:39.954000+00:00"
+    },
+    {
+        "id" : "195836416155101607",
+        "name" : "IntegrateMeOtherBoi",
+        "type" : "youtube",
+        "enabled" : false,
+        "syncing" : true,
+        "role_id" : "958615510160713641",
+        "expire_behavior" : 45123,
+        "expire_grace_period" : 34985,
+        "user" : {
+            "id": "8901234567",
+            "username": "RealityFinite",
+            "discriminator": "3457",
+            "bot": false
+        },
+        "account" : {
+            "id" : "8889",
+            "name" : "IamNotAccount"
+        },
+        "synced_at" : "2017-03-31T19:35:49.954000+00:00"
+    }
+    ],
+    "id": "13455293",
+    "name" : "FiniteReality",
+    "type" : "twitch",
+    "revoked" : true
+})";
+
+    test_connection.decode(web::json::value::parse(json));
+    
+    //integrations array
+    auto ig1 = test_connection.get_integrations().get_value()[0];
+    auto ig2 = test_connection.get_integrations().get_value()[1];
+    REQUIRE(ig1.get_id() == 155101607195836416);
+    REQUIRE(ig1.get_name() == "IntegrateMeBoi");
+    REQUIRE(ig1.get_type() == "twitch");
+    REQUIRE(ig1.get_enabled() == true);
+    REQUIRE(ig1.get_syncing() == false);
+    REQUIRE(ig1.get_role_id() == 958364161551016071);
+    REQUIRE(ig1.get_expire_behavior() == 12345);
+    REQUIRE(ig1.get_expire_grace_period() == 98345);
+    auto usr = ig1.get_user().get_value();
+    REQUIRE(usr.get_id() == 1234567890);
+    REQUIRE(usr.get_username() == "FiniteReality");
+    REQUIRE(usr.get_discriminator() == 5734);
+    REQUIRE(usr.get_bot() == false);
+    auto accnt = ig1.get_account().get_value();
+    REQUIRE(accnt.get_id() == "9998");
+    REQUIRE(accnt.get_name() == "IamAccount");
+    REQUIRE(ig1.get_synced_at() == "2016-03-31T19:15:39.954000+00:00");
+    
+    REQUIRE(ig2.get_id() == 195836416155101607);
+    REQUIRE(ig2.get_name() == "IntegrateMeOtherBoi");
+    REQUIRE(ig2.get_type() == "youtube");
+    REQUIRE(ig2.get_enabled() == false);
+    REQUIRE(ig2.get_syncing() == true);
+    REQUIRE(ig2.get_role_id() == 958615510160713641);
+    REQUIRE(ig2.get_expire_behavior() == 45123);
+    REQUIRE(ig2.get_expire_grace_period() == 34985);
+    auto usr2 = ig2.get_user().get_value();
+    REQUIRE(usr2.get_id() == 8901234567);
+    REQUIRE(usr2.get_username() == "RealityFinite");
+    REQUIRE(usr2.get_discriminator() == 3457);
+    REQUIRE(usr2.get_bot() == false);
+    auto accnt2 = ig2.get_account().get_value();
+    REQUIRE(accnt2.get_id() == "8889");
+    REQUIRE(accnt2.get_name() == "IamNotAccount");
+    REQUIRE(ig2.get_synced_at() == "2017-03-31T19:35:49.954000+00:00");
+
+    REQUIRE(test_connection.get_id() == "13455293");
+    REQUIRE(test_connection.get_name() == "FiniteReality");
+    REQUIRE(test_connection.get_type() == "twitch");
+    REQUIRE(test_connection.get_revoked() == true);
 }
