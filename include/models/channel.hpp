@@ -5,7 +5,7 @@
 
 #include <models/entity.hpp>
 #include <models/user.hpp>
-//#include <models/overwrite.hpp>
+#include <models/overwrite.hpp>
 
 namespace disccord
 {
@@ -30,6 +30,7 @@ namespace disccord
                 util::optional<std::string> get_topic();
                 bool get_is_private();
                 util::optional<user> get_recipient();
+                util::optional<std::vector<overwrite>> get_permission_overwrites();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
@@ -41,7 +42,7 @@ namespace disccord
                 util::optional<std::string> name, type, topic;
                 bool is_private;
                 util::optional<user> recipient;
-                //util::optional<std::vector<overwrite>> permission_overwrites;
+                util::optional<std::vector<overwrite>> permission_overwrites;
                 
         };
     }
