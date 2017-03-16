@@ -5,6 +5,7 @@
 #include <models/invite.hpp>
 #include <models/invite_metadata.hpp>
 #include <models/message.hpp>
+#include <models/channel.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -279,4 +280,89 @@ TEST_CASE( "Message model correctly instantiated" ){
     REQUIRE(mr1.get_hoist() == false);
     
     //TODO: check a few more of these
+}
+
+TEST_CASE( "Channel model correctly instantiated" ){
+    channel test_channel;
+    channel test_channel2;
+    channel test_channel3;
+    if (test_channel.get_id() != 0 && test_channel.get_last_message_id() != 0 && 
+        test_channel.get_guild_id() != 0 && !test_channel.get_is_private())
+    {
+        FAIL("Default constructor for channel model not correctly instantiated");
+    }
+    
+    //Build a DM Channel
+    std::string dm_json = R"({
+    "recipient": {
+        "id": "1234567890",
+        "username": "FiniteReality",
+        "discriminator": "5734",
+        "bot": false
+    },
+    "id": "134552934997426176",
+    "is_private" : true,
+    "last_message_id" : "153642275539255296"
+})";
+
+    test_channel.decode(web::json::value::parse(dm_json));
+    
+    REQUIRE(test_channel.get_id() == 134552934997426176);
+    REQUIRE(test_channel.get_is_private() == true);
+    REQUIRE(test_channel.get_last_message_id().get_value() == 153642275539255296);
+    
+    auto recip = test_channel.get_recipient().get_value();
+    REQUIRE(recip.get_id() == 1234567890);
+    REQUIRE(recip.get_username() == "FiniteReality");
+    REQUIRE(recip.get_discriminator() == 5734);
+    REQUIRE(recip.get_bot() == false);
+
+    //Build a Guild Channel
+    //Text
+    std::string textguild_json = R"({
+    "id": "41771983423143937",
+    "guild_id": "41771983423143937",
+    "name": "general",
+    "type": "text",
+    "position": 6,
+    "is_private": false,
+    "permission_overwrites": [],
+    "topic": "24/7 chat about how to gank Mike #2",
+    "last_message_id": "155117677105512449"
+})";
+    
+    test_channel2.decode(web::json::value::parse(textguild_json));
+    
+    REQUIRE(test_channel2.get_id() == 41771983423143937);
+    REQUIRE(test_channel2.get_is_private() == false);
+    REQUIRE(test_channel2.get_last_message_id().get_value() == 155117677105512449);
+    REQUIRE(test_channel2.get_topic().get_value() == "24/7 chat about how to gank Mike #2");
+    REQUIRE(test_channel2.get_position().get_value() == 6);
+    REQUIRE(test_channel2.get_type().get_value() == "text");
+    REQUIRE(test_channel2.get_name().get_value() == "general");
+    REQUIRE(test_channel2.get_guild_id().get_value() == 41771983423143937);
+    
+    //Voice
+    std::string voiceguild_json = R"({
+    "id": "155101607195836416",
+    "guild_id": "41771983423143937",
+    "name": "ROCKET CHEESE",
+    "type": "voice",
+    "position": 5,
+    "is_private": false,
+    "permission_overwrites": [],
+    "bitrate": 64000,
+    "user_limit": 0
+})";
+
+    test_channel3.decode(web::json::value::parse(voiceguild_json));
+    
+    REQUIRE(test_channel3.get_id() == 155101607195836416);
+    REQUIRE(test_channel3.get_is_private() == false);
+    REQUIRE(test_channel3.get_bitrate().get_value() == 64000);
+    REQUIRE(test_channel3.get_user_limit().get_value() == 0);
+    REQUIRE(test_channel3.get_position().get_value() == 5);
+    REQUIRE(test_channel3.get_type().get_value() == "voice");
+    REQUIRE(test_channel3.get_name().get_value() == "ROCKET CHEESE");
+    REQUIRE(test_channel3.get_guild_id().get_value() == 41771983423143937);
 }
