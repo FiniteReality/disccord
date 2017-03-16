@@ -15,7 +15,7 @@ namespace disccord
 
                 virtual void decode(web::json::value json) override;
 
-                std::string get_id();
+                uint64_t get_id();
                 std::string get_filename();
                 std::string get_url();
                 util::optional<std::string> get_proxy_url();
@@ -27,7 +27,8 @@ namespace disccord
                 virtual void encode_to(std::unordered_map<std::string,web::json::value> &info) override;
 
             private:
-                std::string id, filename, url;
+                uint64_t id;
+                std::string filename, url;
                 util::optional<std::string> proxy_url;
                 util::optional<uint16_t> height, width;
                 int32_t size;

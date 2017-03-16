@@ -15,7 +15,7 @@ namespace disccord
 
                 virtual void decode(web::json::value json) override;
 
-                util::optional<std::string> get_id();
+                util::optional<uint64_t> get_id();
                 std::string get_name();
 
             protected:
@@ -23,7 +23,7 @@ namespace disccord
 
             private:
                 std::string name;
-                util::optional<std::string> id;
+                util::optional<uint64_t> id;
         };
     }
 }
