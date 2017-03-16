@@ -59,16 +59,20 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-            if (json.has_field("last_message_id"))
-                last_message_id = boost::lexical_cast<uint64_t>(json.at("last_message_id").as_string());
-            else
-                last_message_id = util::optional<uint64_t>::no_value();
-            
-            if (json.has_field("guild_id"))
-                guild_id = boost::lexical_cast<uint64_t>(json.at("guild_id").as_string());
-            else
-                guild_id = util::optional<uint64_t>::no_value();
-            
+            #define get_lexical_field(var, lexical_type) \
+                if (json.has_field(#var)) { \
+                    auto field = json.at(#var); \
+                    if (!field.is_null()) { \
+                        var = decltype(var)(boost::lexical_cast<lexical_type>(field.as_string())); \
+                    } else { \
+                        var = decltype(var)::no_value(); \
+                    } \
+                } else { \
+                    var = decltype(var)(); \
+                }
+
+            get_lexical_field(guild_id,uint64_t);
+            get_lexical_field(last_message_id,uint64_t);
             get_field(position, as_integer);
             get_field(user_limit, as_integer);
             get_field(bitrate, as_integer);
@@ -81,6 +85,7 @@ namespace disccord
             get_composite_field_vector(permission_overwrites, overwrite);
             
             #undef get_field
+            #undef get_lexical_field
             #undef get_composite_field
             #undef get_composite_field_vector
         }
