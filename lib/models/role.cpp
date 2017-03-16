@@ -1,3 +1,5 @@
+#include <boost/lexical_cast.hpp>
+
 #include <models/role.hpp>
 
 namespace disccord
@@ -5,7 +7,7 @@ namespace disccord
     namespace models
     {
         role::role()
-            : id(""), name(""), color(0), permissions(0),
+            : id(0), name(""), color(0), permissions(0),
             position(0), managed(false), mentionable(false), hoist(false)
         { }
 
@@ -14,7 +16,7 @@ namespace disccord
 
         void role::decode(web::json::value json)
         {
-            id = json.at("id").as_string();
+            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             name = json.at("name").as_string();
             color = json.at("color").as_integer();
             permissions = json.at("permissions").as_integer();

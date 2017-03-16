@@ -1,3 +1,5 @@
+#include <boost/lexical_cast.hpp>
+
 #include <models/message.hpp>
 
 namespace disccord
@@ -5,7 +7,7 @@ namespace disccord
     namespace models
     {
         message::message()
-            : author(), id(""), channel_id(""), content(""),
+            : author(), id(0), channel_id(0), content(""),
             timestamp(""), edited_timestamp(), nonce(),
             webhook_id(), tts(false), mention_everyone(false),
             pinned(false), mentions(), mention_roles(),
@@ -17,8 +19,8 @@ namespace disccord
 
         void message::decode(web::json::value json)
         {
-            id = json.at("id").as_string();
-            channel_id = json.at("channel_id").as_string();
+            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+            channel_id = boost::lexical_cast<uint64_t>(json.at("channel_id").as_string());
             content = json.at("content").as_string();
             timestamp = json.at("timestamp").as_string();
             tts = json.at("tts").as_bool();

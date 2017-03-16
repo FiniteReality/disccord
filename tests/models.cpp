@@ -182,7 +182,7 @@ TEST_CASE( "Invite Metadata model correctly instantiated" ){
 
 TEST_CASE( "Message model correctly instantiated" ){
     message test_message;
-    if (!test_message.get_id().empty() && !test_message.get_channel_id().empty() && 
+    if (test_message.get_id() != 0 && test_message.get_channel_id() != 0 && 
         !test_message.get_content().empty() && !test_message.get_timestamp().empty() && 
         test_message.get_tts() && test_message.get_mention_everyone() && test_message.get_pinned())
     {
@@ -247,8 +247,8 @@ TEST_CASE( "Message model correctly instantiated" ){
     REQUIRE(test_message.get_author().get_value().get_username() == "FiniteReality");
     REQUIRE(test_message.get_author().get_value().get_discriminator() == 5734);
     REQUIRE(test_message.get_author().get_value().get_bot() == false);
-    REQUIRE(test_message.get_id() == "1266567890");
-    REQUIRE(test_message.get_channel_id() == "9999999999");
+    REQUIRE(test_message.get_id() == 1266567890);
+    REQUIRE(test_message.get_channel_id() == 9999999999);
     REQUIRE(test_message.get_content() == "this is message content");
     REQUIRE(test_message.get_timestamp() == "2016-03-31T19:15:39.954000+00:00");
     REQUIRE(test_message.get_tts() == false);
@@ -271,7 +271,7 @@ TEST_CASE( "Message model correctly instantiated" ){
     //mention_roles array
     auto mr1 = test_message.get_mention_roles().get_value()[0];
     auto mr2 = test_message.get_mention_roles().get_value()[1];
-    REQUIRE(mr1.get_id() == "1234567890");
+    REQUIRE(mr1.get_id() == 1234567890);
     REQUIRE(mr1.get_name() == "DISCCORD_ROLE");
     REQUIRE(mr1.get_color() == 123456);
     REQUIRE(mr1.get_permissions() == 0);

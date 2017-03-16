@@ -1,3 +1,5 @@
+#include <boost/lexical_cast.hpp>
+
 #include <models/attachment.hpp>
 
 namespace disccord
@@ -5,7 +7,7 @@ namespace disccord
     namespace models
     {
         attachment::attachment()
-            : id(""), filename(""), url(""), proxy_url(),
+            : id(0), filename(""), url(""), proxy_url(),
             height(), width(), size(0)
         { }
 
@@ -14,7 +16,7 @@ namespace disccord
 
         void attachment::decode(web::json::value json)
         {
-            id = json.at("id").as_string();
+            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             filename = json.at("filename").as_string();
             url = json.at("url").as_string();
             size = json.at("size").as_integer();

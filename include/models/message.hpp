@@ -23,8 +23,8 @@ namespace disccord
                 virtual void decode(web::json::value json) override;
 
                 util::optional<user> get_author();
-                std::string get_id();
-                std::string get_channel_id();
+                uint64_t get_id();
+                uint64_t get_channel_id();
                 std::string get_content();
                 std::string get_timestamp();
                 util::optional<std::string> get_edited_timestamp();
@@ -44,7 +44,8 @@ namespace disccord
 
             private:
                 util::optional<user> author;
-                std::string id, channel_id, content, timestamp;
+                uint64_t id, channel_id;
+                std::string content, timestamp;
                 util::optional<std::string> edited_timestamp, nonce, webhook_id;
                 bool tts, mention_everyone, pinned;
                 util::optional<std::vector<user>> mentions;
