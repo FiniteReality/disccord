@@ -326,7 +326,20 @@ TEST_CASE( "Channel model correctly instantiated" ){
     "type": "text",
     "position": 6,
     "is_private": false,
-    "permission_overwrites": [],
+    "permission_overwrites": [
+    {
+        "id" : "1234567890",
+        "type" : "role",
+        "allow" : 123456,
+        "deny" : 0
+    },
+    {
+        "id" : "3456789012",
+        "type" : "member",
+        "allow" : 777777,
+        "deny" : 10
+    }
+    ],
     "topic": "24/7 chat about how to gank Mike #2",
     "last_message_id": "155117677105512449"
 })";
@@ -341,6 +354,18 @@ TEST_CASE( "Channel model correctly instantiated" ){
     REQUIRE(test_channel2.get_type().get_value() == "text");
     REQUIRE(test_channel2.get_name().get_value() == "general");
     REQUIRE(test_channel2.get_guild_id().get_value() == 41771983423143937);
+    
+    //permission_overwrites array
+    auto po1 = test_channel2.get_permission_overwrites().get_value()[0];
+    auto po2 = test_channel2.get_permission_overwrites().get_value()[1];
+    REQUIRE(po1.get_id() == 1234567890);
+    REQUIRE(po1.get_type() == "role");
+    REQUIRE(po1.get_allow() == 123456);
+    REQUIRE(po1.get_deny() == 0);
+    REQUIRE(po2.get_id() == 3456789012);
+    REQUIRE(po2.get_type() == "member");
+    REQUIRE(po2.get_allow() == 777777);
+    REQUIRE(po2.get_deny() == 10);
     
     //Voice
     std::string voiceguild_json = R"({
