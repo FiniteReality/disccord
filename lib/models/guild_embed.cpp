@@ -21,8 +21,8 @@ namespace disccord
 
         void guild_embed::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["enabled"] = web::json::value::boolean(enabled);
-            info["channel_id"] = web::json::value::number(channel_id);
+            info["enabled"] = web::json::value(enabled);
+            info["channel_id"] = web::json::value(channel_id);
         }
         
         #define define_get_method(field_name) \

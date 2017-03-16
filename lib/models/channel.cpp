@@ -96,23 +96,23 @@ namespace disccord
             info["is_private"] = web::json::value(is_private);
             
             if (position.is_specified())
-                info["position"] = web::json::value::number(position);
+                info["position"] = web::json::value(position.get_value());
             if (user_limit.is_specified())
-                info["user_limit"] = web::json::value::number(user_limit);
+                info["user_limit"] = web::json::value(user_limit.get_value());
             if (bitrate.is_specified())
-                info["bitrate"] = web::json::value::number(bitrate);
+                info["bitrate"] = web::json::value(bitrate.get_value());
             if (guild_id.is_specified())
-                info["guild_id"] = web::json::value::number(guild_id);
+                info["guild_id"] = web::json::value(guild_id.get_value());
             if (name.is_specified())
-                info["name"] = web::json::value::string(name);
+                info["name"] = web::json::value(name.get_value());
             if (type.is_specified())
-                info["type"] = web::json::value::string(type);
+                info["type"] = web::json::value(type.get_value());
             if (topic.is_specified())
-                info["topic"] = web::json::value::string(topic);
+                info["topic"] = web::json::value(topic.get_value());
             if (recipient.is_specified())
                 info["recipient"] = recipient.get_value().encode();
             if (last_message_id.is_specified())
-                info["last_message_id"] = web::json::value::number(last_message_id);
+                info["last_message_id"] = web::json::value(last_message_id.get_value());
             if (permission_overwrites.is_specified())
             {
                 auto _permission_overwrites = permission_overwrites.get_value();
