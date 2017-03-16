@@ -52,8 +52,8 @@ namespace disccord
 
         void presence::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["status"] = web::json::value::string(status);
-            info["guild_id"] = web::json::value::number(guild_id);
+            info["status"] = web::json::value(status);
+            info["guild_id"] = web::json::value(guild_id);
             if (user.is_specified())
                 info["user"] = user.get_value().encode();
             if (game.is_specified())

@@ -72,7 +72,7 @@ namespace disccord
             info["deaf"] = web::json::value(deaf);
             info["mute"] = web::json::value(mute);
             if (nick.is_specified())
-                info["nick"] = web::json::value::string(nick);
+                info["nick"] = web::json::value(nick.get_value());
             if (user.is_specified())
                 info["user"] = user.get_value().encode();
             

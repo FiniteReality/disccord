@@ -39,9 +39,9 @@ namespace disccord
         {
             info["name"] = web::json::value::string(name);
             if (url.is_specified())
-                info["url"] = web::json::value::string(url);
+                info["url"] = web::json::value(url.get_value());
             if (type.is_specified())
-                info["type"] = web::json::value::number(type);
+                info["type"] = web::json::value(type.get_value());
         }
         
         #define define_get_method(field_name) \
