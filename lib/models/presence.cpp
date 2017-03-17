@@ -42,7 +42,7 @@ namespace disccord
                 std::vector<uint64_t> roles_array(_roles_array.size());
                 std::transform(_roles_array.begin(), _roles_array.end(), roles_array.begin(),
                     [](web::json::value _role){
-                        return _role.as_integer();
+                        return boost::lexical_cast<uint64_t>(_role.as_string());
                     });
                 roles = roles_array;
             }

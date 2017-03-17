@@ -64,7 +64,7 @@ namespace disccord
             owner_id = boost::lexical_cast<uint64_t>(json.at("owner_id").as_string());
             region = json.at("region").as_string();
             get_lexical_field(afk_channel_id, uint64_t);
-            afk_timeout = boost::lexical_cast<int32_t>(json.at("afk_timeout").as_string());
+            afk_timeout = json.at("afk_timeout").as_integer();
             mfa_level = json.at("mfa_level").as_integer();
             verification_level = json.at("verification_level").as_integer();
             default_message_notifications = json.at("default_message_notifications").as_integer();
@@ -105,7 +105,7 @@ namespace disccord
             info["region"] = web::json::value(get_region());
             if (get_afk_channel_id().is_specified())
                 info["afk_channel_id"] = get_afk_channel_id();
-            info["afk_timeout"] = web::json::value::string(std::to_string(get_afk_timeout()));
+            info["afk_timeout"] = web::json::value(get_afk_timeout());
             info["mfa_level"] = web::json::value(mfa_level);
             info["verification_level"] = web::json::value(verification_level);
             info["default_message_notifications"] = web::json::value(default_message_notifications);
