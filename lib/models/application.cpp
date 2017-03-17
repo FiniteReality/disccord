@@ -21,7 +21,7 @@ namespace disccord
             name = json.at("name").as_string();
             bot_public = json.at("bot_public").as_bool();
             bot_requires_code_grant = json.at("bot_requires_code_grant").as_bool();
-            
+
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -53,7 +53,7 @@ namespace disccord
                     std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), \
                     [&json](web::json::value _field){ \
                         type field; \
-                        field = json.at(#var).conv(); \
+                        field = _field.conv(); \
                         return field; \
                     }); \
                     var = decltype(var)(fields_array); \
