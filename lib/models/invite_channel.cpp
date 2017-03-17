@@ -1,3 +1,5 @@
+#include <boost/lexical_cast.hpp>
+
 #include <models/invite_channel.hpp>
 
 namespace disccord
@@ -5,7 +7,7 @@ namespace disccord
     namespace models
     {
         invite_channel::invite_channel()
-            : id(""), name(""), type("")
+            : id(0), name(""), type("")
         { }
 
         invite_channel::~invite_channel()
@@ -13,7 +15,7 @@ namespace disccord
 
         void invite_channel::decode(web::json::value json)
         {
-            id = json.at("id").as_string();
+            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             name = json.at("name").as_string();
             type = json.at("type").as_string();
         }

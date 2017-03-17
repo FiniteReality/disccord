@@ -115,10 +115,10 @@ TEST_CASE( "Invite model correctly instantiated" ){
     
     // When splash/icon are null
     REQUIRE(test_invite.get_code() == "asdfh487yed");
-    REQUIRE(test_invite.get_channel().get_value().get_id() == "165176875973476352");
+    REQUIRE(test_invite.get_channel().get_value().get_id() == 165176875973476352);
     REQUIRE(test_invite.get_channel().get_value().get_name() == "illuminati");
     REQUIRE(test_invite.get_channel().get_value().get_type() == "text");
-    REQUIRE(test_invite.get_guild().get_value().get_id() == "165176875973476352");
+    REQUIRE(test_invite.get_guild().get_value().get_id() == 165176875973476352);
     REQUIRE(test_invite.get_guild().get_value().get_name() == "CS:GO Fraggers Only");
     
     std::string json2 = R"({

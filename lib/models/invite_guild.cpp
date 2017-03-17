@@ -1,3 +1,5 @@
+#include <boost/lexical_cast.hpp>
+
 #include <models/invite_guild.hpp>
 
 namespace disccord
@@ -5,7 +7,7 @@ namespace disccord
     namespace models
     {
         invite_guild::invite_guild()
-            : id(""), name(""),splash(),icon()
+            : id(0), name(""),splash(),icon()
         { }
 
         invite_guild::~invite_guild()
@@ -13,8 +15,9 @@ namespace disccord
 
         void invite_guild::decode(web::json::value json)
         {
-            id = json.at("id").as_string();
+            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             name = json.at("name").as_string();
+            
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
