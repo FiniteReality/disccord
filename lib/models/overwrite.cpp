@@ -16,6 +16,7 @@ namespace disccord
         void overwrite::decode(web::json::value json)
         {
             entity::decode(json);
+            
             id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             allow = json.at("allow").as_integer();
             deny = json.at("deny").as_integer();
@@ -24,6 +25,8 @@ namespace disccord
 
         void overwrite::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
+            entity::encode_to(info);
+            
             info["allow"] = web::json::value(allow);
             info["deny"] = web::json::value(deny);
             info["id"] = web::json::value(id);

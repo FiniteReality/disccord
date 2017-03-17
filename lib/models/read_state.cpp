@@ -39,6 +39,8 @@ namespace disccord
 
         void read_state::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
+            entity::encode_to(info);
+            
             info["id"] = web::json::value(id);
             info["mention_count"] = web::json::value(mention_count);
             if (last_message_id.is_specified())

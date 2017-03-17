@@ -23,6 +23,8 @@ namespace disccord
 
         void integration_account::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
+            entity::encode_to(info);
+            
             info["name"] = web::json::value(name);
             info["id"] = web::json::value(id);
         }

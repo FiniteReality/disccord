@@ -94,6 +94,8 @@ namespace disccord
 
         void channel::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
+            entity::encode_to(info);
+            
             info["id"] = web::json::value(id);
             info["is_private"] = web::json::value(is_private);
             
