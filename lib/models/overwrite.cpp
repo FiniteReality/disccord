@@ -15,6 +15,7 @@ namespace disccord
 
         void overwrite::decode(web::json::value json)
         {
+            entity::decode(json);
             id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             allow = json.at("allow").as_integer();
             deny = json.at("deny").as_integer();

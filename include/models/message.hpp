@@ -14,7 +14,7 @@ namespace disccord
 {
     namespace models
     {
-        class message : public model
+        class message : public entity
         {
             public:
                 message();

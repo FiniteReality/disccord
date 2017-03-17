@@ -9,7 +9,7 @@ namespace disccord
 {
     namespace models
     {
-        class relationship : public model
+        class relationship : public entity
         {
             public:
                 relationship();

@@ -15,6 +15,8 @@ namespace disccord
 
         void invite_channel::decode(web::json::value json)
         {
+            entity::decode(json);
+            
             id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             name = json.at("name").as_string();
             type = json.at("type").as_string();

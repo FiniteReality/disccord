@@ -18,6 +18,8 @@ namespace disccord
 
         void channel::decode(web::json::value json)
         {
+            entity::decode(json);
+            
             id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             is_private = json.at("is_private").as_bool();
             

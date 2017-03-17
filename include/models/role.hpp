@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace models
     {
-        class role : public model
+        class role : public entity
         {
             public:
                 role();

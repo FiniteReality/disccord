@@ -11,7 +11,7 @@ namespace disccord
 {
     namespace models
     {
-        class channel : public model
+        class channel : public entity
         {
             public:
                 channel();

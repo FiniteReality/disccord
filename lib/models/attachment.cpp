@@ -16,6 +16,8 @@ namespace disccord
 
         void attachment::decode(web::json::value json)
         {
+            entity::decode(json);
+            
             id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             filename = json.at("filename").as_string();
             url = json.at("url").as_string();

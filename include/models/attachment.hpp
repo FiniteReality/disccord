@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace models
     {
-        class attachment : public model
+        class attachment : public entity
         {
             public:
                 attachment();

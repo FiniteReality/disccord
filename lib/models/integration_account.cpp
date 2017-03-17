@@ -1,3 +1,5 @@
+#include <boost/lexical_cast.hpp>
+
 #include <models/integration_account.hpp>
 
 namespace disccord
@@ -5,7 +7,7 @@ namespace disccord
     namespace models
     {
         integration_account::integration_account()
-            : id(""), name("")
+            : id(0), name("")
         { }
 
         integration_account::~integration_account()
@@ -13,7 +15,9 @@ namespace disccord
 
         void integration_account::decode(web::json::value json)
         {
-            id = json.at("id").as_string();
+            entity::decode(json);
+            
+            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             name = json.at("name").as_string();
         }
 
