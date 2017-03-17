@@ -44,6 +44,8 @@ namespace disccord
 
         void attachment::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
+            entity::encode_to(info);
+            
             info["id"] = web::json::value(id);
             info["filename"] = web::json::value(filename);
             info["url"] = web::json::value(url);
