@@ -16,6 +16,8 @@ namespace disccord
 
         void role::decode(web::json::value json)
         {
+            entity::decode(json);
+            
             id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             name = json.at("name").as_string();
             color = json.at("color").as_integer();

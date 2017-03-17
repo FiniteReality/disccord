@@ -479,7 +479,7 @@ TEST_CASE( "Connection model correctly instantiated" ){
     REQUIRE(usr.get_discriminator() == 5734);
     REQUIRE(usr.get_bot() == false);
     auto accnt = ig1.get_account().get_value();
-    REQUIRE(accnt.get_id() == "9998");
+    REQUIRE(accnt.get_id() == 9998);
     REQUIRE(accnt.get_name() == "IamAccount");
     REQUIRE(ig1.get_synced_at() == "2016-03-31T19:15:39.954000+00:00");
     
@@ -497,7 +497,7 @@ TEST_CASE( "Connection model correctly instantiated" ){
     REQUIRE(usr2.get_discriminator() == 3457);
     REQUIRE(usr2.get_bot() == false);
     auto accnt2 = ig2.get_account().get_value();
-    REQUIRE(accnt2.get_id() == "8889");
+    REQUIRE(accnt2.get_id() == 8889);
     REQUIRE(accnt2.get_name() == "IamNotAccount");
     REQUIRE(ig2.get_synced_at() == "2017-03-31T19:35:49.954000+00:00");
 

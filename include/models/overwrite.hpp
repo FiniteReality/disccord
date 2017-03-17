@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace models
     {
-        class overwrite : public model
+        class overwrite : public entity
         {
             public:
                 overwrite();

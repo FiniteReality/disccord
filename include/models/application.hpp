@@ -8,7 +8,7 @@ namespace disccord
 {
     namespace models
     {
-        class application : public model
+        class application : public entity
         {
             public:
                 application();

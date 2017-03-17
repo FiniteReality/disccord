@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace models
     {
-        class invite_guild : public model
+        class invite_guild : public entity
         {
             public:
                 invite_guild();

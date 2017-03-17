@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace models
     {
-        class read_state : public model
+        class read_state : public entity
         {
             public:
                 read_state();

@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace models
     {
-        class integration_account : public model
+        class integration_account : public entity
         {
             public:
                 integration_account();
@@ -15,14 +15,15 @@ namespace disccord
 
                 virtual void decode(web::json::value json) override;
 
-                std::string get_id();
+                uint64_t get_id();
                 std::string get_name();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
-                std::string id, name;
+                uint64_t id;
+                std::string name;
         };
     }
 }

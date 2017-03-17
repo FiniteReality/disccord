@@ -9,7 +9,7 @@ namespace disccord
 {
     namespace models
     {
-        class integration : public model
+        class integration : public entity
         {
             public:
                 integration();

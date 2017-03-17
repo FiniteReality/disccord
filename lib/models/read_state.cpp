@@ -15,6 +15,8 @@ namespace disccord
 
         void read_state::decode(web::json::value json)
         {
+            entity::decode(json);
+            
             id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
             mention_count = json.at("mention_count").as_integer();
             
