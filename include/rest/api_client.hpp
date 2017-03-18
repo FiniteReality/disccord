@@ -70,7 +70,7 @@ namespace disccord
                         return bucket->request(http_client, route.full_url).then([=](web::json::value content){
                             T value;
                             
-                            if (content.is_array()){ 
+                            if (content.is_array()){
                                 for (auto i : content.as_array()){
                                     typename T::value_type obj;
                                     obj.decode(i);
