@@ -43,6 +43,79 @@ namespace disccord
                         });
                     }
                     
+                    template <typename T>
+                    pplx::task<T> request(route_info& route, web::json::value body, pplx::cancellation_token token = pplx::cancellation_token::none())
+                    {
+                        auto bucket = get_bucket(route);
+
+                        auto base_url = http_client.base_uri().to_string();
+                        
+                        return bucket->request(http_client, route.full_url, body).then([=](web::json::value content){
+                            T value;
+                            value.decode(content);
+                            return value;
+                        });
+                    }
+                    
+                    // TODO: find a way to generalize the request method to do std::vector<ModelType> or just ModelType
+                    // (in a way where the compiler will be happy), then this logic can be merged into the above method.
+                    // NOTE: this method should only be used if T = std::vector<ModelType>
+                    template <typename T>
+                    pplx::task<T> request_array(route_info& route, pplx::cancellation_token token = pplx::cancellation_token::none())
+                    {
+                        auto bucket = get_bucket(route);
+
+                        auto base_url = http_client.base_uri().to_string();
+                        
+                        return bucket->request(http_client, route.full_url).then([=](web::json::value content){
+                            T value;
+                            
+                            if (content.is_array()){ 
+                                for (auto i : content.as_array()){
+                                    typename T::value_type obj;
+                                    obj.decode(i);
+                                    value.push_back(obj);
+                                }
+                            }
+                            // Incase for some reason the api doesn't return an array, we still want to treat it like they did 
+                            else { 
+                                typename T::value_type obj;
+                                obj.decode(content);
+                                std::vector<typename T::value_type> temp;
+                                temp.push_back(obj);
+                                value = temp;
+                            }
+                            return value;
+                        });
+                    }
+                    
+                    template <typename T>
+                    pplx::task<T> request_array(route_info& route, web::json::value body, pplx::cancellation_token token = pplx::cancellation_token::none())
+                    {
+                        auto bucket = get_bucket(route);
+
+                        auto base_url = http_client.base_uri().to_string();
+                        
+                        return bucket->request(http_client, route.full_url, body).then([=](web::json::value content){
+                            T value;
+                            
+                            if (content.is_array()){ 
+                                for (auto i : content.as_array()){
+                                    typename T::value_type obj;
+                                    obj.decode(i);
+                                    value.push_back(obj);
+                                }
+                            }
+                            // Incase for some reason the api doesn't return an array, we still want to treat it like they did 
+                            else { 
+                                typename T::value_type obj;
+                                obj.decode(content);
+                                value.push_back(obj);
+                            }
+                            return value;
+                        });
+                    }
+                    
                     // User API
                     pplx::task<disccord::models::user> get_current_user(pplx::cancellation_token token = pplx::cancellation_token::none());
                     
@@ -57,12 +130,12 @@ namespace disccord
                     pplx::task<disccord::models::user> modify_current_user(std::string username, std::string avatar, 
                                                                             pplx::cancellation_token token = pplx::cancellation_token::none()); */
                     
-                    pplx::task<disccord::models::user_guild> get_current_user_guilds(pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<disccord::models::user_guild> get_current_user_guilds(uint8_t limit, 
+                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(uint8_t limit, 
                                                                                 pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<disccord::models::user_guild> get_current_user_guilds(std::string query, uint64_t guild_id,  //query can be either "before" or "after".
+                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(std::string query, uint64_t guild_id,  //query can be either "before" or "after".
                                                                                 pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<disccord::models::user_guild> get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, 
+                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, 
                                                                                 pplx::cancellation_token token = pplx::cancellation_token::none());
                                                                                 
                     pplx::task<void> leave_guild(uint64_t guild_id, 
