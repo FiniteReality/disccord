@@ -18,6 +18,7 @@ namespace disccord
                 std::string get_name();
                 std::string get_icon();
                 bool get_owner();
+                int64_t get_id();
                 int64_t get_permissions();
 
             protected:
@@ -26,7 +27,7 @@ namespace disccord
             private:
                 std::string name, icon;
                 bool owner;
-                int64_t permissions;
+                int64_t id, permissions;
         };
     }
 }

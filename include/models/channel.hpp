@@ -28,7 +28,7 @@ namespace disccord
                 util::optional<std::string> get_name();
                 util::optional<std::string> get_type();
                 util::optional<std::string> get_topic();
-                bool get_is_private();
+                util::optional<bool> get_is_private();
                 util::optional<user> get_recipient();
                 util::optional<std::vector<overwrite>> get_permission_overwrites();
 
@@ -40,7 +40,7 @@ namespace disccord
                 util::optional<uint64_t> guild_id, last_message_id;
                 util::optional<uint32_t> position, bitrate, user_limit;
                 util::optional<std::string> name, type, topic;
-                bool is_private;
+                util::optional<bool> is_private;
                 util::optional<user> recipient;
                 util::optional<std::vector<overwrite>> permission_overwrites;
                 
