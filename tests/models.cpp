@@ -317,7 +317,7 @@ TEST_CASE( "Channel model correctly instantiated" ){
     REQUIRE_NOTHROW(test_channel.decode(web::json::value::parse(dm_json)));
     
     REQUIRE(test_channel.get_id() == 134552934997426176);
-    REQUIRE(test_channel.get_is_private() == true);
+    REQUIRE(test_channel.get_is_private().get_value() == true);
     REQUIRE(test_channel.get_last_message_id().get_value() == 153642275539255296);
     
     auto recip = test_channel.get_recipient().get_value();
@@ -356,7 +356,7 @@ TEST_CASE( "Channel model correctly instantiated" ){
     REQUIRE_NOTHROW(test_channel2.decode(web::json::value::parse(textguild_json)));
     
     REQUIRE(test_channel2.get_id() == 41771983423143937);
-    REQUIRE(test_channel2.get_is_private() == false);
+    REQUIRE(test_channel2.get_is_private().get_value() == false);
     REQUIRE(test_channel2.get_last_message_id().get_value() == 155117677105512449);
     REQUIRE(test_channel2.get_topic().get_value() == "24/7 chat about how to gank Mike #2");
     REQUIRE(test_channel2.get_position().get_value() == 6);
@@ -392,7 +392,7 @@ TEST_CASE( "Channel model correctly instantiated" ){
     REQUIRE_NOTHROW(test_channel3.decode(web::json::value::parse(voiceguild_json)));
     
     REQUIRE(test_channel3.get_id() == 155101607195836416);
-    REQUIRE(test_channel3.get_is_private() == false);
+    REQUIRE(test_channel3.get_is_private().get_value() == false);
     REQUIRE(test_channel3.get_bitrate().get_value() == 64000);
     REQUIRE(test_channel3.get_user_limit().get_value() == 0);
     REQUIRE(test_channel3.get_position().get_value() == 5);

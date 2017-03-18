@@ -10,7 +10,7 @@ namespace disccord
             : id(0), guild_id(), last_message_id(),
             position(), bitrate(), user_limit(),
             name(), type(), topic(),
-            is_private(false),  recipient(), permission_overwrites()
+            is_private(),  recipient(), permission_overwrites()
         { }
 
         channel::~channel()
@@ -21,7 +21,6 @@ namespace disccord
             entity::decode(json);
             
             id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
-            is_private = json.at("is_private").as_bool();
             
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
@@ -81,7 +80,7 @@ namespace disccord
             get_field(name, as_string);
             get_field(type, as_string);
             get_field(topic, as_string);
-            
+            get_field(is_private, as_bool);
             get_composite_field(recipient, user);
             
             get_composite_field_vector(permission_overwrites, overwrite);
@@ -97,8 +96,9 @@ namespace disccord
             entity::encode_to(info);
             
             info["id"] = web::json::value(id);
-            info["is_private"] = web::json::value(is_private);
             
+            if (position.is_specified())
+                info["is_private"] = web::json::value(is_private.get_value());
             if (position.is_specified())
                 info["position"] = web::json::value(position.get_value());
             if (user_limit.is_specified())
