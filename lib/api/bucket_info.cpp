@@ -20,6 +20,15 @@ namespace disccord
 
             return request;
         }
+        
+        inline web::http::http_request create_request(std::string method, std::string url, web::json::value body)
+        {
+            auto request = web::http::http_request(method);
+            request.set_request_uri(url);
+            request.set_body(body);
+
+            return request;
+        }
 
         void bucket_info::parse_headers(web::http::http_headers headers)
         {
@@ -60,6 +69,24 @@ namespace disccord
 
             return entry_semaphore.enter().then([this,&client,url,token](bool success){
                 auto request = create_request(http_method, url);
+                return client.request(request, token);
+            }).then([this](web::http::http_response response){
+                // TODO: assert result was successful
+                parse_headers(response.headers());
+                return response.extract_json();
+            });
+        }
+        
+        pplx::task<web::json::value> bucket_info::request(web::http::client::http_client& client, std::string url, web::json::value body, pplx::cancellation_token token)
+        {
+            if ((entry_semaphore.get_current_count() - 1) < 0)
+            {
+                // TODO: wait until the ratelimit is over
+                throw std::runtime_error("pre-emptive ratelimit");
+            }
+
+            return entry_semaphore.enter().then([this,&client,url,token,body](bool success){
+                auto request = create_request(http_method, url, body);
                 return client.request(request, token);
             }).then([this](web::http::http_response response){
                 // TODO: assert result was successful
