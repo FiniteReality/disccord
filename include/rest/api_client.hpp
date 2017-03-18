@@ -81,9 +81,7 @@ namespace disccord
                             else { 
                                 typename T::value_type obj;
                                 obj.decode(content);
-                                std::vector<typename T::value_type> temp;
-                                temp.push_back(obj);
-                                value = temp;
+                                value.push_back(obj);
                             }
                             return value;
                         });
