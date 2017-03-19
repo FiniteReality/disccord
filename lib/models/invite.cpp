@@ -14,7 +14,7 @@ namespace disccord
         void invite::decode(web::json::value json)
         {
             code = json.at("code").as_string();
-            
+
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -28,10 +28,9 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-            
+
             get_composite_field(guild, invite_guild);
             get_composite_field(channel, invite_channel);
-            
             
             #undef get_composite_field
         }
