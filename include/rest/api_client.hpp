@@ -11,6 +11,7 @@
 #include <models/user_guild.hpp>
 #include <models/channel.hpp>
 #include <models/connection.hpp>
+#include <models/invite.hpp>
 
 #include <unordered_map>
 #include <vector>
@@ -149,6 +150,16 @@ namespace disccord
                     
                     pplx::task<std::vector<disccord::models::connection>> get_user_connections(pplx::cancellation_token token = pplx::cancellation_token::none());
                     
+                    
+                    // Invite API
+                    pplx::task<disccord::models::invite> get_invite(std::string invite_code, 
+                                                                pplx::cancellation_token token = pplx::cancellation_token::none());
+                    
+                    pplx::task<disccord::models::invite> delete_invite(std::string invite_code, 
+                                                                pplx::cancellation_token token = pplx::cancellation_token::none());
+                                                                
+                    pplx::task<disccord::models::invite> accept_invite(std::string invite_code, 
+                                                                pplx::cancellation_token token = pplx::cancellation_token::none());
                 private:
                     disccord::api::bucket_info* get_bucket(route_info& route);
 
