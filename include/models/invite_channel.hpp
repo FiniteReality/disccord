@@ -17,14 +17,15 @@ namespace disccord
 
                 uint64_t get_id();
                 std::string get_name();
-                std::string get_type();
+                uint8_t get_type();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
                 uint64_t id;
-                std::string name, type;
+                uint8_t type;
+                std::string name;
         };
     }
 }
