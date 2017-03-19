@@ -54,7 +54,7 @@ namespace disccord
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(uint8_t limit, 
                                                                                                             pplx::cancellation_token token)
             {
-                auto route = get_route("GET", "/users/@me/guilds?limit="+std::to_string(limit));
+                auto route = get_route("GET", "/users/@me/guilds?limit={limit}", std::to_string(limit));
                 return request_array<std::vector<disccord::models::user_guild>>(route, token);
             }
             
@@ -63,15 +63,15 @@ namespace disccord
             {
                 // Here we could be forgiving and default if the user enters a non-existant query param
                 // or can be less forgiving and let the bad request go through.
-                auto route = get_route("GET", "/users/@me/guilds?{query}={guild.id}",query,std::to_string(guild_id));
+                auto route = get_route("GET", "/users/@me/guilds?{query}={guild}",query,std::to_string(guild_id));
                 return request_array<std::vector<disccord::models::user_guild>>(route, token);
             }
             
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, 
                                                                                                             pplx::cancellation_token token)
             {
-                // NOTE: router was throwing an out of range exception when trying to also add limit to params. this is a temp workaround.
-                auto route = get_route("GET", "/users/@me/guilds?{query}={guild.id}&limit="+std::to_string(limit), query, std::to_string(guild_id));
+                // NOTE: {guild.id} is a reserved major param, so we use {guild} here to not break routing
+                auto route = get_route("GET", "/users/@me/guilds?{query}={guild}&limit={limit}", query, std::to_string(guild_id), std::to_string(limit));
                 return request_array<std::vector<disccord::models::user_guild>>(route, token);
             }
             
