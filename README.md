@@ -11,3 +11,8 @@ Join the development server: [![Discord](https://discordapp.com/api/guilds/22669
 
 - [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
 - GCC 6 (May compile on earlier versions, not tested)
+
+## TODO ##
+
+- 'friendly' REST interface
+- WebSocket support
