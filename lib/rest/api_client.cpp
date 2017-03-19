@@ -116,6 +116,26 @@ namespace disccord
                 return request_array<std::vector<disccord::models::connection>>(route, token);
             }
             
+            
+            // Invite API
+            pplx::task<disccord::models::invite> rest_api_client::get_invite(std::string invite_code, pplx::cancellation_token token)
+            {
+                auto route = get_route("GET", "/invites/{invite.code}", invite_code);
+                return request<disccord::models::invite>(route, token);
+            }
+            
+            pplx::task<disccord::models::invite> rest_api_client::delete_invite(std::string invite_code, pplx::cancellation_token token)
+            {
+                auto route = get_route("DELETE", "/invites/{invite.code}", invite_code);
+                return request<disccord::models::invite>(route, token);
+            }
+            
+            pplx::task<disccord::models::invite> rest_api_client::accept_invite(std::string invite_code, pplx::cancellation_token token)
+            {
+                auto route = get_route("POST", "/invites/{invite.code}", invite_code);
+                return request<disccord::models::invite>(route, token);
+            }
+                                                               
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
