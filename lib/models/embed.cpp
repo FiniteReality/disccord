@@ -85,28 +85,28 @@ namespace disccord
 
         void embed::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["title"] = web::json::value(get_title());
-            info["type"] = web::json::value(get_type());
-            info["color"] = web::json::value(get_color());
-            if (get_description().is_specified())
-                info["description"] = get_description();
-            if (get_url().is_specified())
-                info["url"] = get_url();
-            if (get_timestamp().is_specified())
-                info["timestamp"] = get_timestamp();
-            if (get_footer().is_specified())
-                info["footer"] = get_footer().get_value().encode();
-            if (get_image().is_specified())
-                info["image"] = get_footer().get_value().encode();
-            if (get_thumbnail().is_specified())
-                info["thumbnail"] = get_thumbnail().get_value().encode();
-            if (get_video().is_specified())
-                info["video"] = get_video().get_value().encode();
-            if (get_provider().is_specified())
-                info["provider"] = get_provider().get_value().encode();
-            if (get_fields().is_specified())
+            info["title"] = web::json::value(title);
+            info["type"] = web::json::value(type);
+            info["color"] = web::json::value(color);
+            if (description.is_specified())
+                info["description"] = web::json::value(description.get_value());
+            if (url.is_specified())
+                info["url"] = web::json::value(url.get_value());
+            if (timestamp.is_specified())
+                info["timestamp"] = web::json::value(timestamp.get_value());
+            if (footer.is_specified())
+                info["footer"] = footer.get_value().encode();
+            if (image.is_specified())
+                info["image"] = image.get_value().encode();
+            if (thumbnail.is_specified())
+                info["thumbnail"] = thumbnail.get_value().encode();
+            if (video.is_specified())
+                info["video"] = video.get_value().encode();
+            if (provider.is_specified())
+                info["provider"] = provider.get_value().encode();
+            if (fields.is_specified())
             {
-                auto _fields = get_fields().get_value();
+                auto _fields = fields.get_value();
                 std::vector<web::json::value> field_array(_fields.size());
                 std::transform(_fields.begin(), _fields.end(), field_array.begin(),
                     [](embed_field field){
@@ -114,8 +114,8 @@ namespace disccord
                     });
                 info["fields"] = web::json::value::array(field_array);
             }
-            if (get_author().is_specified())
-                info["author"] = get_author().get_value().encode();
+            if (author.is_specified())
+                info["author"] = author.get_value().encode();
         }
 
         #define define_get_method(field_name) \

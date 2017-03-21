@@ -47,17 +47,17 @@ namespace disccord
         {
             entity::encode_to(info);
 
-            info["username"] = web::json::value(get_username());
-            info["discriminator"] = web::json::value(std::to_string(get_discriminator()));
-            if (get_avatar().is_specified())
-                info["avatar"] = get_avatar();
-            info["bot"] = web::json::value(get_bot());
-            if (get_mfa_enabled().is_specified())
-                info["mfa_enabled"] = get_mfa_enabled();
-            if (get_verified().is_specified())
-                info["verified"] = get_verified();
-            if (get_email().is_specified())
-                info["email"] = get_email();
+            info["username"] = web::json::value(username);
+            info["discriminator"] = web::json::value(std::to_string(discriminator));
+            if (avatar.is_specified())
+                info["avatar"] = web::json::value(avatar.get_value());
+            info["bot"] = web::json::value(bot);
+            if (mfa_enabled.is_specified())
+                info["mfa_enabled"] = web::json::value(mfa_enabled.get_value());
+            if (verified.is_specified())
+                info["verified"] = web::json::value(verified.get_value());
+            if (email.is_specified())
+                info["email"] = web::json::value(email.get_value());
         }
 
         #define define_get_method(field_name) \

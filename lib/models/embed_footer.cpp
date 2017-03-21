@@ -35,11 +35,11 @@ namespace disccord
 
         void embed_footer::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["text"] = web::json::value(get_text());
-            if (get_icon_url().is_specified())
-                info["icon_url"] = get_icon_url();
-            if (get_proxy_icon_url().is_specified())
-                info["proxy_icon_url"] = get_proxy_icon_url();
+            info["text"] = web::json::value(text);
+            if (icon_url.is_specified())
+                info["icon_url"] = web::json::value(icon_url.get_value());
+            if (proxy_icon_url.is_specified())
+                info["proxy_icon_url"] = web::json::value(proxy_icon_url.get_value());
         }
 
         std::string embed_footer::get_text()

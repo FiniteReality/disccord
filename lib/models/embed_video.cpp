@@ -35,11 +35,11 @@ namespace disccord
 
         void embed_video::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["url"] = web::json::value(get_url());
-            if (get_height().is_specified())
-                info["height"] = get_height();
-            if (get_width().is_specified())
-                info["width"] = get_width();
+            info["url"] = web::json::value(url);
+            if (height.is_specified())
+                info["height"] = web::json::value(height.get_value());
+            if (width.is_specified())
+                info["width"] = web::json::value(width.get_value());
         }
 
         std::string embed_video::get_url()

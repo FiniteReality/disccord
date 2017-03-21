@@ -36,13 +36,13 @@ namespace disccord
 
         void embed_thumbnail::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["url"] = web::json::value(get_url());
-            if (get_proxy_url().is_specified())
-                info["proxy_url"] = get_proxy_url();
-            if (get_height().is_specified())
-                info["height"] = get_height();
-            if (get_width().is_specified())
-                info["width"] = get_width();
+            info["url"] = web::json::value(url);
+            if (proxy_url.is_specified())
+                info["proxy_url"] = web::json::value(proxy_url.get_value());
+            if (height.is_specified())
+                info["height"] = web::json::value(height.get_value());
+            if (width.is_specified())
+                info["width"] = web::json::value(width.get_value());
         }
 
         std::string embed_thumbnail::get_url()

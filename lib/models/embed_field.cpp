@@ -35,10 +35,10 @@ namespace disccord
 
         void embed_field::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["name"] = web::json::value(get_name());
-            info["value"] = web::json::value(get_value());
-            if (get_inline().is_specified())
-                info["inline"] = get_inline();
+            info["name"] = web::json::value(name);
+            info["value"] = web::json::value(value);
+            if (_inline.is_specified())
+                info["inline"] = web::json::value(_inline.get_value());
         }
 
         std::string embed_field::get_name()

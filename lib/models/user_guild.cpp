@@ -28,11 +28,11 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["id"] = web::json::value(get_id());
-            info["name"] = web::json::value(get_name());
-            info["icon"] = web::json::value(get_icon());
-            info["owner"] = web::json::value(get_owner());
-            info["permissions"] = web::json::value(std::to_string(get_permissions()));
+            info["id"] = web::json::value(id);
+            info["name"] = web::json::value(name);
+            info["icon"] = web::json::value(icon);
+            info["owner"] = web::json::value(owner);
+            info["permissions"] = web::json::value(std::to_string(permissions));
         }
         
         int64_t user_guild::get_id()
