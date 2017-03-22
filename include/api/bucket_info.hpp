@@ -17,8 +17,9 @@ namespace disccord
                 bucket_info(std::string method);
                 virtual ~bucket_info();
 
-                pplx::task<web::json::value> request(web::http::client::http_client& client, std::string url, pplx::cancellation_token token = pplx::cancellation_token::none());
-                pplx::task<web::json::value> request(web::http::client::http_client& client, std::string url, web::json::value body, pplx::cancellation_token token = pplx::cancellation_token::none());
+                pplx::task<web::http::http_response> enter(web::http::client::http_client& client, 
+                    web::http::http_request& request, 
+                    pplx::cancellation_token token = pplx::cancellation_token::none());
 
             private:
                 void parse_headers(web::http::http_headers headers);
