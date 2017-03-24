@@ -3,6 +3,9 @@
 
 #include <type_traits>
 
+#include <rest/models/create_dm_channel_args.hpp>
+#include <rest/models/create_group_dm_args.hpp>
+
 namespace disccord
 {
     namespace rest
@@ -67,7 +70,7 @@ namespace disccord
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(uint8_t limit, 
                                                                                                             pplx::cancellation_token token)
             {
-                auto route = get_route("GET", "/users/@me/guilds?limit="+std::to_string(limit));
+                auto route = get_route("GET", "/users/@me/guilds?limit={limit}", std::to_string(limit));
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
             
@@ -101,26 +104,20 @@ namespace disccord
                 return request_multi_json<disccord::models::channel>(route, token);
             }
             
-            pplx::task<disccord::models::channel> rest_api_client::create_dm(uint64_t recipient_id,
+            pplx::task<disccord::models::channel> rest_api_client::create_dm_channel(uint64_t recipient_id,
                                                             pplx::cancellation_token token)
             {
-                web::json::value body;
-                body["recipient_id"] = web::json::value(recipient_id);
+                disccord::rest::models::create_dm_channel_args args{recipient_id};
                 auto route = get_route("POST", "/users/@me/channels");
-                return request_json<disccord::models::channel>(route, body, token);
+                return request_json<disccord::models::channel>(route, args, token);
             }
             
-            pplx::task<disccord::models::channel> rest_api_client::create_group_dm(std::vector<std::string> access_tokens, web::json::value nicks,
+            pplx::task<disccord::models::channel> rest_api_client::create_group_dm(std::unordered_map<uint64_t, std::string> nicks, std::vector<std::string> access_tokens,
                                                                     pplx::cancellation_token token)
             {
-                web::json::value body;
-                std::vector<web::json::value> token_array; // This could probably be generalized to use for other endpoints
-                for (auto i : access_tokens)
-                   token_array.push_back(web::json::value(i));
-                body["access_tokens"] = web::json::value::array(token_array);
-                body["nicks"] = nicks;
+                disccord::rest::models::create_group_dm_args args{nicks, access_tokens};
                 auto route = get_route("POST", "/users/@me/channels");
-                return request_json<disccord::models::channel>(route, body, token);
+                return request_json<disccord::models::channel>(route, args, token);
             }
             
             pplx::task<std::vector<disccord::models::connection>> rest_api_client::get_user_connections(pplx::cancellation_token token)

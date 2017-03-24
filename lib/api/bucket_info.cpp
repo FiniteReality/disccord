@@ -42,7 +42,7 @@ namespace disccord
             }
         }
 
-        pplx::task<web::http::http_response> bucket_info::request(web::http::client::http_client& client, web::http::http_request& request, pplx::cancellation_token& token)
+        pplx::task<web::http::http_response> bucket_info::enter(web::http::client::http_client& client, web::http::http_request& request, pplx::cancellation_token token)
         {
             return entry_semaphore.enter().then([this,&client,&request,&token](bool success){
                 return client.request(request, token);

@@ -20,6 +20,8 @@ namespace disccord
                 virtual std::unordered_map<std::string, std::string> get_attributes();
 
             private:
+                std::string get_name();
+
                 std::string name;
                 std::string content_type;
         };

@@ -56,10 +56,10 @@ namespace disccord
 
                     pplx::task<std::vector<disccord::models::channel>> get_user_dms(pplx::cancellation_token token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::channel> create_dm(uint64_t recipient_id, 
+                    pplx::task<disccord::models::channel> create_dm_channel(uint64_t recipient_id, 
                                                                     pplx::cancellation_token token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::channel> create_group_dm(std::vector<std::string> access_tokens, web::json::value nicks,
+                    pplx::task<disccord::models::channel> create_group_dm(std::unordered_map<uint64_t, std::string> nicks, std::vector<std::string> access_tokens,
                                                                         pplx::cancellation_token token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::connection>> get_user_connections(pplx::cancellation_token token = pplx::cancellation_token::none());
@@ -78,7 +78,7 @@ namespace disccord
                     template <typename TResponse>
                     pplx::task<TResponse> request_json(route_info& route, pplx::cancellation_token token = pplx::cancellation_token::none())
                     {
-                        web::http::http_request request();
+                        web::http::http_request request;
 
                         return request_internal(route, request, token).then([](web::http::http_response response)
                         {
@@ -91,12 +91,12 @@ namespace disccord
                         });
                     }
 
-                    template <typename TModel, typename TResponse>
+                    template <typename TResponse, typename TModel>
                     pplx::task<TResponse> request_json(route_info& route, TModel body, pplx::cancellation_token token = pplx::cancellation_token::none())
                     {
-                        web::http::http_request request();
+                        web::http::http_request request;
 
-                        request.set_body(body.encode(), "application/json");
+                        request.set_body(body.encode());
                         return request_internal(route, request, token).then([](web::http::http_response response)
                         {
                             return response.extract_json();
@@ -111,7 +111,7 @@ namespace disccord
                     template <typename TResponse>
                     pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, pplx::cancellation_token token = pplx::cancellation_token::none())
                     {
-                        web::http::http_request request();
+                        web::http::http_request request;
 
                         return request_internal(route, request, token).then([](web::http::http_response response)
                         {
@@ -128,20 +128,23 @@ namespace disccord
                                     result.decode(item);
                                     return result;
                                 });
+                                return responses;
                             }
                             else
                             {
+                                std::vector<TResponse> responses;
                                 TResponse result;
                                 result.decode(response);
-                                return result;
+                                responses.push_back(result);
+                                return responses;
                             }
                         });
                     }
 
-                    template <typename TModel, typename TResponse>
+                    template <typename TResponse, typename TModel>
                     pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, std::vector<TModel> body, pplx::cancellation_token token = pplx::cancellation_token::none())
                     {
-                        web::http::http_request request();
+                        web::http::http_request request;
 
                         web::json::array body_arr(body.size());
                         std::transform(body.begin(), body.end(), body_arr.size(), [](TModel value)
@@ -149,7 +152,9 @@ namespace disccord
                             return value.encode();
                         });
 
-                        request.set_body(body_arr, "application/json");
+                        web::json::value _body = body_arr;
+
+                        request.set_body(_body);
                         return request_internal(route, request, token).then([](web::http::http_response response)
                         {
                             return response.extract_json();
@@ -165,12 +170,15 @@ namespace disccord
                                     result.decode(item);
                                     return result;
                                 });
+                                return responses;
                             }
                             else
                             {
+                                std::vector<TResponse> responses;
                                 TResponse result;
                                 result.decode(response);
-                                return result;
+                                responses.push_back(result);
+                                return responses;
                             }
                         });
                     }
@@ -178,7 +186,7 @@ namespace disccord
                     template <typename TResponse>
                     pplx::task<TResponse> request_multipart(route_info& route, disccord::api::multipart_request args, pplx::cancellation_token token = pplx::cancellation_token::none())
                     {
-                        web::http::http_request request();
+                        web::http::http_request request;
 
                         request.set_body(args.encode(), args.get_content_type());
                         return request_internal(route, request, token).then([](web::http::http_response response)

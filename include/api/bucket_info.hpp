@@ -17,7 +17,7 @@ namespace disccord
                 bucket_info(std::string method);
                 virtual ~bucket_info();
 
-                pplx::task<web::http::http_response> enter(web::http::client::http_client& client, 
+                pplx::task<web::http::http_response> enter(web::http::client::http_client& client,
                     web::http::http_request& request, 
                     pplx::cancellation_token token = pplx::cancellation_token::none());
 

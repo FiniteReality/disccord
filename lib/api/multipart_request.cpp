@@ -1,8 +1,8 @@
-#include <api/multipart_file.hpp>
+#include <api/multipart_request.hpp>
 
 #include <chrono>
 
-using std::chrono;
+using namespace std::chrono;
 
 namespace disccord
 {
@@ -18,16 +18,16 @@ namespace disccord
         std::string multipart_request::encode()
         {
             std::string body;
-            for (auto field : fields)
+            for (auto& field : fields)
             {
                 body += "--" + multipart_boundary + "\r\n";
-                body += "Content-Disposition: " + content_type;
+                body += "Content-Disposition: " + content_type_suffix;
                 for (auto& attribute_pair : field.get_attributes())
                 {
                     // HACK: no encoding is done here! values may be unsanitary!
-                    body += "; " += attribute_pair.first + "=\"" + attribute_pair.second + "\"";
+                    body += "; " + attribute_pair.first + "=\"" + attribute_pair.second + "\"";
                 }
-                body += "\r\n" + "Content-Type: " + field.get_content_type() + "\r\n\r\n";
+                body += "\r\nContent-Type: " + field.get_content_type() + "\r\n\r\n";
                 body += field.get_content() + "\r\n";
             }
             body += "--";
@@ -44,7 +44,7 @@ namespace disccord
         {
             auto current_time = high_resolution_clock::now().time_since_epoch();
 
-            return "Upload----" + std::to_string(duration_cast<nanoseconds>(current_time).ticks());
+            return "Upload----" + std::to_string(duration_cast<nanoseconds>(current_time).count());
         }
     }
 }

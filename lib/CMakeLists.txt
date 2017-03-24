@@ -20,7 +20,8 @@ models/message.cpp models/integration_account.cpp models/integration.cpp
 models/channel.cpp models/overwrite.cpp models/connection.cpp models/game.cpp
 models/presence.cpp models/guild_embed.cpp models/guild_member.cpp
 models/read_state.cpp models/relationship.cpp models/ban.cpp
-models/application.cpp)
+models/application.cpp rest/models/create_dm_channel_args.cpp
+rest/models/create_group_dm_args.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 

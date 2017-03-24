@@ -11,8 +11,10 @@ namespace disccord
         class multipart_file : public multipart_field
         {
             public:
-                multipart_file(std::string field_name, std::string file_name, std::ostream content, std::string content_type);
+                multipart_file(std::string field_name, std::string file_name, std::string contents, std::string content_type);
                 virtual ~multipart_file();
+
+                std::string get_file_name();
 
                 virtual std::string get_content() override;
 
@@ -20,7 +22,7 @@ namespace disccord
 
             private:
                 std::string filename;
-                std::istream stream;
+                std::string data;
         };
     }
 }
