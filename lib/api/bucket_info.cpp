@@ -13,23 +13,6 @@ namespace disccord
         bucket_info::~bucket_info()
         { }
 
-        inline web::http::http_request create_request(std::string method, std::string url)
-        {
-            auto request = web::http::http_request(method);
-            request.set_request_uri(url);
-
-            return request;
-        }
-        
-        inline web::http::http_request create_request(std::string method, std::string url, web::json::value body)
-        {
-            auto request = web::http::http_request(method);
-            request.set_request_uri(url);
-            request.set_body(body);
-
-            return request;
-        }
-
         void bucket_info::parse_headers(web::http::http_headers headers)
         {
             // HACK: this code is in *no* way complete!
@@ -59,39 +42,30 @@ namespace disccord
             }
         }
 
-        pplx::task<web::json::value> bucket_info::request(web::http::client::http_client& client, std::string url, pplx::cancellation_token token)
+        pplx::task<web::http::http_response> bucket_info::enter(web::http::client::http_client& client, disccord::api::request_info* info, pplx::cancellation_token token)
         {
-            if ((entry_semaphore.get_current_count() - 1) < 0)
-            {
-                // TODO: wait until the ratelimit is over
-                throw std::runtime_error("pre-emptive ratelimit");
-            }
+            return entry_semaphore.enter().then([this,&client,info,&token](bool success){
+                web::http::http_request request(info->get_method());
+                request.set_request_uri(info->get_url());
+                if (info->get_has_body())
+                {
+                    request.set_body(info->get_body(), info->get_content_type());
+                }
 
-            return entry_semaphore.enter().then([this,&client,url,token](bool success){
-                auto request = create_request(http_method, url);
-                return client.request(request, token);
-            }).then([this](web::http::http_response response){
+                auto headers = request.headers();
+                for (auto& pair : info->get_headers())
+                {
+                    headers.add(pair.first, pair.second);
+                }
+
+                delete info; // we're done with our custom type at this point
+
+                auto req = client.request(request, token);
+                return req;
+            }).then([this,info](web::http::http_response response){
                 // TODO: assert result was successful
                 parse_headers(response.headers());
-                return response.extract_json();
-            });
-        }
-        
-        pplx::task<web::json::value> bucket_info::request(web::http::client::http_client& client, std::string url, web::json::value body, pplx::cancellation_token token)
-        {
-            if ((entry_semaphore.get_current_count() - 1) < 0)
-            {
-                // TODO: wait until the ratelimit is over
-                throw std::runtime_error("pre-emptive ratelimit");
-            }
-
-            return entry_semaphore.enter().then([this,&client,url,token,body](bool success){
-                auto request = create_request(http_method, url, body);
-                return client.request(request, token);
-            }).then([this](web::http::http_response response){
-                // TODO: assert result was successful
-                parse_headers(response.headers());
-                return response.extract_json();
+                return response;
             });
         }
     }

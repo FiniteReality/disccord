@@ -8,17 +8,20 @@ set(LIBS ${LIBS} ${CPPREST_LIBRARIES} ${Boost_LIBRARIES}
     ${OPENSSL_LIBRARIES} ${CMAKE_DL_LIBS})
 
 set(SOURCE_FILES client.cpp rest/api_client.cpp rest/route.cpp
-api/bucket_info.cpp rest/client.cpp util/semaphore.cpp models/model.cpp
-models/entity.cpp models/user.cpp models/user_guild.cpp models/embed.cpp
-models/embed_author.cpp models/embed_field.cpp models/embed_footer.cpp
-models/embed_image.cpp models/embed_provider.cpp models/embed_thumbnail.cpp
-models/embed_video.cpp models/guild.cpp
-models/invite.cpp models/invite_channel.cpp models/invite_guild.cpp models/invite_metadata.cpp
-models/attachment.cpp models/emoji.cpp models/reaction.cpp models/role.cpp
-models/message.cpp models/integration_account.cpp models/integration.cpp
-models/channel.cpp models/overwrite.cpp models/connection.cpp models/game.cpp
-models/presence.cpp models/guild_embed.cpp models/guild_member.cpp models/read_state.cpp
-models/relationship.cpp models/ban.cpp models/application.cpp)
+api/bucket_info.cpp api/multipart_field.cpp api/multipart_request.cpp
+api/multipart_file.cpp api/request_info.cpp rest/client.cpp util/semaphore.cpp
+models/model.cpp models/entity.cpp models/user.cpp models/user_guild.cpp
+models/embed.cpp models/embed_author.cpp models/embed_field.cpp
+models/embed_footer.cpp models/embed_image.cpp models/embed_provider.cpp
+models/embed_thumbnail.cpp models/embed_video.cpp models/guild.cpp
+models/invite.cpp models/invite_channel.cpp models/invite_guild.cpp
+models/invite_metadata.cpp models/attachment.cpp models/emoji.cpp
+models/reaction.cpp models/role.cpp models/message.cpp
+models/integration_account.cpp models/integration.cpp models/channel.cpp
+models/overwrite.cpp models/connection.cpp models/game.cpp models/presence.cpp
+models/guild_embed.cpp models/guild_member.cpp models/read_state.cpp
+models/relationship.cpp models/ban.cpp models/application.cpp
+rest/models/create_dm_channel_args.cpp rest/models/create_group_dm_args.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
