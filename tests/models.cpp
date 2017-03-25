@@ -115,7 +115,7 @@ TEST_CASE( "Invite model correctly instantiated" ){
     "channel": {
         "id" : "165176875973476352",
         "name" : "illuminati",
-        "type" : "text"
+        "type" : 0
     }
 })";
 
@@ -125,7 +125,7 @@ TEST_CASE( "Invite model correctly instantiated" ){
     REQUIRE(test_invite.get_code() == "asdfh487yed");
     REQUIRE(test_invite.get_channel().get_value().get_id() == 165176875973476352);
     REQUIRE(test_invite.get_channel().get_value().get_name() == "illuminati");
-    REQUIRE(test_invite.get_channel().get_value().get_type() == "text");
+    REQUIRE(test_invite.get_channel().get_value().get_type() == 0);
     REQUIRE(test_invite.get_guild().get_value().get_id() == 165176875973476352);
     REQUIRE(test_invite.get_guild().get_value().get_name() == "CS:GO Fraggers Only");
     
@@ -140,7 +140,7 @@ TEST_CASE( "Invite model correctly instantiated" ){
     "channel": {
         "id" : "165176875973476352",
         "name" : "illuminati",
-        "type" : "text"
+        "type" : 0
     }
 })";
 

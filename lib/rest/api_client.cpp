@@ -71,27 +71,23 @@ namespace disccord
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
             
-            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(uint8_t limit, 
-                                                                                                            pplx::cancellation_token token)
+            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(uint8_t limit, pplx::cancellation_token token)
             {
                 auto route = get_route("GET", "/users/@me/guilds?limit={limit}", std::to_string(limit));
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
             
-            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(std::string query, uint64_t guild_id,
-                                                                                                            pplx::cancellation_token token)
+            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(std::string query, uint64_t guild_id, pplx::cancellation_token token)
             {
                 // Here we could be forgiving and default if the user enters a non-existant query param
                 // or can be less forgiving and let the bad request go through.
-                auto route = get_route("GET", "/users/@me/guilds?{query}={guild.id}",query,std::to_string(guild_id));
+                auto route = get_route("GET", "/users/@me/guilds?{query}={guild}",query,std::to_string(guild_id));
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
             
-            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, 
-                                                                                                            pplx::cancellation_token token)
+            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, pplx::cancellation_token token)
             {
-                // NOTE: router was throwing an out of range exception when trying to also add limit to params. this is a temp workaround.
-                auto route = get_route("GET", "/users/@me/guilds?{query}={guild.id}&limit="+std::to_string(limit), query, std::to_string(guild_id));
+                auto route = get_route("GET", "/users/@me/guilds?{query}={guild}&limit={limit}", query, std::to_string(guild_id), std::to_string(limit));
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
             
@@ -116,8 +112,7 @@ namespace disccord
                 return request_json<disccord::models::channel>(route, args, token);
             }
             
-            pplx::task<disccord::models::channel> rest_api_client::create_group_dm(std::unordered_map<uint64_t, std::string> nicks, std::vector<std::string> access_tokens,
-                                                                    pplx::cancellation_token token)
+            pplx::task<disccord::models::channel> rest_api_client::create_group_dm(std::unordered_map<uint64_t, std::string> nicks, std::vector<std::string> access_tokens, pplx::cancellation_token token)
             {
                 disccord::rest::models::create_group_dm_args args{nicks, access_tokens};
                 auto route = get_route("POST", "/users/@me/channels");
@@ -130,6 +125,26 @@ namespace disccord
                 return request_multi_json<disccord::models::connection>(route, token);
             }
             
+            
+            // Invite API
+            pplx::task<disccord::models::invite> rest_api_client::get_invite(std::string invite_code, pplx::cancellation_token token)
+            {
+                auto route = get_route("GET", "/invites/{invite.code}", invite_code);
+                return request<disccord::models::invite>(route, token);
+            }
+            
+            pplx::task<disccord::models::invite> rest_api_client::delete_invite(std::string invite_code, pplx::cancellation_token token)
+            {
+                auto route = get_route("DELETE", "/invites/{invite.code}", invite_code);
+                return request<disccord::models::invite>(route, token);
+            }
+            
+            pplx::task<disccord::models::invite> rest_api_client::accept_invite(std::string invite_code, pplx::cancellation_token token)
+            {
+                auto route = get_route("POST", "/invites/{invite.code}", invite_code);
+                return request<disccord::models::invite>(route, token);
+            }
+                                                               
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
