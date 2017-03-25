@@ -4,6 +4,7 @@
 #include <cpprest/http_client.h>
 
 #include <util/semaphore.hpp>
+#include <api/request_info.hpp>
 
 #include <string>
 
@@ -18,7 +19,7 @@ namespace disccord
                 virtual ~bucket_info();
 
                 pplx::task<web::http::http_response> enter(web::http::client::http_client& client,
-                    web::http::http_request& request, 
+                    disccord::api::request_info* request,
                     pplx::cancellation_token token = pplx::cancellation_token::none());
 
             private:
@@ -30,6 +31,5 @@ namespace disccord
         };
     }
 }
-
 
 #endif /* _bucket_info_hpp_ */

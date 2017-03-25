@@ -13,14 +13,14 @@ namespace disccord
         namespace internal
         {
             rest_api_client::rest_api_client(const web::uri& base_uri, std::string acct_token, disccord::token_type type)
-                : http_client(base_uri), buckets(), token(acct_token), nonce_generator(), token_type(type)
+                : http_client(base_uri), buckets(), token(acct_token), token_type(type)
             {
                 setup_discord_handler();
             }
 
             rest_api_client::rest_api_client(const web::uri& base_uri, std::string acct_token, disccord::token_type type,
                 const web::http::client::http_client_config& client_config)
-                    : http_client(base_uri, client_config), buckets(), token(acct_token), nonce_generator(), token_type(type)
+                    : http_client(base_uri, client_config), buckets(), token(acct_token), token_type(type)
             {
                 setup_discord_handler();
             }
@@ -35,19 +35,23 @@ namespace disccord
                 buckets.clear();
             }
 
-            pplx::task<web::http::http_response> rest_api_client::request_internal(route_info& route, web::http::http_request request, pplx::cancellation_token token)
+            pplx::task<web::http::http_response> rest_api_client::request_internal(route_info& route, pplx::cancellation_token token)
+            {
+                disccord::api::request_info* info = new disccord::api::request_info();
+                return request_internal(route, info, token);
+            }
+
+            pplx::task<web::http::http_response> rest_api_client::request_internal(route_info& route, disccord::api::request_info* request, pplx::cancellation_token token)
             {
                 auto bucket = get_bucket(route);
 
-                request.set_method(route.method);
+                request->set_method(route.method);
 
-                web::uri_builder url_builder(http_client.base_uri());
-                url_builder.append_path(route.full_url);
-                request.set_request_uri(url_builder.to_uri());
+                request->set_url(web::uri(route.full_url));
 
                 return bucket->enter(http_client, request, token);
             }
-            
+
             // User API
             pplx::task<disccord::models::user> rest_api_client::get_current_user(pplx::cancellation_token token)
             {
