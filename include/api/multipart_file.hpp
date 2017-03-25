@@ -1,8 +1,9 @@
 #ifndef _multipart_file_hpp_
 #define _multipart_file_hpp_
 
+#include <string>
+
 #include <api/multipart_field.hpp>
-#include <ostream>
 
 namespace disccord
 {

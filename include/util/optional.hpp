@@ -33,11 +33,10 @@ namespace disccord
                 {
                     if (_specified)
                     {
-                        if (_null) {
+                        if (_null)
                             return web::json::value();
-                        } else {
+                        else
                             return web::json::value(_value);
-                        }
                     }
                     else
                     {

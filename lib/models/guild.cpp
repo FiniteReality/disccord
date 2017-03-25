@@ -80,8 +80,8 @@ namespace disccord
             {
                 auto _features_array = json.at("features").as_array();
                 std::vector<std::string> features_array(_features_array.size());
-                std::transform(_features_array.begin(), _features_array.end(), features_array.begin(),
-                    [](web::json::value _feature){
+                std::transform(_features_array.begin(), _features_array.end(), features_array.begin(), [](web::json::value _feature)
+                    {
                         return _feature.as_string();
                     });
                 features = features_array;
@@ -116,8 +116,8 @@ namespace disccord
             {
                 auto _features = get_features();
                 std::vector<web::json::value> features_array(_features.size());
-                std::transform(_features.begin(), _features.end(), features_array.begin(),
-                    [](std::string feature){
+                std::transform(_features.begin(), _features.end(), features_array.begin(), [](std::string feature)
+                    {
                         return web::json::value(feature);
                     });
                 info["features"] = web::json::value::array(features_array);

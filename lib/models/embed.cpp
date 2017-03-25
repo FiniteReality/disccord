@@ -1,6 +1,6 @@
-#include <models/embed.hpp>
-
 #include <vector>
+
+#include <models/embed.hpp>
 
 #include <models/entity.hpp>
 #include <models/embed_author.hpp>
@@ -70,8 +70,8 @@ namespace disccord
             {
                 auto _fields_array = json.at("fields").as_array();
                 std::vector<embed_field> fields_array(_fields_array.size());
-                std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(),
-                    [](web::json::value _field){
+                std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), [](web::json::value _field)
+                    {
                         embed_field field;
                         field.decode(_field);
                         return field;
@@ -108,8 +108,8 @@ namespace disccord
             {
                 auto _fields = get_fields().get_value();
                 std::vector<web::json::value> field_array(_fields.size());
-                std::transform(_fields.begin(), _fields.end(), field_array.begin(),
-                    [](embed_field field){
+                std::transform(_fields.begin(), _fields.end(), field_array.begin(), [](embed_field field)
+                    {
                         return field.encode();
                     });
                 info["fields"] = web::json::value::array(field_array);

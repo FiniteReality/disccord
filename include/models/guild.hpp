@@ -1,6 +1,8 @@
 #ifndef _guild_hpp_
 #define _guild_hpp_
 
+#include <vector>
+
 #include <models/entity.hpp>
 #include <models/role.hpp>
 #include <models/emoji.hpp>
@@ -8,7 +10,6 @@
 #include <models/channel.hpp>
 #include <models/presence.hpp>
 //#include <models/voice_state.hpp>
-#include <vector>
 
 namespace disccord
 {

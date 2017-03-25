@@ -1,7 +1,7 @@
+#include <type_traits>
+
 #include <rest/api_client.hpp>
 #include <rest.hpp>
-
-#include <type_traits>
 
 #include <rest/models/create_dm_channel_args.hpp>
 #include <rest/models/create_group_dm_args.hpp>
@@ -46,7 +46,6 @@ namespace disccord
                 auto bucket = get_bucket(route);
 
                 request->set_method(route.method);
-
                 request->set_url(web::uri(route.full_url));
 
                 return bucket->enter(http_client, request, token);
@@ -161,7 +160,8 @@ namespace disccord
             void rest_api_client::setup_discord_handler()
             {
                 // Set user-agent on a request and add authorization header
-                http_client.add_handler([=](auto req, auto pipeline){
+                http_client.add_handler([=](auto req, auto pipeline)
+                {
                     req.headers().add("User-Agent", DISCORD_USER_AGENT);
 
                     std::string token_type_s;

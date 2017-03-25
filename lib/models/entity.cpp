@@ -1,7 +1,7 @@
-#include <models/entity.hpp>
-
 #include <vector>
 #include <boost/lexical_cast.hpp>
+
+#include <models/entity.hpp>
 
 namespace disccord
 {

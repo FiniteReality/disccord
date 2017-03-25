@@ -5,7 +5,8 @@ namespace disccord
 {
     namespace models
     {
-        enum class relationship_type {
+        enum class relationship_type
+        {
             Friend = 1,
             Blocked = 2,
             IncomingPending = 3,

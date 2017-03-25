@@ -1,12 +1,12 @@
 #ifndef _entity_hpp_
 #define _entity_hpp_
 
-#include <util/optional.hpp>
-#include <models/model.hpp>
-
 #include <string>
 #include <unordered_map>
 #include <cstdint>
+
+#include <util/optional.hpp>
+#include <models/model.hpp>
 
 namespace disccord
 {

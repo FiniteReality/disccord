@@ -21,16 +21,16 @@ namespace disccord
             {
                 auto _access_tokens = get_access_tokens();
                 std::vector<web::json::value> _tokens(_access_tokens.size());
-                std::transform(_access_tokens.begin(), _access_tokens.end(), _tokens.begin(),
-                    [](std::string token){
+                std::transform(_access_tokens.begin(), _access_tokens.end(), _tokens.begin(), [](std::string token)
+                    {
                         return web::json::value(token);
                     });
                 web::json::value tokens = web::json::value::array(_tokens);
 
                 auto _nicks = get_nicks();
                 std::vector<std::pair<std::string, web::json::value>> _nicknames(_nicks.size());
-                std::transform(_nicks.begin(), _nicks.end(), _nicknames.begin(), 
-                    [](std::pair<uint64_t, std::string> field){
+                std::transform(_nicks.begin(), _nicks.end(), _nicknames.begin(), [](std::pair<uint64_t, std::string> field)
+                    {
                         return std::make_pair(std::to_string(field.first), web::json::value(field.second));
                     });
                 web::json::value nicknames = web::json::value::object(_nicknames);

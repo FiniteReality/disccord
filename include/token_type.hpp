@@ -3,7 +3,8 @@
 
 namespace disccord
 {
-    enum class token_type {
+    enum class token_type
+    {
         User,
         Bot,
         Bearer

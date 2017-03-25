@@ -92,8 +92,8 @@ namespace disccord
             {
                 auto _rpc_origins = rpc_origins.get_value();
                 std::vector<web::json::value> field_array(_rpc_origins.size());
-                std::transform(_rpc_origins.begin(), _rpc_origins.end(), field_array.begin(),
-                    [](std::string field){
+                std::transform(_rpc_origins.begin(), _rpc_origins.end(), field_array.begin(), [](std::string field)
+                    {
                         return web::json::value(field);
                     });
                 info["rpc_origins"] = web::json::value::array(field_array);

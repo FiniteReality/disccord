@@ -1,12 +1,12 @@
 #ifndef _bucket_info_hpp_
 #define _bucket_info_hpp_
 
+#include <string>
+
 #include <cpprest/http_client.h>
 
 #include <util/semaphore.hpp>
 #include <api/request_info.hpp>
-
-#include <string>
 
 namespace disccord
 {

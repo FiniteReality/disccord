@@ -1,10 +1,10 @@
 #ifndef _request_info_hpp_
 #define _request_info_hpp_
 
+#include <unordered_map>
+
 #include <cpprest/base_uri.h>
 #include <cpprest/json.h>
-
-#include <unordered_map>
 
 namespace disccord
 {

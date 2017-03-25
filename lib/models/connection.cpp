@@ -49,8 +49,8 @@ namespace disccord
             {
                 auto _integrations = integrations.get_value();
                 std::vector<web::json::value> field_array(_integrations.size());
-                std::transform(_integrations.begin(), _integrations.end(), field_array.begin(),
-                    [](integration field){
+                std::transform(_integrations.begin(), _integrations.end(), field_array.begin(), [](integration field)
+                    {
                         return field.encode();
                     });
                 info["integrations"] = web::json::value::array(field_array);

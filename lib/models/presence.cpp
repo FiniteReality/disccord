@@ -40,8 +40,8 @@ namespace disccord
             {
                 auto _roles_array = json.at("roles").as_array();
                 std::vector<uint64_t> roles_array(_roles_array.size());
-                std::transform(_roles_array.begin(), _roles_array.end(), roles_array.begin(),
-                    [](web::json::value _role){
+                std::transform(_roles_array.begin(), _roles_array.end(), roles_array.begin(), [](web::json::value _role)
+                    {
                         return boost::lexical_cast<uint64_t>(_role.as_string());
                     });
                 roles = roles_array;
@@ -61,8 +61,8 @@ namespace disccord
             {
                 auto _roles = roles;
                 std::vector<web::json::value> roles_array(_roles.size());
-                std::transform(_roles.begin(), _roles.end(), roles_array.begin(),
-                    [](uint64_t role){
+                std::transform(_roles.begin(), _roles.end(), roles_array.begin(), [](uint64_t role)
+                    {
                         return web::json::value(role);
                     });
                 info["roles"] = web::json::value::array(roles_array);

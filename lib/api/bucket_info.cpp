@@ -1,6 +1,6 @@
-#include <api/bucket_info.hpp>
-
 #include <exception>
+
+#include <api/bucket_info.hpp>
 
 namespace disccord
 {
@@ -44,7 +44,8 @@ namespace disccord
 
         pplx::task<web::http::http_response> bucket_info::enter(web::http::client::http_client& client, disccord::api::request_info* info, pplx::cancellation_token token)
         {
-            return entry_semaphore.enter().then([this,&client,info,&token](bool success){
+            return entry_semaphore.enter().then([this,&client,info,&token](bool success)
+            {
                 web::http::http_request request(info->get_method());
                 request.set_request_uri(info->get_url());
                 if (info->get_has_body())
@@ -62,7 +63,8 @@ namespace disccord
 
                 auto req = client.request(request, token);
                 return req;
-            }).then([this,info](web::http::http_response response){
+            }).then([this,info](web::http::http_response response)
+            {
                 // TODO: assert result was successful
                 parse_headers(response.headers());
                 return response;

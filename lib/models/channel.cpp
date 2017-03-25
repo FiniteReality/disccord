@@ -121,8 +121,8 @@ namespace disccord
             {
                 auto _permission_overwrites = permission_overwrites.get_value();
                 std::vector<web::json::value> field_array(_permission_overwrites.size());
-                std::transform(_permission_overwrites.begin(), _permission_overwrites.end(), field_array.begin(),
-                    [](overwrite field){
+                std::transform(_permission_overwrites.begin(), _permission_overwrites.end(), field_array.begin(), [](overwrite field)
+                    {
                         return field.encode();
                     });
                 info["permission_overwrites"] = web::json::value::array(field_array);

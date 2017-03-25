@@ -1,10 +1,10 @@
 #ifndef _semaphore_hpp_
 #define _semaphore_hpp_
 
-#include <pplxtasks.h>
-
 #include <mutex>
 #include <condition_variable>
+
+#include <pplxtasks.h>
 
 namespace disccord
 {

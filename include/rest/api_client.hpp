@@ -1,6 +1,9 @@
 #ifndef _rest_api_client_hpp_
 #define _rest_api_client_hpp_
 
+#include <unordered_map>
+#include <vector>
+
 #include <cpprest/http_client.h>
 
 #include <rest/route.hpp>
@@ -13,9 +16,6 @@
 #include <models/channel.hpp>
 #include <models/connection.hpp>
 #include <models/invite.hpp>
-
-#include <unordered_map>
-#include <vector>
 
 namespace disccord
 {
