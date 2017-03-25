@@ -96,25 +96,25 @@ namespace disccord
         {
             entity::encode_to(info);
 
-            info["name"] = web::json::value(get_name());
-            if (get_icon().is_specified())
-                info["icon"] = get_icon();
-            if (get_splash().is_specified())
-                info["splash"] = get_splash();
-            info["owner_id"] = web::json::value::string(std::to_string(get_owner_id()));
-            info["region"] = web::json::value(get_region());
-            if (get_afk_channel_id().is_specified())
-                info["afk_channel_id"] = get_afk_channel_id();
-            info["afk_timeout"] = web::json::value(get_afk_timeout());
+            info["name"] = web::json::value(name);
+            if (icon.is_specified())
+                info["icon"] = web::json::value(icon.get_value());
+            if (splash.is_specified())
+                info["splash"] = web::json::value(splash.get_value());
+            info["owner_id"] = web::json::value::string(std::to_string(owner_id));
+            info["region"] = web::json::value(region);
+            if (afk_channel_id.is_specified())
+                info["afk_channel_id"] = web::json::value(afk_channel_id.get_value());
+            info["afk_timeout"] = web::json::value(afk_timeout);
             info["mfa_level"] = web::json::value(mfa_level);
             info["verification_level"] = web::json::value(verification_level);
             info["default_message_notifications"] = web::json::value(default_message_notifications);
-            info["embed_enabled"] = web::json::value(get_embed_enabled());
-            if (get_embed_channel_id().is_specified())
-                info["embed_channel_id"] = get_embed_channel_id();
+            info["embed_enabled"] = web::json::value(embed_enabled);
+            if (embed_channel_id.is_specified())
+                info["embed_channel_id"] = web::json::value(embed_channel_id.get_value());
             // TODO: see guild.hpp
             {
-                auto _features = get_features();
+                auto _features = features;
                 std::vector<web::json::value> features_array(_features.size());
                 std::transform(_features.begin(), _features.end(), features_array.begin(),
                     [](std::string feature){

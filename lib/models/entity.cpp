@@ -21,7 +21,7 @@ namespace disccord
 
         void entity::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["id"] = web::json::value::string(std::to_string(get_id()));
+            info["id"] = web::json::value::string(std::to_string(id));
         }
         
         uint64_t entity::get_id()

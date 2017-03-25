@@ -34,9 +34,9 @@ namespace disccord
 
         void embed_provider::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["name"] = web::json::value(get_name());
-            if (get_url().is_specified())
-                info["url"] = get_url();
+            info["name"] = web::json::value(name);
+            if (url.is_specified())
+                info["url"] = web::json::value(url.get_value());
         }
 
         std::string embed_provider::get_name()

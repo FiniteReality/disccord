@@ -36,13 +36,13 @@ namespace disccord
 
         void embed_author::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["name"] = web::json::value(get_name());
-            if (get_url().is_specified())
-                info["url"] = get_url();
-            if (get_icon_url().is_specified())
-                info["icon_url"] = get_icon_url();
-            if (get_proxy_icon_url().is_specified())
-                info["proxy_icon_url"] = get_proxy_icon_url();
+            info["name"] = web::json::value(name);
+            if (url.is_specified())
+                info["url"] = web::json::value(url.get_value());
+            if (icon_url.is_specified())
+                info["icon_url"] = web::json::value(icon_url.get_value());
+            if (proxy_icon_url.is_specified())
+                info["proxy_icon_url"] = web::json::value(proxy_icon_url.get_value());
         }
 
         std::string embed_author::get_name()
