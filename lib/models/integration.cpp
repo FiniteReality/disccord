@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         integration::integration()
-            : id(0), role_id(0), name(""), type(""), synced_at(""),
+            : entity(), role_id(0), name(""), type(""), synced_at(""),
             expire_behavior(0), expire_grace_period(0), enabled(false),
             syncing(false), user(), account()
         { }
@@ -19,7 +19,6 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = std::stoull(json.at("id").as_string());
             role_id = std::stoull(json.at("role_id").as_string());
             name = json.at("name").as_string();
             type = json.at("type").as_string();
@@ -53,9 +52,8 @@ namespace disccord
         void integration::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
-            info["name"] = web::json::value(get_name());
-            info["id"] = web::json::value(std::to_string(get_id()));
+
+            info["name"] = web::json::value(get_name());;
             info["role_id"] = web::json::value(std::to_string(get_role_id()));
             info["synced_at"] = web::json::value(get_synced_at());
             info["expire_behavior"] = web::json::value(get_expire_behavior());
@@ -63,7 +61,7 @@ namespace disccord
             info["enabled"] = web::json::value(get_enabled());
             info["syncing"] = web::json::value(get_syncing());
             info["type"] = web::json::value(get_type());
-            
+
             if (user.is_specified())
                 info["user"] = user.get_value().encode();
             if (account.is_specified())

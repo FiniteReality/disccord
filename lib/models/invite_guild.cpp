@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         invite_guild::invite_guild()
-            : id(0), name(""),splash(),icon()
+            : entity(), name(""),splash(),icon()
         { }
 
         invite_guild::~invite_guild()
@@ -16,8 +16,7 @@ namespace disccord
         void invite_guild::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
+
             name = json.at("name").as_string();
             
             #define get_field(var, conv) \
@@ -41,9 +40,8 @@ namespace disccord
         void invite_guild::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
+
             info["name"] = web::json::value(get_name());
-            info["id"] = web::json::value(std::to_string(get_id());
             if (splash.is_specified())
                 info["splash"] = web::json::value(get_splash().get_value());
             if (icon.is_specified())

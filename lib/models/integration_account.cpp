@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         integration_account::integration_account()
-            : id(0), name("")
+            : entity(), name("")
         { }
 
         integration_account::~integration_account()
@@ -16,17 +16,15 @@ namespace disccord
         void integration_account::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
+
             name = json.at("name").as_string();
         }
 
         void integration_account::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
+
             info["name"] = web::json::value(get_name());
-            info["id"] = web::json::value(std::to_string(get_id()));
         }
         
         #define define_get_method(field_name) \

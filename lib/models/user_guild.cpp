@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         user_guild::user_guild()
-            : name(""), icon(""), owner(false), id(0), permissions(0)
+            : entity(), name(""), icon(""), owner(false), id(0), permissions(0)
         { }
 
         user_guild::~user_guild()
@@ -20,15 +20,13 @@ namespace disccord
             name = json.at("name").as_string();
             icon = json.at("icon").as_string();
             owner = json.at("owner").as_bool();
-            id = std::stoull(json.at("id").as_string());
             permissions = json.at("permissions").as_integer();
         }
 
         void user_guild::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
-            info["id"] = web::json::value(std::to_string(get_id()));
+
             info["name"] = web::json::value(get_name());
             info["icon"] = web::json::value(get_icon());
             info["owner"] = web::json::value(get_owner());

@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         overwrite::overwrite()
-        : id(0), allow(0), deny(0), type("")
+        : entity(), allow(0), deny(0), type("")
         { }
 
         overwrite::~overwrite()
@@ -16,8 +16,7 @@ namespace disccord
         void overwrite::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
+
             allow = json.at("allow").as_integer();
             deny = json.at("deny").as_integer();
             type = json.at("type").as_string();
@@ -26,10 +25,9 @@ namespace disccord
         void overwrite::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
+
             info["allow"] = web::json::value(get_allow());
             info["deny"] = web::json::value(get_deny());
-            info["id"] = web::json::value(std::to_string(get_id()));
             info["type"] = web::json::value(get_type());
         }
         

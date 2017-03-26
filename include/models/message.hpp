@@ -44,7 +44,7 @@ namespace disccord
 
             private:
                 util::optional<user> author;
-                uint64_t id, channel_id;
+                uint64_t channel_id;
                 std::string content, timestamp;
                 util::optional<std::string> edited_timestamp, nonce, webhook_id;
                 bool tts, mention_everyone, pinned;

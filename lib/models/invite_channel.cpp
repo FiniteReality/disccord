@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         invite_channel::invite_channel()
-            : id(0), name(""), type(0)
+            : entity(), name(""), type(0)
         { }
 
         invite_channel::~invite_channel()
@@ -16,8 +16,7 @@ namespace disccord
         void invite_channel::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
+
             name = json.at("name").as_string();
             type = json.at("type").as_integer();
         }
@@ -25,9 +24,8 @@ namespace disccord
         void invite_channel::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
+
             info["name"] = web::json::value(get_name());
-            info["id"] = web::json::value(std::to_string(get_id()));
             info["type"] = web::json::value(get_type());
         }
         

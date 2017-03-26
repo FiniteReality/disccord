@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         guild::guild()
-            : name(""), region(""), icon(), splash(), owner_id(0),
+            : entity(), name(""), region(""), icon(), splash(), owner_id(0),
             afk_channel_id(), embed_channel_id(), afk_timeout(0),
             mfa_level(0), verification_level(0), default_message_notifications(0),
             embed_enabled(false), features(), roles(), 
@@ -88,7 +88,7 @@ namespace disccord
             }
 
             #undef get_field
-            #undef get_lexical_field
+            #undef get_id_field
             #undef get_composite_field_vector
         }
 

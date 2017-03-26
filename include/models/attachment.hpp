@@ -27,7 +27,6 @@ namespace disccord
                 virtual void encode_to(std::unordered_map<std::string,web::json::value> &info) override;
 
             private:
-                uint64_t id;
                 std::string filename, url;
                 util::optional<std::string> proxy_url;
                 util::optional<uint16_t> height, width;

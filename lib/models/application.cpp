@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         application::application()
-        : id(), name(""), icon(), description(),
+        : entity(), name(""), icon(), description(),
         rpc_origins(), bot_public(false),
         bot_requires_code_grant(false), owner()
         { }
@@ -18,8 +18,7 @@ namespace disccord
         void application::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
+
             name = json.at("name").as_string();
             bot_public = json.at("bot_public").as_bool();
             bot_requires_code_grant = json.at("bot_requires_code_grant").as_bool();
@@ -76,12 +75,11 @@ namespace disccord
         void application::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
+
             info["name"] = web::json::value(name);
-            info["id"] = web::json::value(std::to_string(id));
             info["bot_public"] = web::json::value(bot_public);
             info["bot_requires_code_grant"] = web::json::value(bot_requires_code_grant);
-            
+
             if (icon.is_specified())
                 info["icon"] = web::json::value(icon.get_value());
             if (description.is_specified())

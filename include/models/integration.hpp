@@ -33,7 +33,7 @@ namespace disccord
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
-                uint64_t id, role_id;
+                uint64_t role_id;
                 std::string name, type, synced_at;
                 uint32_t expire_behavior, expire_grace_period;
                 bool enabled, syncing;

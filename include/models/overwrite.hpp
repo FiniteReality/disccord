@@ -24,7 +24,7 @@ namespace disccord
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
-                uint64_t id, allow, deny;
+                uint64_t allow, deny;
                 std::string type;
         };
     }

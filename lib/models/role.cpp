@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         role::role()
-            : id(0), name(""), color(0), permissions(0),
+            : entity(), name(""), color(0), permissions(0),
             position(0), managed(false), mentionable(false), hoist(false)
         { }
 
@@ -17,8 +17,7 @@ namespace disccord
         void role::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
+
             name = json.at("name").as_string();
             color = json.at("color").as_integer();
             permissions = json.at("permissions").as_integer();
@@ -31,9 +30,8 @@ namespace disccord
         void role::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
+
             info["name"] = web::json::value(std::to_string(get_name()));
-            info["id"] = web::json::value(std::to_string(get_id()));
             info["color"] = web::json::value(get_color());
             info["permissions"] = web::json::value(get_permissions());
             info["position"] = web::json::value(get_position());

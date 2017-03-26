@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         attachment::attachment()
-            : id(0), filename(""), url(""), proxy_url(),
+            : entity(), filename(""), url(""), proxy_url(),
             height(), width(), size(0)
         { }
 
@@ -17,8 +17,7 @@ namespace disccord
         void attachment::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
+
             filename = json.at("filename").as_string();
             url = json.at("url").as_string();
             size = json.at("size").as_integer();
@@ -45,12 +44,11 @@ namespace disccord
         void attachment::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
-            info["id"] = web::json::value(std::to_string(id));
+
             info["filename"] = web::json::value(filename);
             info["url"] = web::json::value(url);
             info["size"] = web::json::value(size);
-            
+
             if (proxy_url.is_specified())
                 info["proxy_url"] = web::json::value(proxy_url.get_value());
             if (height.is_specified())

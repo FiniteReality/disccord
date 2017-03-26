@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         channel::channel()
-            : id(0), guild_id(), last_message_id(),
+            : entity(), guild_id(), last_message_id(),
             position(), bitrate(), user_limit(),
             name(), type(), topic(),
             is_private(),  recipient(), permission_overwrites()
@@ -19,9 +19,7 @@ namespace disccord
         void channel::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
-            
+
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -60,7 +58,7 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-            #define get_id_field(var, lexical_type) \
+            #define get_id_field(var) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
                     if (!field.is_null()) { \
@@ -86,7 +84,7 @@ namespace disccord
             get_composite_field_vector(permission_overwrites, overwrite);
             
             #undef get_field
-            #undef get_lexical_field
+            #undef get_id_field
             #undef get_composite_field
             #undef get_composite_field_vector
         }
@@ -94,9 +92,7 @@ namespace disccord
         void channel::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
-            info["id"] = web::json::value(std::to_string(id));
-            
+
             if (position.is_specified())
                 info["is_private"] = web::json::value(is_private.get_value());
             if (position.is_specified())

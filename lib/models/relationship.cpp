@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         relationship::relationship()
-            : id(0), user(), type()
+            : entity(), user(), type()
         { }
 
         relationship::~relationship()
@@ -16,8 +16,7 @@ namespace disccord
         void relationship::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = std::stoull(json.at("id").as_string());
+
             switch(json.at("type").as_integer())
             {
                 case uint32_t(relationship_type::Friend):
@@ -59,8 +58,7 @@ namespace disccord
         void relationship::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
-            info["id"] = web::json::value(std::to_string(get_id());
+
             if (get_type().is_specified())
                 info["type"] = web::json::value(get_type().get_value());
             if (get_user().is_specified())

@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         read_state::read_state()
-        : id(0), mention_count(0), last_message_id()
+        : entity(), mention_count(0), last_message_id()
         { }
 
         read_state::~read_state()
@@ -17,7 +17,6 @@ namespace disccord
         {
             entity::decode(json);
 
-            id = std::stoull(json.at("id").as_string());
             mention_count = json.at("mention_count").as_integer();
 
             #define get_id_field(var) \
@@ -32,16 +31,15 @@ namespace disccord
                     var = decltype(var)(); \
                 }
 
-            get_id_field(last_message_id, uint64_t);
+            get_id_field(last_message_id);
 
-            #undef get_lexical_field
+            #undef get_id_field
         }
 
         void read_state::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
-            
-            info["id"] = web::json::value(std::to_string(get_id()));
+
             info["mention_count"] = web::json::value(get_mention_count());
             if (get_last_message_id().is_specified())
                 info["last_message_id"] = web::json::value(get_last_message_id().get_value());
