@@ -61,6 +61,8 @@ namespace disccord
             decltype(connection::field_name) connection::get_##field_name() { \
                 return field_name; \
             }
+
+        define_get_method(id);
         define_get_method(name);
         define_get_method(type);
         define_get_method(revoked);

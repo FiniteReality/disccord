@@ -19,7 +19,6 @@ namespace disccord
 
                 virtual void decode(web::json::value json) override;
 
-                uint64_t get_id();
                 util::optional<uint64_t> get_last_message_id();
                 util::optional<uint64_t> get_guild_id();
                 util::optional<uint32_t> get_position();

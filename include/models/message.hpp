@@ -23,7 +23,6 @@ namespace disccord
                 virtual void decode(web::json::value json) override;
 
                 util::optional<user> get_author();
-                uint64_t get_id();
                 uint64_t get_channel_id();
                 std::string get_content();
                 std::string get_timestamp();

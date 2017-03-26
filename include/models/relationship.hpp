@@ -17,7 +17,6 @@ namespace disccord
 
                 virtual void decode(web::json::value json) override;
 
-                uint64_t get_id();
                 util::optional<models::user> get_user();
                 util::optional<uint32_t> get_type();
 

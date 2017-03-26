@@ -15,7 +15,6 @@ namespace disccord
 
                 virtual void decode(web::json::value json) override;
 
-                uint64_t get_id();
                 std::string get_filename();
                 std::string get_url();
                 util::optional<std::string> get_proxy_url();

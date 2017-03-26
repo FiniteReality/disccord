@@ -17,7 +17,6 @@ namespace disccord
 
                 virtual void decode(web::json::value json) override;
 
-                uint64_t get_id();
                 uint64_t get_role_id();
                 std::string get_synced_at();
                 std::string get_name();

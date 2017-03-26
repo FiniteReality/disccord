@@ -31,7 +31,7 @@ namespace disccord
         {
             entity::encode_to(info);
 
-            info["name"] = web::json::value(std::to_string(get_name()));
+            info["name"] = web::json::value(get_name());
             info["color"] = web::json::value(get_color());
             info["permissions"] = web::json::value(get_permissions());
             info["position"] = web::json::value(get_position());
