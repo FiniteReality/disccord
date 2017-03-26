@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/emoji.hpp>
 
@@ -16,11 +16,11 @@ namespace disccord
         void emoji::decode(web::json::value json)
         {
             name = json.at("name").as_string();
-            #define get_lexical_field(var, lexical_type) \
+            #define get_id_field(var, lexical_type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
                     if (!field.is_null()) { \
-                        var = decltype(var)(boost::lexical_cast<lexical_type>(field.as_string())); \
+                        var = decltype(var)(std::stoull(field.as_string())); \
                     } else { \
                         var = decltype(var)::no_value(); \
                     } \
@@ -28,8 +28,8 @@ namespace disccord
                     var = decltype(var)(); \
                 }
 
-            get_lexical_field(id, uint64_t);
-            
+            get_id_field(id);
+
             #undef get_lexical_field
         }
 
@@ -37,7 +37,7 @@ namespace disccord
         {
             info["name"] = web::json::value(name);
             if (id.is_specified())
-                info["id"] = web::json::value(id.get_value());
+                info["id"] = web::json::value(std::to_string(id.get_value()));
         }
         
         #define define_get_method(field_name) \

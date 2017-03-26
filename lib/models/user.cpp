@@ -17,8 +17,9 @@ namespace disccord
         void user::decode(web::json::value json)
         {
             entity::decode(json);
-            
+
             username = json.at("username").as_string();
+            // HACK: use boost::lexical_cast here since it safely validates values
             discriminator = boost::lexical_cast<uint16_t>(json.at("discriminator").as_string());
 
             #define get_field(var, conv) \

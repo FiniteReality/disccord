@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/presence.hpp>
 
@@ -17,7 +17,7 @@ namespace disccord
         void presence::decode(web::json::value json)
         {
             status = json.at("status").as_string();
-            guild_id = boost::lexical_cast<uint64_t>(json.at("guild_id").as_string());
+            guild_id = std::stoull(json.at("guild_id").as_string());
             
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
@@ -42,7 +42,7 @@ namespace disccord
                 std::vector<uint64_t> roles_array(_roles_array.size());
                 std::transform(_roles_array.begin(), _roles_array.end(), roles_array.begin(), [](web::json::value _role)
                     {
-                        return boost::lexical_cast<uint64_t>(_role.as_string());
+                        return std::stoull(_role.as_string());
                     });
                 roles = roles_array;
             }
@@ -52,18 +52,18 @@ namespace disccord
 
         void presence::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
-            info["status"] = web::json::value(status);
-            info["guild_id"] = web::json::value(guild_id);
+            info["status"] = web::json::value(get_status());
+            info["guild_id"] = web::json::value(std::to_string(get_guild_id()));
             if (user.is_specified())
-                info["user"] = user.get_value().encode();
+                info["user"] = get_user().get_value().encode();
             if (game.is_specified())
-                info["game"] = game.get_value().encode();
+                info["game"] = get_game().get_value().encode();
             {
-                auto _roles = roles;
+                auto _roles = get_roles();
                 std::vector<web::json::value> roles_array(_roles.size());
                 std::transform(_roles.begin(), _roles.end(), roles_array.begin(), [](uint64_t role)
                     {
-                        return web::json::value(role);
+                        return web::json::value(std::to_string(role));
                     });
                 info["roles"] = web::json::value::array(roles_array);
             }

@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/guild_embed.hpp>
 
@@ -16,13 +16,13 @@ namespace disccord
         void guild_embed::decode(web::json::value json)
         {
             enabled = json.at("enabled").as_bool();
-            channel_id = boost::lexical_cast<uint64_t>(json.at("channel_id").as_string());
+            channel_id = std::stoull(json.at("channel_id").as_string());
         }
 
         void guild_embed::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             info["enabled"] = web::json::value(enabled);
-            info["channel_id"] = web::json::value(channel_id);
+            info["channel_id"] = web::json::value(std::to_string(channel_id));
         }
         
         #define define_get_method(field_name) \

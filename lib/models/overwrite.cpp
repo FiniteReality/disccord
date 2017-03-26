@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/overwrite.hpp>
 
@@ -17,7 +17,7 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+            id = std::stoull(json.at("id").as_string());
             allow = json.at("allow").as_integer();
             deny = json.at("deny").as_integer();
             type = json.at("type").as_string();
@@ -27,10 +27,10 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["allow"] = web::json::value(allow);
-            info["deny"] = web::json::value(deny);
-            info["id"] = web::json::value(id);
-            info["type"] = web::json::value(type);
+            info["allow"] = web::json::value(get_allow());
+            info["deny"] = web::json::value(get_deny());
+            info["id"] = web::json::value(std::to_string(get_id()));
+            info["type"] = web::json::value(get_type());
         }
         
         #define define_get_method(field_name) \

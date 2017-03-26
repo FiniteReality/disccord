@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/invite_guild.hpp>
 
@@ -17,7 +17,7 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+            id = std::stoull(json.at("id").as_string());
             name = json.at("name").as_string();
             
             #define get_field(var, conv) \
@@ -42,12 +42,12 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["name"] = web::json::value(name);
-            info["id"] = web::json::value(id);
+            info["name"] = web::json::value(get_name());
+            info["id"] = web::json::value(std::to_string(get_id());
             if (splash.is_specified())
-                info["splash"] = web::json::value(splash.get_value());
+                info["splash"] = web::json::value(get_splash().get_value());
             if (icon.is_specified())
-                info["icon"] = web::json::value(icon.get_value());
+                info["icon"] = web::json::value(get_icon().get_value());
         }
         
         #define define_get_method(field_name) \

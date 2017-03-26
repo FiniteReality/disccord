@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/invite_channel.hpp>
 
@@ -17,7 +17,7 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+            id = std::stoull(json.at("id").as_string());
             name = json.at("name").as_string();
             type = json.at("type").as_integer();
         }
@@ -26,9 +26,9 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["name"] = web::json::value(name);
-            info["id"] = web::json::value(id);
-            info["type"] = web::json::value(type);
+            info["name"] = web::json::value(get_name());
+            info["id"] = web::json::value(std::to_string(get_id()));
+            info["type"] = web::json::value(get_type());
         }
         
         #define define_get_method(field_name) \

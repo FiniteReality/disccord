@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/message.hpp>
 
@@ -21,8 +21,8 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
-            channel_id = boost::lexical_cast<uint64_t>(json.at("channel_id").as_string());
+            id = std::stoull(json.at("id").as_string());
+            channel_id = std::stoull(json.at("channel_id").as_string());
             content = json.at("content").as_string();
             timestamp = json.at("timestamp").as_string();
             tts = json.at("tts").as_bool();
@@ -91,22 +91,22 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["id"] = web::json::value(id);
-            info["channel_id"] = web::json::value(channel_id);
-            info["content"] = web::json::value(content);
-            info["timestamp"] = web::json::value(timestamp);
-            info["tts"] = web::json::value(tts);
-            info["mention_everyone"] = web::json::value(mention_everyone);
-            info["pinned"] = web::json::value(pinned);
+            info["id"] = web::json::value(std::to_string(get_id()));
+            info["channel_id"] = web::json::value(std::to_string(get_channel_id()));
+            info["content"] = web::json::value(get_content());
+            info["timestamp"] = web::json::value(get_timestamp());
+            info["tts"] = web::json::value(get_tts());
+            info["mention_everyone"] = web::json::value(get_mention_everyone());
+            info["pinned"] = web::json::value(get_pinned());
             
             if (edited_timestamp.is_specified())
-                info["edited_timestamp"] = web::json::value(edited_timestamp.get_value());
+                info["edited_timestamp"] = web::json::value(get_edited_timestamp().get_value());
             if (nonce.is_specified())
-                info["nonce"] = web::json::value(nonce.get_value());
+                info["nonce"] = web::json::value(get_nonce().get_value());
             if (webhook_id.is_specified())
-                info["webhook_id"] = web::json::value(webhook_id.get_value());
+                info["webhook_id"] = web::json::value(get_webhook_id().get_value());
             if (author.is_specified())
-                info["author"] = author.get_value().encode();
+                info["author"] = get_author().get_value().encode();
             
             #define encode_composite_vector(var, type) \
                 if (var.is_specified()) { \

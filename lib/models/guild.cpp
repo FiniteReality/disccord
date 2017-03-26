@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/guild.hpp>
 
@@ -32,11 +32,11 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-            #define get_lexical_field(var, lexical_type) \
+            #define get_id_field(var) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
                     if (!field.is_null()) { \
-                        var = decltype(var)(boost::lexical_cast<lexical_type>(field.as_string())); \
+                        var = decltype(var)(std::stoull(field.as_string())); \
                     } else { \
                         var = decltype(var)::no_value(); \
                     } \
@@ -61,15 +61,15 @@ namespace disccord
             name = json.at("name").as_string();
             get_field(icon, as_string);
             get_field(splash, as_string);
-            owner_id = boost::lexical_cast<uint64_t>(json.at("owner_id").as_string());
+            owner_id = std::stoull(json.at("owner_id").as_string());
             region = json.at("region").as_string();
-            get_lexical_field(afk_channel_id, uint64_t);
+            get_id_field(afk_channel_id);
             afk_timeout = json.at("afk_timeout").as_integer();
             mfa_level = json.at("mfa_level").as_integer();
             verification_level = json.at("verification_level").as_integer();
             default_message_notifications = json.at("default_message_notifications").as_integer();
             embed_enabled = json.at("embed_enabled").as_bool();
-            get_lexical_field(embed_channel_id, uint64_t);
+            get_id_field(embed_channel_id);
             get_composite_field_vector(roles, role);
             get_composite_field_vector(emojis, emoji);
             get_composite_field_vector(members, guild_member);
@@ -104,14 +104,14 @@ namespace disccord
             info["owner_id"] = web::json::value::string(std::to_string(get_owner_id()));
             info["region"] = web::json::value(get_region());
             if (get_afk_channel_id().is_specified())
-                info["afk_channel_id"] = get_afk_channel_id();
+                info["afk_channel_id"] = web::json::value(std::to_string(get_afk_channel_id().get_value()));
             info["afk_timeout"] = web::json::value(get_afk_timeout());
             info["mfa_level"] = web::json::value(mfa_level);
             info["verification_level"] = web::json::value(verification_level);
             info["default_message_notifications"] = web::json::value(default_message_notifications);
             info["embed_enabled"] = web::json::value(get_embed_enabled());
             if (get_embed_channel_id().is_specified())
-                info["embed_channel_id"] = get_embed_channel_id();
+                info["embed_channel_id"] = web::json::value(std::to_string(get_embed_channel_id().get_value()));
             // TODO: see guild.hpp
             {
                 auto _features = get_features();

@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/role.hpp>
 
@@ -18,7 +18,7 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+            id = std::stoull(json.at("id").as_string());
             name = json.at("name").as_string();
             color = json.at("color").as_integer();
             permissions = json.at("permissions").as_integer();
@@ -32,14 +32,14 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["name"] = web::json::value(name);
-            info["id"] = web::json::value(id);
-            info["color"] = web::json::value(color);
-            info["permissions"] = web::json::value(permissions);
-            info["position"] = web::json::value(position);
-            info["managed"] = web::json::value(managed);
-            info["mentionable"] = web::json::value(mentionable);
-            info["hoist"] = web::json::value(hoist);
+            info["name"] = web::json::value(std::to_string(get_name()));
+            info["id"] = web::json::value(std::to_string(get_id()));
+            info["color"] = web::json::value(get_color());
+            info["permissions"] = web::json::value(get_permissions());
+            info["position"] = web::json::value(get_position());
+            info["managed"] = web::json::value(get_managed());
+            info["mentionable"] = web::json::value(get_mentionable());
+            info["hoist"] = web::json::value(get_hoist());
         }
         
         #define define_get_method(field_name) \

@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/relationship.hpp>
 
@@ -17,7 +17,7 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+            id = std::stoull(json.at("id").as_string());
             switch(json.at("type").as_integer())
             {
                 case uint32_t(relationship_type::Friend):
@@ -60,11 +60,11 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["id"] = web::json::value(id);
-            if (type.is_specified())
-                info["type"] = web::json::value(type.get_value());
-            if (user.is_specified())
-                info["user"] = user.get_value().encode();
+            info["id"] = web::json::value(std::to_string(get_id());
+            if (get_type().is_specified())
+                info["type"] = web::json::value(get_type().get_value());
+            if (get_user().is_specified())
+                info["user"] = get_user().get_value().encode();
         }
         
         #define define_get_method(field_name) \

@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/integration.hpp>
 
@@ -19,8 +19,8 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
-            role_id = boost::lexical_cast<uint64_t>(json.at("role_id").as_string());
+            id = std::stoull(json.at("id").as_string());
+            role_id = std::stoull(json.at("role_id").as_string());
             name = json.at("name").as_string();
             type = json.at("type").as_string();
             synced_at = json.at("synced_at").as_string();
@@ -54,15 +54,15 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["name"] = web::json::value(name);
-            info["id"] = web::json::value(id);
-            info["role_id"] = web::json::value(role_id);
-            info["synced_at"] = web::json::value(synced_at);
-            info["expire_behavior"] = web::json::value(expire_behavior);
-            info["expire_grace_period"] = web::json::value(expire_grace_period);
-            info["enabled"] = web::json::value(enabled);
-            info["syncing"] = web::json::value(syncing);
-            info["type"] = web::json::value(type);
+            info["name"] = web::json::value(get_name());
+            info["id"] = web::json::value(std::to_string(get_id()));
+            info["role_id"] = web::json::value(std::to_string(get_role_id()));
+            info["synced_at"] = web::json::value(get_synced_at());
+            info["expire_behavior"] = web::json::value(get_expire_behavior());
+            info["expire_grace_period"] = web::json::value(get_expire_grace_period());
+            info["enabled"] = web::json::value(get_enabled());
+            info["syncing"] = web::json::value(get_syncing());
+            info["type"] = web::json::value(get_type());
             
             if (user.is_specified())
                 info["user"] = user.get_value().encode();

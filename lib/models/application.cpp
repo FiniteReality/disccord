@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/application.hpp>
 
@@ -19,7 +19,7 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+            id = std::stoull(json.at("id").as_string());
             name = json.at("name").as_string();
             bot_public = json.at("bot_public").as_bool();
             bot_requires_code_grant = json.at("bot_requires_code_grant").as_bool();
@@ -78,7 +78,7 @@ namespace disccord
             entity::encode_to(info);
             
             info["name"] = web::json::value(name);
-            info["id"] = web::json::value(id);
+            info["id"] = web::json::value(std::to_string(id));
             info["bot_public"] = web::json::value(bot_public);
             info["bot_requires_code_grant"] = web::json::value(bot_requires_code_grant);
             

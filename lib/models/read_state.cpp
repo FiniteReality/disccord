@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/read_state.hpp>
 
@@ -16,24 +16,24 @@ namespace disccord
         void read_state::decode(web::json::value json)
         {
             entity::decode(json);
-            
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+
+            id = std::stoull(json.at("id").as_string());
             mention_count = json.at("mention_count").as_integer();
-            
-            #define get_lexical_field(var, lexical_type) \
+
+            #define get_id_field(var) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
                     if (!field.is_null()) { \
-                        var = decltype(var)(boost::lexical_cast<lexical_type>(field.as_string())); \
+                        var = decltype(var)(std::stoull(field.as_string())); \
                     } else { \
                         var = decltype(var)::no_value(); \
                     } \
                 } else { \
                     var = decltype(var)(); \
                 }
-                
-            get_lexical_field(last_message_id, uint64_t);
-                
+
+            get_id_field(last_message_id, uint64_t);
+
             #undef get_lexical_field
         }
 
@@ -41,10 +41,10 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["id"] = web::json::value(id);
-            info["mention_count"] = web::json::value(mention_count);
-            if (last_message_id.is_specified())
-                info["last_message_id"] = web::json::value(last_message_id.get_value());
+            info["id"] = web::json::value(std::to_string(get_id()));
+            info["mention_count"] = web::json::value(get_mention_count());
+            if (get_last_message_id().is_specified())
+                info["last_message_id"] = web::json::value(get_last_message_id().get_value());
         }
         
         #define define_get_method(field_name) \

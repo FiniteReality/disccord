@@ -1,4 +1,4 @@
-#include <boost/lexical_cast.hpp>
+#include <string>
 
 #include <models/attachment.hpp>
 
@@ -18,7 +18,7 @@ namespace disccord
         {
             entity::decode(json);
             
-            id = boost::lexical_cast<uint64_t>(json.at("id").as_string());
+            id = std::stoull(json.at("id").as_string());
             filename = json.at("filename").as_string();
             url = json.at("url").as_string();
             size = json.at("size").as_integer();
@@ -46,7 +46,7 @@ namespace disccord
         {
             entity::encode_to(info);
             
-            info["id"] = web::json::value(id);
+            info["id"] = web::json::value(std::to_string(id));
             info["filename"] = web::json::value(filename);
             info["url"] = web::json::value(url);
             info["size"] = web::json::value(size);
