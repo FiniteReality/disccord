@@ -16,7 +16,7 @@ namespace disccord
         void user_guild::decode(web::json::value json)
         {
             entity::decode(json);
-            
+
             name = json.at("name").as_string();
             icon = json.at("icon").as_string();
             owner = json.at("owner").as_bool();

@@ -80,9 +80,9 @@ namespace disccord
             get_field(topic, as_string);
             get_field(is_private, as_bool);
             get_composite_field(recipient, user);
-            
+
             get_composite_field_vector(permission_overwrites, overwrite);
-            
+
             #undef get_field
             #undef get_id_field
             #undef get_composite_field
@@ -124,13 +124,12 @@ namespace disccord
                 info["permission_overwrites"] = web::json::value::array(field_array);
             }
         }
-        
+
         #define define_get_method(field_name) \
             decltype(channel::field_name) channel::get_##field_name() { \
                 return field_name; \
             }
-            
-        define_get_method(id);
+
         define_get_method(guild_id);
         define_get_method(last_message_id);
         define_get_method(position);
@@ -142,7 +141,7 @@ namespace disccord
         define_get_method(is_private);
         define_get_method(recipient);
         define_get_method(permission_overwrites);
-        
+
         #undef define_get_method
     }
 }

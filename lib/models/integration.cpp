@@ -18,7 +18,7 @@ namespace disccord
         void integration::decode(web::json::value json)
         {
             entity::decode(json);
-            
+
             role_id = std::stoull(json.at("role_id").as_string());
             name = json.at("name").as_string();
             type = json.at("type").as_string();
@@ -27,7 +27,7 @@ namespace disccord
             expire_grace_period = json.at("expire_grace_period").as_integer();
             enabled = json.at("enabled").as_bool();
             syncing = json.at("syncing").as_bool();
-            
+
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -41,12 +41,12 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-                
+
             get_composite_field(user, models::user);
             get_composite_field(account, integration_account);
-            
+
             #undef get_composite_field
-            
+
         }
 
         void integration::encode_to(std::unordered_map<std::string, web::json::value> &info)
@@ -67,13 +67,13 @@ namespace disccord
             if (account.is_specified())
                 info["account"] = account.get_value().encode();
         }
-        
+
         #define define_get_method(field_name) \
             decltype(integration::field_name) integration::get_##field_name() { \
                 return field_name; \
             }
         define_get_method(name);
-        define_get_method(id);
+
         define_get_method(type);
         define_get_method(role_id);
         define_get_method(synced_at);
@@ -83,7 +83,7 @@ namespace disccord
         define_get_method(syncing);
         define_get_method(user);
         define_get_method(account);
-        
+
         #undef define_get_method
     }
 }

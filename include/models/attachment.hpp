@@ -22,7 +22,7 @@ namespace disccord
                 util::optional<uint16_t> get_height();
                 util::optional<uint16_t> get_width();
                 int32_t get_size();
-                
+
             protected:
                 virtual void encode_to(std::unordered_map<std::string,web::json::value> &info) override;
 

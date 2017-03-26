@@ -18,7 +18,7 @@ namespace disccord
             entity::decode(json);
 
             name = json.at("name").as_string();
-            
+
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -47,17 +47,16 @@ namespace disccord
             if (icon.is_specified())
                 info["icon"] = web::json::value(get_icon().get_value());
         }
-        
+
         #define define_get_method(field_name) \
             decltype(invite_guild::field_name) invite_guild::get_##field_name() { \
                 return field_name; \
             }
-            
+
         define_get_method(name);
-        define_get_method(id);
         define_get_method(splash);
         define_get_method(icon);
-        
+
         #undef define_get_method
     }
 }

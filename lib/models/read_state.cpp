@@ -44,15 +44,14 @@ namespace disccord
             if (get_last_message_id().is_specified())
                 info["last_message_id"] = web::json::value(get_last_message_id().get_value());
         }
-        
+
         #define define_get_method(field_name) \
             decltype(read_state::field_name) read_state::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(id);
         define_get_method(mention_count);
         define_get_method(last_message_id);
-        
+
         #undef define_get_method
     }
 }

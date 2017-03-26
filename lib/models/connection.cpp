@@ -18,7 +18,7 @@ namespace disccord
             name = json.at("name").as_string();
             type = json.at("type").as_string();
             revoked = json.at("revoked").as_bool();
-            
+
             #define get_composite_field_vector(var, type) \
                 if (json.has_field(#var)) { \
                     auto _fields_array = json.at(#var).as_array(); \
@@ -33,9 +33,9 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-            
+
             get_composite_field_vector(integrations, integration);
-            
+
             #undef get_composite_field_vector
         }
 
@@ -56,17 +56,16 @@ namespace disccord
                 info["integrations"] = web::json::value::array(field_array);
             }
         }
-        
+
         #define define_get_method(field_name) \
             decltype(connection::field_name) connection::get_##field_name() { \
                 return field_name; \
             }
         define_get_method(name);
-        define_get_method(id);
         define_get_method(type);
         define_get_method(revoked);
         define_get_method(integrations);
-        
+
         #undef define_get_method
     }
 }

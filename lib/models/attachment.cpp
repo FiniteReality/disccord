@@ -21,7 +21,7 @@ namespace disccord
             filename = json.at("filename").as_string();
             url = json.at("url").as_string();
             size = json.at("size").as_integer();
-            
+
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -37,7 +37,7 @@ namespace disccord
             get_field(proxy_url, as_string);
             get_field(height, as_integer);
             get_field(width, as_integer);
-            
+
             #undef get_field
         }
 
@@ -56,19 +56,18 @@ namespace disccord
             if (width.is_specified())
                 info["width"] = web::json::value(width.get_value());
         }
-        
+
         #define define_get_method(field_name) \
             decltype(attachment::field_name) attachment::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(id);
         define_get_method(filename);
         define_get_method(url);
         define_get_method(size);
         define_get_method(proxy_url);
         define_get_method(height);
         define_get_method(width);
-        
+
         #undef define_get_method
     }
 }

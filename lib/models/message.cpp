@@ -27,7 +27,7 @@ namespace disccord
             tts = json.at("tts").as_bool();
             mention_everyone = json.at("mention_everyone").as_bool();
             pinned = json.at("pinned").as_bool();
-            
+
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -39,7 +39,7 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-                
+
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -68,19 +68,19 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-            
+
             get_field(edited_timestamp, as_string);
             get_field(nonce, as_string);
             get_field(webhook_id, as_string);
-            
+
             get_composite_field(author, user);
-            
+
             get_composite_field_vector(mentions, user);
             get_composite_field_vector(mention_roles, role);
             get_composite_field_vector(attachments, attachment);
             get_composite_field_vector(embeds, embed);
             get_composite_field_vector(reactions, reaction);
-            
+
             #undef get_field
             #undef get_composite_field
             #undef get_composite_field_vector
@@ -96,7 +96,7 @@ namespace disccord
             info["tts"] = web::json::value(get_tts());
             info["mention_everyone"] = web::json::value(get_mention_everyone());
             info["pinned"] = web::json::value(get_pinned());
-            
+
             if (edited_timestamp.is_specified())
                 info["edited_timestamp"] = web::json::value(get_edited_timestamp().get_value());
             if (nonce.is_specified())
@@ -105,7 +105,7 @@ namespace disccord
                 info["webhook_id"] = web::json::value(get_webhook_id().get_value());
             if (author.is_specified())
                 info["author"] = get_author().get_value().encode();
-            
+
             #define encode_composite_vector(var, type) \
                 if (var.is_specified()) { \
                     auto _array = get_##var().get_value(); \
@@ -116,25 +116,24 @@ namespace disccord
                     }); \
                     info[#var] = web::json::value::array(array); \
                 } 
-            
+
             encode_composite_vector(mentions, user);
             encode_composite_vector(mention_roles, role);
             encode_composite_vector(attachments, attachment);
             encode_composite_vector(embeds, embed);
             encode_composite_vector(reactions, reaction);
-            
+
             #undef encode_composite_vector
-            
+
         }
-        
-        
+
+
         #define define_get_method(field_name) \
             decltype(message::field_name) message::get_##field_name() { \
                 return field_name; \
             }
 
         define_get_method(author);
-        define_get_method(id);
         define_get_method(channel_id);
         define_get_method(content);
         define_get_method(timestamp);

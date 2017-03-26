@@ -14,7 +14,7 @@ namespace disccord
         void ban::decode(web::json::value json)
         {
             reason = json.at("reason").as_string();
-            
+
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -28,9 +28,9 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-                
+
             get_composite_field(user, models::user);
-                
+
             #undef get_composite_field
         }
 
@@ -40,14 +40,14 @@ namespace disccord
             if (user.is_specified())
                 info["user"] = user.get_value().encode();
         }
-        
+
         #define define_get_method(field_name) \
             decltype(ban::field_name) ban::get_##field_name() { \
                 return field_name; \
             }
         define_get_method(reason);
         define_get_method(user);
-        
+
         #undef define_get_method
     }
 }

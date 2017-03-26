@@ -35,7 +35,7 @@ namespace disccord
                     type = util::optional<uint32_t>::no_value();
                     break;
             }
-            
+
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -49,9 +49,9 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-                
+
             get_composite_field(user, models::user);
-                
+
             #undef get_composite_field
         }
 
@@ -64,15 +64,14 @@ namespace disccord
             if (get_user().is_specified())
                 info["user"] = get_user().get_value().encode();
         }
-        
+
         #define define_get_method(field_name) \
             decltype(relationship::field_name) relationship::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(id);
         define_get_method(type);
         define_get_method(user);
-        
+
         #undef define_get_method
     }
 }

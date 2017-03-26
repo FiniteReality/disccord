@@ -36,11 +36,10 @@ namespace disccord
                     pplx::task<disccord::models::user> get_user(uint64_t user_id, pplx::cancellation_token token = pplx::cancellation_token::none());
 
                     pplx::task<disccord::models::user> modify_current_user(std::string username, pplx::cancellation_token token = pplx::cancellation_token::none());
+
                     //avatar format: data:image/jpeg;base64,MY_BASE64_IMAGE_DATA_HERE, maybe should make an object for Avatars (models::avatar)?? thoughts
-                    /* pplx::task<disccord::models::user> modify_current_user(std::string avatar, 
-                                                                            pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<disccord::models::user> modify_current_user(std::string username, std::string avatar, 
-                                                                            pplx::cancellation_token token = pplx::cancellation_token::none()); */
+                    /* pplx::task<disccord::models::user> modify_current_user(std::string avatar, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::user> modify_current_user(std::string username, std::string avatar, pplx::cancellation_token token = pplx::cancellation_token::none()); */
 
                     pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(pplx::cancellation_token token = pplx::cancellation_token::none());
                     pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(uint8_t limit, pplx::cancellation_token token = pplx::cancellation_token::none());

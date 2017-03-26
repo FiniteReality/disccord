@@ -26,14 +26,13 @@ namespace disccord
 
             info["name"] = web::json::value(get_name());
         }
-        
+
         #define define_get_method(field_name) \
             decltype(integration_account::field_name) integration_account::get_##field_name() { \
                 return field_name; \
             }
         define_get_method(name);
-        define_get_method(id);
-        
+
         #undef define_get_method
     }
 }

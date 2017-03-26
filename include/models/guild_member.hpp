@@ -18,14 +18,14 @@ namespace disccord
                 virtual ~guild_member();
 
                 virtual void decode(web::json::value json) override;
-                
+
                 util::optional<models::user> get_user();
                 util::optional<std::string> get_nick();
                 util::optional<std::vector<role>> get_roles();
                 std::string get_joined_at();
                 bool get_deaf();
                 bool get_mute();
-               
+
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 

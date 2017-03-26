@@ -61,12 +61,12 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-                
+
             get_field(icon, as_string);
             get_field(description, as_string);
             get_composite_field(owner, user);
             get_field_vector(rpc_origins, std::string, as_string);
-            
+
             #undef get_field
             #undef get_composite_field
             #undef get_field_vector
@@ -97,20 +97,19 @@ namespace disccord
                 info["rpc_origins"] = web::json::value::array(field_array);
             }
         }
-        
+
         #define define_get_method(field_name) \
             decltype(application::field_name) application::get_##field_name() { \
                 return field_name; \
             }
         define_get_method(name);
-        define_get_method(id);
         define_get_method(bot_public);
         define_get_method(bot_requires_code_grant);
         define_get_method(icon);
         define_get_method(description);
         define_get_method(owner);
         define_get_method(rpc_origins);
-        
+
         #undef define_get_method
     }
 }

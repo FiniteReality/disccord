@@ -39,20 +39,19 @@ namespace disccord
             info["mentionable"] = web::json::value(get_mentionable());
             info["hoist"] = web::json::value(get_hoist());
         }
-        
+
         #define define_get_method(field_name) \
             decltype(role::field_name) role::get_##field_name() { \
                 return field_name; \
             }
         define_get_method(name);
-        define_get_method(id);
         define_get_method(color);
         define_get_method(permissions);
         define_get_method(position);
         define_get_method(managed);
         define_get_method(mentionable);
         define_get_method(hoist);
-        
+
         #undef define_get_method
     }
 }
