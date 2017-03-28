@@ -42,7 +42,7 @@ namespace disccord
             }
         }
 
-        pplx::task<web::http::http_response> bucket_info::enter(web::http::client::http_client& client, disccord::api::request_info* info, pplx::cancellation_token token)
+        pplx::task<web::http::http_response> bucket_info::enter(web::http::client::http_client& client, disccord::api::request_info* info, const pplx::cancellation_token& token)
         {
             return entry_semaphore.enter().then([this,&client,info,&token](bool success)
             {
@@ -59,12 +59,12 @@ namespace disccord
                     headers.add(pair.first, pair.second);
                 }
 
-                delete info; // we're done with our custom type at this point
-
                 auto req = client.request(request, token);
                 return req;
             }).then([this,info](web::http::http_response response)
             {
+                // only delete the request info once the request has completed to prevent memory corruption
+                delete info;
                 // TODO: assert result was successful
                 parse_headers(response.headers());
                 return response;

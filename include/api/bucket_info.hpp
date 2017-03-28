@@ -20,7 +20,7 @@ namespace disccord
 
                 pplx::task<web::http::http_response> enter(web::http::client::http_client& client,
                     disccord::api::request_info* request,
-                    pplx::cancellation_token token = pplx::cancellation_token::none());
+                    const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
             private:
                 void parse_headers(web::http::http_headers headers);

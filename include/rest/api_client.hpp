@@ -31,41 +31,41 @@ namespace disccord
                     virtual ~rest_api_client();
 
                     // User API
-                    pplx::task<disccord::models::user> get_current_user(pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::user> get_current_user(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::user> get_user(uint64_t user_id, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::user> get_user(uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::user> modify_current_user(std::string username, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::user> modify_current_user(std::string username, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     //avatar format: data:image/jpeg;base64,MY_BASE64_IMAGE_DATA_HERE, maybe should make an object for Avatars (models::avatar)?? thoughts
-                    /* pplx::task<disccord::models::user> modify_current_user(std::string avatar, pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<disccord::models::user> modify_current_user(std::string username, std::string avatar, pplx::cancellation_token token = pplx::cancellation_token::none()); */
+                    /* pplx::task<disccord::models::user> modify_current_user(std::string avatar, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::user> modify_current_user(std::string username, std::string avatar, const pplx::cancellation_token& token = pplx::cancellation_token::none()); */
 
-                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(uint8_t limit, pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(std::string query, uint64_t guild_id, pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(uint8_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(std::string query, uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<void> leave_guild(uint64_t guild_id, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<void> leave_guild(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<std::vector<disccord::models::channel>> get_user_dms(pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::channel>> get_user_dms(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::channel> create_dm_channel(uint64_t recipient_id, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::channel> create_dm_channel(uint64_t recipient_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::channel> create_group_dm(std::unordered_map<uint64_t, std::string> nicks, std::vector<std::string> access_tokens, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::channel> create_group_dm(std::unordered_map<uint64_t, std::string> nicks, std::vector<std::string> access_tokens, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<std::vector<disccord::models::connection>> get_user_connections(pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::connection>> get_user_connections(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     // Invite API
-                    pplx::task<disccord::models::invite> get_invite(std::string invite_code, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::invite> get_invite(std::string invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::invite> delete_invite(std::string invite_code, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::invite> delete_invite(std::string invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::invite> accept_invite(std::string invite_code, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::invite> accept_invite(std::string invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                 private:
-                    pplx::task<web::http::http_response> request_internal(route_info& route, pplx::cancellation_token token = pplx::cancellation_token::none());
-                    pplx::task<web::http::http_response> request_internal(route_info& route, disccord::api::request_info* request, pplx::cancellation_token token = pplx::cancellation_token::none());
+                    pplx::task<web::http::http_response> request_internal(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<web::http::http_response> request_internal(route_info& route, disccord::api::request_info* request, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     disccord::api::bucket_info* get_bucket(route_info& route);
 
                     web::http::client::http_client http_client;
@@ -75,7 +75,7 @@ namespace disccord
                     void setup_discord_handler();
 
                     template <typename TResponse>
-                    pplx::task<TResponse> request_json(route_info& route, pplx::cancellation_token token = pplx::cancellation_token::none())
+                    pplx::task<TResponse> request_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         return request_internal(route, token).then([](web::http::http_response response)
                         {
@@ -89,7 +89,7 @@ namespace disccord
                     }
 
                     template <typename TResponse, typename TModel>
-                    pplx::task<TResponse> request_json(route_info& route, TModel body, pplx::cancellation_token token = pplx::cancellation_token::none())
+                    pplx::task<TResponse> request_json(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
@@ -106,7 +106,7 @@ namespace disccord
                     }
 
                     template <typename TResponse>
-                    pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, pplx::cancellation_token token = pplx::cancellation_token::none())
+                    pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         return request_internal(route, token).then([](web::http::http_response response)
                         {
@@ -137,7 +137,7 @@ namespace disccord
                     }
 
                     template <typename TResponse, typename TModel>
-                    pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, std::vector<TModel> body, pplx::cancellation_token token = pplx::cancellation_token::none())
+                    pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, std::vector<TModel> body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
@@ -179,7 +179,7 @@ namespace disccord
                     }
 
                     template <typename TResponse>
-                    pplx::task<TResponse> request_multipart(route_info& route, disccord::api::multipart_request args, pplx::cancellation_token token = pplx::cancellation_token::none())
+                    pplx::task<TResponse> request_multipart(route_info& route, disccord::api::multipart_request args, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
