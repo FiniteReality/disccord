@@ -3,12 +3,14 @@
 
 #include <rest/api_client.hpp>
 #include <rest/route.hpp>
+#include <disccord.hpp>
 
 #include <models/user.hpp>
 
 #include <exception>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include <cstdlib>
 
@@ -46,8 +48,38 @@ TEST_CASE( "Correct entity ids are returned", "[!throws]" ) {
 
     auto api_client = rest_api_client(web::uri("https://discordapp.com/api/v6"), token, disccord::token_type::Bot);
 
-    api_client.get_current_user().then([=](user ent){
+    api_client.get_current_user().then([=](user ent)
+    {
         CAPTURE(ent.get_id());
         REQUIRE(ent.get_id() == id);
     }).wait();
+
+    std::stringstream message_builder;
+
+    message_builder
+    << "Hello, world! Message sent using disccord "
+    << DISCCORD_VERSION
+    << " located at <"
+    << DISCCORD_PROJECT_URL
+    << ">!" << "\n";
+
+    std::string ci_id = environment_variable("TRAVIS_BUILD_NUMBER");
+    std::string ci_commit = environment_variable("TRAVIS_COMMIT");
+
+    if (ci_id != "")
+    {
+        message_builder
+        << "**Build ID:** " << ci_id << "\n"
+        << "**Commit:** " << ci_commit << "\n";
+    }
+
+    bool success;
+
+    api_client.create_message(237990708101775361, message_builder.str()).then([&](message msg)
+    {
+        success = true;
+    }).wait();
+
+    if (!success)
+        FAIL("create_message failed!");
 }

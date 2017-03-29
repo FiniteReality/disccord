@@ -36,6 +36,28 @@ namespace disccord
                 buckets.clear();
             }
 
+            pplx::task<void> rest_api_client::request_empty_internal(route_info& route, const pplx::cancellation_token& token)
+            {
+                return request_internal(route, token).then([](web::http::http_response response)
+                {
+                    if (response.status_code() != 204)
+                    {
+                        throw web::http::http_exception("http response did not return a 204");
+                    }
+                });
+            }
+
+            pplx::task<void> rest_api_client::request_empty_internal(route_info& route, disccord::api::request_info* request, const pplx::cancellation_token& token)
+            {
+                return request_internal(route, request, token).then([](web::http::http_response response)
+                {
+                    if (response.status_code() != 204)
+                    {
+                        throw web::http::http_exception("http response did not return a 204");
+                    }
+                });
+            }
+
             pplx::task<web::http::http_response> rest_api_client::request_internal(route_info& route, const pplx::cancellation_token& token)
             {
                 disccord::api::request_info* info = new disccord::api::request_info();
@@ -50,6 +72,19 @@ namespace disccord
                 request->set_url(web::uri(route.full_url));
 
                 return bucket->enter(http_client, request, token);
+            }
+
+            pplx::task<void> rest_api_client::request(route_info& route, const pplx::cancellation_token& token)
+            {
+                return request_empty_internal(route, token);
+            }
+
+            pplx::task<void> rest_api_client::request_multipart(route_info& route, disccord::api::multipart_request args, const pplx::cancellation_token& token)
+            {
+                disccord::api::request_info* info = new disccord::api::request_info();
+
+                info->set_body(args.encode(), args.get_content_type());
+                return request_empty_internal(route, info, token);
             }
 
             // User API
@@ -94,7 +129,7 @@ namespace disccord
             pplx::task<void> rest_api_client::leave_guild(uint64_t guild_id, const pplx::cancellation_token& token)
             {
                 auto route = get_route("DELETE", "/users/@me/guilds/{guild.id}", std::to_string(guild_id));
-                return request_empty(route, token);
+                return request(route, token);
             }
 
             pplx::task<std::vector<disccord::models::channel>> rest_api_client::get_user_dms(const pplx::cancellation_token& token)
@@ -153,7 +188,7 @@ namespace disccord
             pplx::task<void> rest_api_client::create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
                 auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/"+emoji+"/@me", std::to_string(channel_id), std::to_string(message_id));
-                return request_empty(route, token);
+                return request(route, token);
             }
             
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
