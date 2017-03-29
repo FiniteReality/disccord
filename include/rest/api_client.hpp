@@ -16,6 +16,7 @@
 #include <models/channel.hpp>
 #include <models/connection.hpp>
 #include <models/invite.hpp>
+#include <models/message.hpp>
 
 namespace disccord
 {
@@ -63,6 +64,27 @@ namespace disccord
 
                     pplx::task<disccord::models::invite> accept_invite(std::string invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
+                    //Channel API
+                    pplx::task<disccord::models::channel> get_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    //TODO: modify_channel
+                    
+                    pplx::task<disccord::models::channel> delete_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    //TODO: add query param overloads
+                    pplx::task<std::vector<disccord::models::message>> get_messages(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<disccord::models::message> get_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    //TODO: add json body overloads
+                    pplx::task<disccord::models::message> create_message(uint64_t channel_id, std::string content, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> delete_own_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> delete_user_reaction(uint64_t channel_id, uint64_t message_id, uint64_t user_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
                 private:
                     pplx::task<web::http::http_response> request_internal(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     pplx::task<web::http::http_response> request_internal(route_info& route, disccord::api::request_info* request, const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -73,6 +95,7 @@ namespace disccord
                     std::string token;
                     disccord::token_type token_type;
                     void setup_discord_handler();
+                    void set_content_length(uint64_t length);
 
                     template <typename TResponse>
                     pplx::task<TResponse> request_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
@@ -105,6 +128,22 @@ namespace disccord
                         });
                     }
 
+                    pplx::task<void> request_empty(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    {
+                        set_content_length(0);
+                        return request_internal(route, token).then([](web::http::http_response response){});
+                    }
+                    
+                    template <typename TModel>
+                    pplx::task<void> request_empty(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    {
+                        disccord::api::request_info* info = new disccord::api::request_info();
+
+                        info->set_body(body.encode());
+                        set_content_length(info->get_body().size());
+                        return request_internal(route, info, token).then([](web::http::http_response response){});
+                    }
+                    
                     template <typename TResponse>
                     pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {

@@ -5,6 +5,7 @@
 
 #include <rest/models/create_dm_channel_args.hpp>
 #include <rest/models/create_group_dm_args.hpp>
+#include <rest/models/create_message_args.hpp>
 
 namespace disccord
 {
@@ -86,16 +87,15 @@ namespace disccord
 
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/@me/guilds?{query}={guild}&limit={limit}", query, std::to_string(guild_id), std::to_string(limit));
+                auto route = get_route("GET", "/users/@me/guilds?{query}={guild}&limit="+std::to_string(limit), query, std::to_string(guild_id));
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
 
-            /* pplx::task<void> rest_api_client::leave_guild(uint64_t guild_id, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::leave_guild(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                // TODO: does our request method not break on empty responses? Doubt it.
                 auto route = get_route("DELETE", "/users/@me/guilds/{guild.id}", std::to_string(guild_id));
-                return request_json<void>(route, token);
-            } */
+                return request_empty(route, token);
+            }
 
             pplx::task<std::vector<disccord::models::channel>> rest_api_client::get_user_dms(const pplx::cancellation_token& token)
             {
@@ -142,6 +142,20 @@ namespace disccord
                 return request_json<disccord::models::invite>(route, token);
             }
 
+            // Channel API
+            pplx::task<disccord::models::message> rest_api_client::create_message(uint64_t channel_id, std::string content, const pplx::cancellation_token& token)
+            {
+                disccord::rest::models::create_message_args args{content};
+                auto route = get_route("POST", "/channels/{channel.id}/messages",std::to_string(channel_id));
+                return request_json<disccord::models::message>(route, args, token);
+            }
+            
+            pplx::task<void> rest_api_client::create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/"+emoji+"/@me", std::to_string(channel_id), std::to_string(message_id));
+                return request_empty(route, token);
+            }
+            
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
@@ -180,6 +194,15 @@ namespace disccord
                     }
 
                     req.headers().add("Authorization", token_type_s + token);
+                    return pipeline->propagate(req);
+                });
+            }
+            
+            void rest_api_client::set_content_length(uint64_t length)
+            {
+                http_client.add_handler([=](auto req, auto pipeline)
+                {
+                    req.headers().set_content_length(length);    
                     return pipeline->propagate(req);
                 });
             }
