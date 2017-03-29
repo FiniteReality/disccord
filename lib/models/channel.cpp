@@ -9,7 +9,7 @@ namespace disccord
         channel::channel()
             : entity(), guild_id(), last_message_id(),
             position(), bitrate(), user_limit(),
-            name(), type(), topic(),
+            type(), name(), topic(),
             is_private(),  recipient(), permission_overwrites()
         { }
 
@@ -76,7 +76,7 @@ namespace disccord
             get_field(user_limit, as_integer);
             get_field(bitrate, as_integer);
             get_field(name, as_string);
-            get_field(type, as_string);
+            get_field(type, as_integer);
             get_field(topic, as_string);
             get_field(is_private, as_bool);
             get_composite_field(recipient, user);
