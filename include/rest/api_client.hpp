@@ -95,7 +95,6 @@ namespace disccord
                     std::string token;
                     disccord::token_type token_type;
                     void setup_discord_handler();
-                    void set_content_length(uint64_t length);
 
                     template <typename TResponse>
                     pplx::task<TResponse> request_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
@@ -130,8 +129,10 @@ namespace disccord
 
                     pplx::task<void> request_empty(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
-                        set_content_length(0);
-                        return request_internal(route, token).then([](web::http::http_response response){});
+                        disccord::api::request_info* info = new disccord::api::request_info();
+                        
+                        info->set_body("", "application/json");
+                        return request_internal(route, info, token).then([](web::http::http_response response){});
                     }
                     
                     template <typename TModel>
@@ -140,7 +141,6 @@ namespace disccord
                         disccord::api::request_info* info = new disccord::api::request_info();
 
                         info->set_body(body.encode());
-                        set_content_length(info->get_body().size());
                         return request_internal(route, info, token).then([](web::http::http_response response){});
                     }
                     

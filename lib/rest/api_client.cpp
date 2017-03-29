@@ -197,15 +197,6 @@ namespace disccord
                     return pipeline->propagate(req);
                 });
             }
-            
-            void rest_api_client::set_content_length(uint64_t length)
-            {
-                http_client.add_handler([=](auto req, auto pipeline)
-                {
-                    req.headers().set_content_length(length);    
-                    return pipeline->propagate(req);
-                });
-            }
         }
     }
 }
