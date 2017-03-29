@@ -332,7 +332,7 @@ TEST_CASE( "Channel model correctly instantiated" ){
     "id": "41771983423143937",
     "guild_id": "41771983423143937",
     "name": "general",
-    "type": "text",
+    "type": 0,
     "position": 6,
     "is_private": false,
     "permission_overwrites": [
@@ -360,7 +360,7 @@ TEST_CASE( "Channel model correctly instantiated" ){
     REQUIRE(test_channel2.get_last_message_id().get_value() == 155117677105512449);
     REQUIRE(test_channel2.get_topic().get_value() == "24/7 chat about how to gank Mike #2");
     REQUIRE(test_channel2.get_position().get_value() == 6);
-    REQUIRE(test_channel2.get_type().get_value() == "text");
+    REQUIRE(test_channel2.get_type().get_value() == 0);
     REQUIRE(test_channel2.get_name().get_value() == "general");
     REQUIRE(test_channel2.get_guild_id().get_value() == 41771983423143937);
     
@@ -381,7 +381,7 @@ TEST_CASE( "Channel model correctly instantiated" ){
     "id": "155101607195836416",
     "guild_id": "41771983423143937",
     "name": "ROCKET CHEESE",
-    "type": "voice",
+    "type": 1,
     "position": 5,
     "is_private": false,
     "permission_overwrites": [],
@@ -396,7 +396,7 @@ TEST_CASE( "Channel model correctly instantiated" ){
     REQUIRE(test_channel3.get_bitrate().get_value() == 64000);
     REQUIRE(test_channel3.get_user_limit().get_value() == 0);
     REQUIRE(test_channel3.get_position().get_value() == 5);
-    REQUIRE(test_channel3.get_type().get_value() == "voice");
+    REQUIRE(test_channel3.get_type().get_value() == 1);
     REQUIRE(test_channel3.get_name().get_value() == "ROCKET CHEESE");
     REQUIRE(test_channel3.get_guild_id().get_value() == 41771983423143937);
 }
@@ -654,7 +654,7 @@ TEST_CASE( "Guild model correctly instantiated" ){
                 "id": "41771983423143937",
                 "guild_id": "41771983423143937",
                 "name": "general",
-                "type": "text",
+                "type": 0,
                 "position": 6,
                 "is_private": false,
                 "permission_overwrites": [],
@@ -665,7 +665,7 @@ TEST_CASE( "Guild model correctly instantiated" ){
                 "id": "41771983423143937",
                 "guild_id": "41771983423143937",
                 "name": "general",
-                "type": "text",
+                "type": 0,
                 "position": 6,
                 "is_private": false,
                 "permission_overwrites": [],
