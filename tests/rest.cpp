@@ -75,12 +75,14 @@ SCENARIO("REST api is successful", "[!mayfail]") {
 
             std::string ci_id = environment_variable("TRAVIS_BUILD_NUMBER");
             std::string ci_commit = environment_variable("TRAVIS_COMMIT");
+            std::string compiler = environment_variable("CXX");
 
             if (ci_id != "")
             {
                 message_builder
                 << "**Build ID:** " << ci_id << "\n"
-                << "**Commit:** " << ci_commit << "\n";
+                << "**Commit:** " << ci_commit << "\n"
+                << "**Compiler:** " << compiler << "\n";
             }
 
             bool success;

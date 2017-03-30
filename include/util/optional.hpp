@@ -29,7 +29,7 @@ namespace disccord
                 constexpr operator T&() { return _value; }
                 constexpr operator T() const { return _value; }
 
-                constexpr operator web::json::value() const
+                operator web::json::value() const
                 {
                     if (_specified)
                     {

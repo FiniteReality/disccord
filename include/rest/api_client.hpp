@@ -148,13 +148,13 @@ namespace disccord
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
-                        web::json::array body_arr(body.size());
+                        std::vector<web::json::value> body_arr(body.size());
                         std::transform(body.begin(), body.end(), body_arr.size(), [](TModel value)
                         {
                             return value.encode();
                         });
 
-                        web::json::value _body = body_arr;
+                        web::json::value _body = web::json::value::array(body_arr);
 
                         info->set_body(_body);
                         return request_internal(route, info, token).then([](web::http::http_response response)
@@ -199,13 +199,13 @@ namespace disccord
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
-                        web::json::array body_arr(body.size());
+                        std::vector<web::json::value> body_arr(body.size());
                         std::transform(body.begin(), body.end(), body_arr.size(), [](TModel value)
                         {
                             return value.encode();
                         });
 
-                        web::json::value _body = body_arr;
+                        web::json::value _body = web::json::value::array(body_arr);
 
                         info->set_body(_body);
                         return request_internal(route, info, token).then([](web::http::http_response response)
