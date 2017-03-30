@@ -53,9 +53,9 @@ namespace disccord
                 return field_name; \
             }
 
-        define_get_method(name);
-        define_get_method(splash);
-        define_get_method(icon);
+        define_get_method(name)
+        define_get_method(splash)
+        define_get_method(icon)
 
         #undef define_get_method
     }

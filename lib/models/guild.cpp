@@ -149,25 +149,25 @@ namespace disccord
                 return field_name; \
             }
 
-        define_get_method(name);
-        define_get_method(icon);
-        define_get_method(splash);
-        define_get_method(owner_id);
-        define_get_method(region);
-        define_get_method(afk_channel_id);
-        define_get_method(afk_timeout);
-        define_get_method(mfa_level);
-        define_get_method(verification_level);
-        define_get_method(default_message_notifications);
-        define_get_method(embed_enabled);
-        define_get_method(embed_channel_id);
+        define_get_method(name)
+        define_get_method(icon)
+        define_get_method(splash)
+        define_get_method(owner_id)
+        define_get_method(region)
+        define_get_method(afk_channel_id)
+        define_get_method(afk_timeout)
+        define_get_method(mfa_level)
+        define_get_method(verification_level)
+        define_get_method(default_message_notifications)
+        define_get_method(embed_enabled)
+        define_get_method(embed_channel_id)
         // TODO: see guild.hpp
-        define_get_method(features);
-        define_get_method(roles);
-        define_get_method(emojis);
-        define_get_method(members);
-        define_get_method(channels);
-        define_get_method(presences);
+        define_get_method(features)
+        define_get_method(roles)
+        define_get_method(emojis)
+        define_get_method(members)
+        define_get_method(channels)
+        define_get_method(presences)
 
         #undef define_get_method
     }

@@ -29,8 +29,9 @@ namespace disccord
             decltype(guild_embed::field_name) guild_embed::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(enabled);
-        define_get_method(channel_id);
+
+        define_get_method(enabled)
+        define_get_method(channel_id)
         
         #undef define_get_method
     }

@@ -69,8 +69,9 @@ namespace disccord
             decltype(relationship::field_name) relationship::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(type);
-        define_get_method(user);
+
+        define_get_method(type)
+        define_get_method(user)
 
         #undef define_get_method
     }

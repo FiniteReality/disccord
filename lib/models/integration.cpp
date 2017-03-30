@@ -72,17 +72,17 @@ namespace disccord
             decltype(integration::field_name) integration::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(name);
 
-        define_get_method(type);
-        define_get_method(role_id);
-        define_get_method(synced_at);
-        define_get_method(expire_behavior);
-        define_get_method(expire_grace_period);
-        define_get_method(enabled);
-        define_get_method(syncing);
-        define_get_method(user);
-        define_get_method(account);
+        define_get_method(name)
+        define_get_method(type)
+        define_get_method(role_id)
+        define_get_method(synced_at)
+        define_get_method(expire_behavior)
+        define_get_method(expire_grace_period)
+        define_get_method(enabled)
+        define_get_method(syncing)
+        define_get_method(user)
+        define_get_method(account)
 
         #undef define_get_method
     }

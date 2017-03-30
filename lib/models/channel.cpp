@@ -130,17 +130,17 @@ namespace disccord
                 return field_name; \
             }
 
-        define_get_method(guild_id);
-        define_get_method(last_message_id);
-        define_get_method(position);
-        define_get_method(bitrate);
-        define_get_method(user_limit);
-        define_get_method(name);
-        define_get_method(type);
-        define_get_method(topic);
-        define_get_method(is_private);
-        define_get_method(recipient);
-        define_get_method(permission_overwrites);
+        define_get_method(guild_id)
+        define_get_method(last_message_id)
+        define_get_method(position)
+        define_get_method(bitrate)
+        define_get_method(user_limit)
+        define_get_method(name)
+        define_get_method(type)
+        define_get_method(topic)
+        define_get_method(is_private)
+        define_get_method(recipient)
+        define_get_method(permission_overwrites)
 
         #undef define_get_method
     }

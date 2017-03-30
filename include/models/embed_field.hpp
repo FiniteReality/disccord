@@ -17,7 +17,7 @@ namespace disccord
 
                 std::string get_name();
                 std::string get_value();
-                util::optional<bool> get_inline();;
+                util::optional<bool> get_inline();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;

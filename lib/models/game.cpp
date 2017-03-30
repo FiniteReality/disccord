@@ -46,9 +46,10 @@ namespace disccord
             decltype(game::field_name) game::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(name);
-        define_get_method(url);
-        define_get_method(type);
+
+        define_get_method(name)
+        define_get_method(url)
+        define_get_method(type)
         
         #undef define_get_method
     }

@@ -47,9 +47,10 @@ namespace disccord
             decltype(reaction::field_name) reaction::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(count);
-        define_get_method(me);
-        define_get_method(emoji_);
+
+        define_get_method(count)
+        define_get_method(me)
+        define_get_method(emoji_)
         
         #undef define_get_method
     }

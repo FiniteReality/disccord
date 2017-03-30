@@ -35,9 +35,10 @@ namespace disccord
             decltype(overwrite::field_name) overwrite::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(allow);
-        define_get_method(deny);
-        define_get_method(type);
+
+        define_get_method(allow)
+        define_get_method(deny)
+        define_get_method(type)
 
         #undef define_get_method
     }

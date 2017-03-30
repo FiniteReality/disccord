@@ -50,9 +50,9 @@ namespace disccord
                 return field_name; \
             }
 
-        define_get_method(code);
-        define_get_method(channel);
-        define_get_method(guild);
+        define_get_method(code)
+        define_get_method(channel)
+        define_get_method(guild)
 
         #undef define_get_method
     }

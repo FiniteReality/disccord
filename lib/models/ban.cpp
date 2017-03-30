@@ -45,8 +45,9 @@ namespace disccord
             decltype(ban::field_name) ban::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(reason);
-        define_get_method(user);
+
+        define_get_method(reason)
+        define_get_method(user)
 
         #undef define_get_method
     }

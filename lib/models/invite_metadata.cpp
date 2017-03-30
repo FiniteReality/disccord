@@ -56,13 +56,14 @@ namespace disccord
             decltype(invite_metadata::field_name) invite_metadata::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(created_at);
-        define_get_method(uses);
-        define_get_method(max_uses);
-        define_get_method(max_age);
-        define_get_method(temporary);
-        define_get_method(revoked);
-        define_get_method(inviter);
+
+        define_get_method(created_at)
+        define_get_method(uses)
+        define_get_method(max_uses)
+        define_get_method(max_age)
+        define_get_method(temporary)
+        define_get_method(revoked)
+        define_get_method(inviter)
         
         #undef define_get_method
     }

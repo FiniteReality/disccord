@@ -62,11 +62,11 @@ namespace disccord
                 return field_name; \
             }
 
-        define_get_method(id);
-        define_get_method(name);
-        define_get_method(type);
-        define_get_method(revoked);
-        define_get_method(integrations);
+        define_get_method(id)
+        define_get_method(name)
+        define_get_method(type)
+        define_get_method(revoked)
+        define_get_method(integrations)
 
         #undef define_get_method
     }

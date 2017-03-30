@@ -133,21 +133,21 @@ namespace disccord
                 return field_name; \
             }
 
-        define_get_method(author);
-        define_get_method(channel_id);
-        define_get_method(content);
-        define_get_method(timestamp);
-        define_get_method(edited_timestamp);
-        define_get_method(nonce);
-        define_get_method(webhook_id);
-        define_get_method(tts);
-        define_get_method(mention_everyone);
-        define_get_method(pinned);
-        define_get_method(mentions);
-        define_get_method(mention_roles);
-        define_get_method(attachments);
-        define_get_method(embeds);
-        define_get_method(reactions);
+        define_get_method(author)
+        define_get_method(channel_id)
+        define_get_method(content)
+        define_get_method(timestamp)
+        define_get_method(edited_timestamp)
+        define_get_method(nonce)
+        define_get_method(webhook_id)
+        define_get_method(tts)
+        define_get_method(mention_everyone)
+        define_get_method(pinned)
+        define_get_method(mentions)
+        define_get_method(mention_roles)
+        define_get_method(attachments)
+        define_get_method(embeds)
+        define_get_method(reactions)
 
         #undef define_get_method
     }

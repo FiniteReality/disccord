@@ -49,8 +49,9 @@ namespace disccord
             decltype(read_state::field_name) read_state::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(mention_count);
-        define_get_method(last_message_id);
+
+        define_get_method(mention_count)
+        define_get_method(last_message_id)
 
         #undef define_get_method
     }

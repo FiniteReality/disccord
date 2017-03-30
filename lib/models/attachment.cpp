@@ -61,12 +61,13 @@ namespace disccord
             decltype(attachment::field_name) attachment::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(filename);
-        define_get_method(url);
-        define_get_method(size);
-        define_get_method(proxy_url);
-        define_get_method(height);
-        define_get_method(width);
+
+        define_get_method(filename)
+        define_get_method(url)
+        define_get_method(size)
+        define_get_method(proxy_url)
+        define_get_method(height)
+        define_get_method(width)
 
         #undef define_get_method
     }

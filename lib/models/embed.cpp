@@ -123,19 +123,19 @@ namespace disccord
                 return field_name; \
             }
 
-        define_get_method(title);
-        define_get_method(type);
-        define_get_method(description);
-        define_get_method(url);
-        define_get_method(timestamp);
-        define_get_method(color);
-        define_get_method(footer);
-        define_get_method(image);
-        define_get_method(thumbnail);
-        define_get_method(video);
-        define_get_method(provider);
-        define_get_method(author);
-        define_get_method(fields);
+        define_get_method(title)
+        define_get_method(type)
+        define_get_method(description)
+        define_get_method(url)
+        define_get_method(timestamp)
+        define_get_method(color)
+        define_get_method(footer)
+        define_get_method(image)
+        define_get_method(thumbnail)
+        define_get_method(video)
+        define_get_method(provider)
+        define_get_method(author)
+        define_get_method(fields)
 
         #undef define_get_method
     }

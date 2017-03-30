@@ -96,12 +96,13 @@ namespace disccord
             decltype(guild_member::field_name) guild_member::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(joined_at);
-        define_get_method(deaf);
-        define_get_method(mute);
-        define_get_method(nick);
-        define_get_method(user);
-        define_get_method(roles);
+
+        define_get_method(joined_at)
+        define_get_method(deaf)
+        define_get_method(mute)
+        define_get_method(nick)
+        define_get_method(user)
+        define_get_method(roles)
         
         #undef define_get_method
     }

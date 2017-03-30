@@ -102,13 +102,14 @@ namespace disccord
             decltype(application::field_name) application::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(name);
-        define_get_method(bot_public);
-        define_get_method(bot_requires_code_grant);
-        define_get_method(icon);
-        define_get_method(description);
-        define_get_method(owner);
-        define_get_method(rpc_origins);
+
+        define_get_method(name)
+        define_get_method(bot_public)
+        define_get_method(bot_requires_code_grant)
+        define_get_method(icon)
+        define_get_method(description)
+        define_get_method(owner)
+        define_get_method(rpc_origins)
 
         #undef define_get_method
     }

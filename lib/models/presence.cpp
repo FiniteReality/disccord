@@ -73,11 +73,12 @@ namespace disccord
             decltype(presence::field_name) presence::get_##field_name() { \
                 return field_name; \
             }
-        define_get_method(status);
-        define_get_method(guild_id);
-        define_get_method(user);
-        define_get_method(game);
-        define_get_method(roles);
+
+        define_get_method(status)
+        define_get_method(guild_id)
+        define_get_method(user)
+        define_get_method(game)
+        define_get_method(roles)
         
         #undef define_get_method
     }

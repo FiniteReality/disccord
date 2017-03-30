@@ -66,13 +66,13 @@ namespace disccord
                 return field_name; \
             }
 
-        define_get_method(username);
-        define_get_method(discriminator);
-        define_get_method(avatar);
-        define_get_method(bot);
-        define_get_method(mfa_enabled);
-        define_get_method(verified);
-        define_get_method(email);
+        define_get_method(username)
+        define_get_method(discriminator)
+        define_get_method(avatar)
+        define_get_method(bot)
+        define_get_method(mfa_enabled)
+        define_get_method(verified)
+        define_get_method(email)
 
         #undef define_get_method
     }
