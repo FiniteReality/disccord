@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <utility>
 
 #include <cpprest/http_client.h>
 
@@ -104,7 +105,7 @@ namespace disccord
                     
                     //TODO: create_guild_channel
                     
-                    pplx::task<std::vector<disccord::models::channel>> modify_guild_channel_positions(uint64_t guild_id, uint64_t id, uint8_t position, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::channel>> modify_guild_channel_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     pplx::task<disccord::models::guild_member> get_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
@@ -138,7 +139,7 @@ namespace disccord
                     
                     //TODO: create_guild_role
                     
-                    pplx::task<std::vector<disccord::models::role>> modify_guild_role_positions(uint64_t guild_id, uint8_t position, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::role>> modify_guild_role_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     //TODO: modify_guild_role
                     
