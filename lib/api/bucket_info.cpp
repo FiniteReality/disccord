@@ -26,7 +26,7 @@ namespace disccord
             if (global == "true")
             {
                 // TODO: handle global ratelimits
-                throw new std::runtime_error("We encountered a global ratelimit :(");
+                throw new std::runtime_error("encountered a global ratelimit");
             }
             else if (limit.empty() || remaining.empty() || reset.empty() || retry_after.empty())
             {
@@ -46,6 +46,9 @@ namespace disccord
         {
             return entry_semaphore.enter().then([this,&client,info,&token](bool success)
             {
+                if (!success)
+                    throw new std::runtime_error("failed to enter semaphore");
+
                 web::http::http_request request(info->get_method());
                 request.set_request_uri(info->get_url());
                 if (info->get_has_body())
@@ -67,6 +70,7 @@ namespace disccord
                 delete info;
                 // TODO: assert result was successful
                 parse_headers(response.headers());
+                entry_semaphore.release();
                 return response;
             });
         }
