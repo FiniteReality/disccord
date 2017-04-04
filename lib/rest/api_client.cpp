@@ -193,63 +193,63 @@ namespace disccord
             
             // Guild API
             pplx::task<disccord::models::guild> rest_api_client::get_guild(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}", std::to_string(guild_id));
                 return request_json<disccord::models::guild>(route, token);
-			}
+            }
             //TODO: modify_guild
             
             pplx::task<disccord::models::guild> rest_api_client::delete_guild(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("DELETE", "/guilds/{guild.id}", std::to_string(guild_id));
                 return request_json<disccord::models::guild>(route, token);
                 }
-			
+            
             pplx::task<std::vector<disccord::models::channel>> rest_api_client::get_guild_channels(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/channels", std::to_string(guild_id));
                 return request_multi_json<disccord::models::channel>(route, token);
-			}
-			
+            }
+            
             //TODO: create_guild_channel
             
             /* pplx::task<std::vector<disccord::models::channel>> rest_api_client::modify_guild_channel_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token)
-			{
+            {
                 disccord::rest::models::modify_guild_channel_positions_args args{id_pos_params};
                 auto route = get_route("PATCH", "/guilds/{guild.id}/channels", guild_id);
                 return request_multi_json<disccord::models::channel>(route, args, token);
-			} */
-			
+            } */
+            
             pplx::task<disccord::models::guild_member> rest_api_client::get_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/members/{user.id}", std::to_string(guild_id), std::to_string(user_id));
                 return request_json<disccord::models::guild_member>(route, token);
-			}
-			
+            }
+            
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/members", std::to_string(guild_id));
                 return request_multi_json<disccord::models::guild_member>(route, token);
-			}
-			
+            }
+            
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, uint16_t limit, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/members?limit={limit}", std::to_string(guild_id), std::to_string(limit));
                 return request_multi_json<disccord::models::guild_member>(route, token);
-			}
+            }
             
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, std::string query, uint64_t user_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/members?{query}={user}", std::to_string(guild_id), query, std::to_string(user_id));
                 return request_multi_json<disccord::models::guild_member>(route, token);
-			}
-			
+            }
+            
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, std::string query, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/members?{query}={user}&limit={limit}", std::to_string(guild_id), query, std::to_string(user_id), std::to_string(limit));
                 return request_multi_json<disccord::models::guild_member>(route, token);
-			}
-			
+            }
+            
             //TODO: add_guild_member
             
             //TODO: modify_guild_member
@@ -257,65 +257,65 @@ namespace disccord
             //TODO: modify_current_nick
             
             pplx::task<void> rest_api_client::add_guild_member_role(uint64_t guild_id, uint64_t user_id, uint64_t role_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("PUT", "/guilds/{guild.id}/members/{user.id}/roles/{role.id}", std::to_string(guild_id), std::to_string(user_id), std::to_string(role_id));
                 return request(route, token);
-			}
-			
+            }
+            
             pplx::task<void> rest_api_client::remove_guild_member_role(uint64_t guild_id, uint64_t user_id, uint64_t role_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("DELETE", "/guilds/{guild.id}/members/{user.id}/roles/{role.id}", std::to_string(guild_id), std::to_string(user_id), std::to_string(role_id));
                 return request(route, token);
-			}
-			
+            }
+            
             pplx::task<void> rest_api_client::remove_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("DELETE", "/guilds/{guild.id}/members/{user.id}", std::to_string(guild_id), std::to_string(user_id));
                 return request(route, token);
-			}
-			
+            }
+            
             pplx::task<std::vector<disccord::models::user>> rest_api_client::get_guild_bans(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/bans", std::to_string(guild_id));
                 return request_multi_json<disccord::models::user>(route, token);
-			}
-			
+            }
+            
             /* pplx::task<void> rest_api_client::create_guild_ban(uint64_t guild_id, uint64_t user_id, uint8_t delete_message_days, const pplx::cancellation_token& token)
-			{
+            {
                 disccord::rest::models::create_guild_ban_args args{delete_message_days};
                 auto route = get_route("PUT", "/guilds/{guild.id}/bans/{user.id}", std::to_string(guild_id), std::to_string(user_id));
                 return request(route, args, token);
-			} */
-			
+            } */
+            
             pplx::task<void> rest_api_client::remove_guild_ban(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("DELETE", "/guilds/{guild.id}/bans/{user.id}", std::to_string(guild_id), std::to_string(user_id));
                 return request(route, token);
-			}
-			
+            }
+            
             pplx::task<std::vector<disccord::models::role>> rest_api_client::get_guild_roles(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/roles", std::to_string(guild_id));
                 return request_multi_json<disccord::models::role>(route, token);
-			}
-			
+            }
+            
             //TODO: create_guild_role
             
             /* pplx::task<std::vector<disccord::models::role>> rest_api_client::modify_guild_role_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token)
-			{
+            {
                 disccord::rest::models::modify_guild_role_positions_args args{id_pos_params};
                 auto route = get_route("PATCH", "/guilds/{guild.id}/roles", guild_id);
                 return request_multi_json<disccord::models::role>(route, args, token);
-			} */
-			
+            } */
+            
             //TODO: modify_guild_role
             
             pplx::task<void> rest_api_client::delete_guild_role(uint64_t guild_id, uint64_t role_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("DELETE", "/guilds/{guild.id}/roles/{role.id}", std::to_string(guild_id), std::to_string(role_id));
                 return request(route, token);
-			}
-			
+            }
+            
             //TODO: get_guild_prune_count
             
             //TODO: begin_guild_prune
@@ -324,51 +324,51 @@ namespace disccord
             
             //NOTE: invite_metadata is also retrieved here, will want to grab that data as well
             pplx::task<std::vector<disccord::models::invite>> rest_api_client::get_guild_invites(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/invites", std::to_string(guild_id));
                 return request_multi_json<disccord::models::invite>(route, token);
-			}
-			
+            }
+            
             pplx::task<std::vector<disccord::models::integration>> rest_api_client::get_guild_integrations(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/integrations", std::to_string(guild_id));
                 return request_multi_json<disccord::models::integration>(route, token);
-			}
-			
+            }
+            
             /* pplx::task<void> rest_api_client::create_guild_integration(uint64_t guild_id, uint64_t integration_id, std::string type, const pplx::cancellation_token& token)
-			{
+            {
                 disccord::rest::models::create_guild_integration_args args{integration_id, type};
                 auto route = get_route("PATCH", "/guilds/{guild.id}/roles", guild_id);
                 return request(route, args, token);
-			} */
-			
+            } */
+            
             //TODO: modify_guild_integration
             
             pplx::task<void> rest_api_client::delete_guild_integration(uint64_t guild_id, uint64_t integration_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("DELETE", "/guilds/{guild.id}/integrations/{integration.id}", std::to_string(guild_id), std::to_string(integration_id));
                 return request(route, token);
-			}
-			
+            }
+            
             pplx::task<void> rest_api_client::sync_guild_integration(uint64_t guild_id, uint64_t integration_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("POST", "/guilds/{guild.id}/integrations/{integration.id}/sync", std::to_string(guild_id), std::to_string(integration_id));
                 return request(route, token);
-			}
-			
+            }
+            
             pplx::task<disccord::models::guild_embed> rest_api_client::get_guild_embed(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 auto route = get_route("GET", "/guilds/{guild.id}/embed", std::to_string(guild_id));
                 return request_json<disccord::models::guild_embed>(route, token);
-			}
-			
+            }
+            
             /* pplx::task<disccord::models::guild_embed> rest_api_client::modify_guild_embed(uint64_t guild_id, const pplx::cancellation_token& token)
-			{
+            {
                 disccord::rest::models::modify_guild_embed_args args{**json_args}; //these args can be bool enabled OR uint64_t channel_id
                 auto route = get_route("GET", "/guilds/{guild.id}/embed", std::to_string(guild_id));
                 return request_json<disccord::models::guild_embed>(route, args, token);
-			} */
-			
+            } */
+            
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
