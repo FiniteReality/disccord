@@ -109,13 +109,13 @@ namespace disccord
                     
                     pplx::task<disccord::models::guild_member> get_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(uint16_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(uint64_t guild_id, uint16_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(std::string query, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(uint64_t guild_id, std::string query, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(std::string query, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(uint64_t guild_id, std::string query, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     //TODO: add_guild_member
                     
