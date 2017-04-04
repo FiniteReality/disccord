@@ -1,6 +1,7 @@
 #ifndef _semaphore_hpp_
 #define _semaphore_hpp_
 
+#include <atomic>
 #include <mutex>
 #include <condition_variable>
 
@@ -27,7 +28,7 @@ namespace disccord
 
             private:
                 int current_count;
-                int maximum_count;
+                std::atomic_int maximum_count;
 
                 std::mutex entry_mutex;
                 std::condition_variable entry_condition;

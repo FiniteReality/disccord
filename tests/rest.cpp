@@ -111,15 +111,24 @@ SCENARIO("REST api is successful", "[!mayfail]") {
                 << "**Compiler:** " << compiler << "\n";
             }
 
-            api_client.create_message(c_id, message_builder.str()).then([&](message msg)
+            api_client.create_message(c_id, message_builder.str()).then([&](pplx::task<message> message_task)
             {
-                req_success = true;
+                try
+                {
+                    auto message = message_task.wait();
+                    req_success = true;
+                }
+                catch (std::exception e)
+                {
+                    WARN("create_message failed with" << e.what());
+                    req_success = false;
+                }
             }).wait();
 
             THEN("the send succeeds") {
                 if (!req_success)
-                    FAIL("create_message failed!");
-                req_success = false;
+                    WARN("create_message failed!");
+                REQUIRE(req_success);
             }
         }
         
@@ -128,30 +137,46 @@ SCENARIO("REST api is successful", "[!mayfail]") {
         // Guild API tests
         WHEN("We get a guild") {
             
-            api_client.get_guild(g_id).then([&](guild gd)
+            api_client.get_guild(g_id).then([&](pplx::task<guild> guild_task)
             {
-                REQUIRE(gd.get_id() == g_id);
-                req_success = true;
+                try
+                {
+                    auto guild = guild_task.wait();
+                    req_success = true;
+                }
+                catch (std::exception e)
+                {
+                    WARN("create_message failed with" << e.what());
+                    req_success = false;
+                }
             }).wait();
 
             THEN("the req succeeds") {
                 if (!req_success)
                     FAIL("get_guild failed!");
-                req_success = false;
+                REQUIRE(req_success);
             }
         }
-        
         WHEN("We get a guilds channels") {
             
-            api_client.get_guild_channels(g_id).then([&](std::vector<channel> channels)
+            api_client.get_guild_channels(g_id).then([&](pplx::task<std::vector<channel>> channels_task)
             {
-                req_success = true;
+                try
+                {
+                    auto guild = channels_task.wait();
+                    req_success = true;
+                }
+                catch (std::exception e)
+                {
+                    WARN("create_message failed with" << e.what());
+                    req_success = false;
+                }
             }).wait();
 
             THEN("the req succeeds") {
                 if (!req_success)
                     FAIL("get_guild_channels failed!");
-                req_success = false;
+                REQUIRE(req_success);
             }
         }
     }
