@@ -5,7 +5,7 @@ namespace disccord
     namespace models
     {
         guild_member::guild_member()
-        : user(), nick(), roles(),
+        : member(), nick(), roles(),
         joined_at(""), deaf(false), mute(false)
         { }
 
@@ -42,28 +42,22 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-            #define get_composite_field_vector(var, type) \
-                if (json.has_field(#var)) { \
-                    auto _fields_array = json.at(#var).as_array(); \
-                    std::vector<type> fields_array(_fields_array.size()); \
-                    std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), \
-                    [](web::json::value _field){ \
-                        type field; \
-                        field.decode(_field); \
-                        return field; \
-                    }); \
-                    var = decltype(var)(fields_array); \
-                } else { \
-                    var = decltype(var)(); \
-                }
-                
             get_field(nick, as_string);
-            get_composite_field(user, models::user);
-            get_composite_field_vector(roles, role);
+            get_composite_field(member, user);
+            
+            if (json.has_field("roles"))
+            {
+                auto _roles_array = json.at("roles").as_array();
+                std::vector<uint64_t> roles_array(_roles_array.size());
+                std::transform(_roles_array.begin(), _roles_array.end(), roles_array.begin(), [](web::json::value _role)
+                    {
+                        return std::stoull(_role.as_string());
+                    });
+                roles = roles_array;
+            }
             
             #undef get_field
             #undef get_composite_field
-            #undef get_composite_field_vector
         }
 
         void guild_member::encode_to(std::unordered_map<std::string, web::json::value> &info)
@@ -73,23 +67,18 @@ namespace disccord
             info["mute"] = web::json::value(mute);
             if (nick.is_specified())
                 info["nick"] = web::json::value(nick.get_value());
-            if (user.is_specified())
-                info["user"] = user.get_value().encode();
-            
-            #define encode_composite_vector(var, type) \
-                if (var.is_specified()) { \
-                    auto _array = get_##var().get_value(); \
-                    std::vector<web::json::value> array(_array.size()); \
-                    std::transform(_array.begin(), _array.end(), array.begin(), \
-                    [](type _field){ \
-                        return _field.encode(); \
-                    }); \
-                    info[#var] = web::json::value::array(array); \
-                }
-            
-            encode_composite_vector(roles, role);
-            
-            #undef encode_composite_vector
+            if (member.is_specified())
+                info["user"] = member.get_value().encode();
+            if (roles.is_specified())
+            {
+                auto _roles = get_roles().get_value();
+                std::vector<web::json::value> roles_array(_roles.size());
+                std::transform(_roles.begin(), _roles.end(), roles_array.begin(), [](uint64_t role)
+                    {
+                        return web::json::value(role);
+                    });
+                info["roles"] = web::json::value::array(roles_array);
+            }
         }
         
         #define define_get_method(field_name) \
@@ -101,7 +90,7 @@ namespace disccord
         define_get_method(deaf)
         define_get_method(mute)
         define_get_method(nick)
-        define_get_method(user)
+        define_get_method(member)
         define_get_method(roles)
         
         #undef define_get_method

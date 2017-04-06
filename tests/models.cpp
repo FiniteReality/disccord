@@ -9,6 +9,7 @@
 #include <models/connection.hpp>
 #include <models/guild.hpp>
 #include <models/guild_embed.hpp>
+#include <models/guild_member.hpp>
 #include <models/read_state.hpp>
 #include <models/relationship.hpp>
 #include <models/ban.hpp>
@@ -574,16 +575,8 @@ TEST_CASE( "Guild model correctly instantiated" ){
                 },
                 "nick": "NOT API SUPPORT",
                 "roles": [
-                    {
-                        "id": "23143936417719834",
-                        "name": "WE DEM GURLZZ!!!!!!",
-                        "color": 7003344,
-                        "hoist": true,
-                        "position": 5,
-                        "permissions": 0,
-                        "managed": true,
-                        "mentionable": true
-                    }
+                    "23143936417719834",
+                    "23143936834417719"
                 ],
                 "joined_at": "2015-04-26T06:26:56.936000+00:00",
                 "deaf": false,
@@ -598,16 +591,8 @@ TEST_CASE( "Guild model correctly instantiated" ){
                 },
                 "nick": "DISCCORD IS BEST LIB",
                 "roles": [
-                    {
-                        "id": "23143936417719834",
-                        "name": "WE DEM GURLZZ!!!!!!",
-                        "color": 7003344,
-                        "hoist": true,
-                        "position": 5,
-                        "permissions": 0,
-                        "managed": true,
-                        "mentionable": true
-                    }
+                    "23143936417719834",
+                    "23143936834417719"
                 ],
                 "joined_at": "2017-02-26T06:26:69.936000+00:00",
                 "deaf": true,
@@ -791,6 +776,29 @@ TEST_CASE( "Ban model correctly instantiated" ){
     REQUIRE_NOTHROW(test_ban.decode(web::json::value::parse(json)));
     
     REQUIRE(test_ban.get_reason() == "low quality jokes");
+}
+
+TEST_CASE( "Guild Member model correctly instantiated" ){
+    guild_member test_guild_memb;
+    
+    std::string json = R"({
+      "deaf": false,
+      "joined_at": "2016-12-11T19:10:41.288000+00:00",
+      "user": {
+        "username": "Disccord test bot",
+        "discriminator": "3071",
+        "bot": true,
+        "id": "257584807716978688",
+        "avatar": null
+      },
+      "roles": [
+        "230773182120984577",
+        "257584964726423554"
+      ],
+      "mute": false
+})";
+
+    REQUIRE_NOTHROW(test_guild_memb.decode(web::json::value::parse(json)));
 }
 
 TEST_CASE( "Application model correctly instantiated" ){
