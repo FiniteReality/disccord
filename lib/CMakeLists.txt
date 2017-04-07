@@ -24,7 +24,7 @@ models/relationship.cpp models/ban.cpp models/application.cpp
 rest/models/create_dm_channel_args.cpp rest/models/create_group_dm_args.cpp
 rest/models/create_message_args.cpp rest/models/create_guild_ban_args.cpp
 rest/models/modify_guild_args.cpp rest/models/modify_guild_integration_args.cpp
-rest/models/create_guild_integration_args.cpp)
+rest/models/create_guild_integration_args.cpp rest/models/modify_positions_args.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 

@@ -105,7 +105,7 @@ namespace disccord
                     
                     //TODO: create_guild_channel
                     
-                    pplx::task<std::vector<disccord::models::channel>> modify_guild_channel_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<void> modify_guild_channel_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     pplx::task<disccord::models::guild_member> get_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
@@ -139,7 +139,7 @@ namespace disccord
                     
                     //TODO: create_guild_role
                     
-                    pplx::task<std::vector<disccord::models::role>> modify_guild_role_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<void> modify_guild_role_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     //TODO: modify_guild_role
                     
@@ -236,19 +236,11 @@ namespace disccord
                     }
 
                     template <typename TModel>
-                    pplx::task<void> request_multi_json(route_info& route, std::vector<TModel> body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    pplx::task<void> request_multi_json(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
-                        std::vector<web::json::value> body_arr(body.size());
-                        std::transform(body.begin(), body.end(), body_arr.size(), [](TModel value)
-                        {
-                            return value.encode();
-                        });
-
-                        web::json::value _body = web::json::value::array(body_arr);
-
-                        info->set_body(_body);
+                        info->set_body(body.encode());
                         return request_internal(route, info, token).then([](web::http::http_response response)
                         {
                             return response.extract_json();
@@ -287,21 +279,58 @@ namespace disccord
                     }
 
                     template <typename TResponse, typename TModel>
-                    pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, std::vector<TModel> body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
-                        std::vector<web::json::value> body_arr(body.size());
-                        std::transform(body.begin(), body.end(), body_arr.size(), [](TModel value)
-                        {
-                            return value.encode();
-                        });
-
-                        web::json::value _body = web::json::value::array(body_arr);
-
-                        info->set_body(_body);
+                        info->set_body(body.encode());
                         return request_internal(route, info, token).then([](web::http::http_response response)
                         {
+                            return response.extract_json();
+                        }).then([](web::json::value response)
+                        {
+                            if (response.is_array())
+                            {
+                                auto response_arr = response.as_array();
+                                std::vector<TResponse> responses(response_arr.size());
+                                std::transform(response_arr.begin(), response_arr.end(), responses.begin(), [](web::json::value item)
+                                {
+                                    TResponse result;
+                                    result.decode(item);
+                                    return result;
+                                });
+                                return responses;
+                            }
+                            else
+                            {
+                                std::vector<TResponse> responses;
+                                TResponse result;
+                                result.decode(response);
+                                responses.push_back(result);
+                                return responses;
+                            }
+                        });
+                    }
+                    
+                    template <typename TModel>
+                    pplx::task<void> request_json_array(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    {
+                        disccord::api::request_info* info = new disccord::api::request_info();
+
+                        info->set_body(body.encode_array());
+                        return request_internal(route, info, token).then([](web::http::http_response response)
+                        {});
+                    }
+                    
+                    template <typename TResponse, typename TModel>
+                    pplx::task<std::vector<TResponse>> request_multi_json_array(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    {
+                        disccord::api::request_info* info = new disccord::api::request_info();
+
+                        info->set_body(body.encode_array());
+                        return request_internal(route, info, token).then([](web::http::http_response response)
+                        {
+                            std::cout << response.to_string()<< "\n";
                             return response.extract_json();
                         }).then([](web::json::value response)
                         {

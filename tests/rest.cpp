@@ -206,17 +206,17 @@ SCENARIO("REST api is successful", "[!mayfail]") {
                 req_success = false;
             }
         }
-        /* WHEN("We modify channel positions") {
+        WHEN("We modify channel positions") {
             
-            std::pair<uint64_t, uint8_t> pos1(c_id, 3);
-            std::pair<uint64_t, uint8_t> pos2(g_id, 2); //general channel
+            std::pair<uint64_t, uint8_t> pos1(c_id, 2);
+            std::pair<uint64_t, uint8_t> pos2(g_id, 4); //general channel
             std::vector<std::pair<uint64_t, uint8_t>> params = {pos1, pos2};
             
-            api_client.modify_guild_channel_positions(g_id, params).then([&](pplx::task<std::vector<channel>> channels_task)
+            api_client.modify_guild_channel_positions(g_id, params).then([&](pplx::task<void> channels_task)
             {
                 try
                 {
-                    auto guild = channels_task.wait();
+                    channels_task.wait();
                     req_success = true;
                 }
                 catch (...)
@@ -231,7 +231,7 @@ SCENARIO("REST api is successful", "[!mayfail]") {
                 REQUIRE(req_success);
                 req_success = false;
             }
-        } */
+        }
         WHEN("We get a guild member") {
             
             api_client.get_guild_member(g_id, u_id).then([&](pplx::task<disccord::models::guild_member> member_task)
