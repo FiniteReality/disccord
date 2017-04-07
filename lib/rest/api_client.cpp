@@ -7,6 +7,8 @@
 #include <rest/models/create_group_dm_args.hpp>
 #include <rest/models/create_message_args.hpp>
 #include <rest/models/create_guild_ban_args.hpp>
+#include <rest/models/create_guild_integration_args.hpp>
+#include <rest/models/modify_guild_integration_args.hpp>
 
 namespace disccord
 {
@@ -345,14 +347,19 @@ namespace disccord
                 return request_multi_json<disccord::models::integration>(route, token);
             }
             
-            /* pplx::task<void> rest_api_client::create_guild_integration(uint64_t guild_id, uint64_t integration_id, std::string type, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::create_guild_integration(uint64_t guild_id, uint64_t integration_id, std::string type, const pplx::cancellation_token& token)
             {
-                disccord::rest::models::create_guild_integration_args args{integration_id, type};
-                auto route = get_route("PATCH", "/guilds/{guild.id}/roles", guild_id);
+                disccord::rest::models::create_guild_integration_args args{type, integration_id};
+                auto route = get_route("PATCH", "/guilds/{guild.id}/integrations", std::to_string(guild_id));
                 return request(route, args, token);
-            } */
+            }
             
-            //TODO: modify_guild_integration
+            pplx::task<void> rest_api_client::modify_guild_integration(uint64_t guild_id, uint64_t integration_id, uint32_t expire_behavior, uint32_t expire_grace_period, bool enable_emoticons, const pplx::cancellation_token& token)
+            {
+                disccord::rest::models::modify_guild_integration_args args{expire_behavior, expire_grace_period, enable_emoticons};
+                auto route = get_route("PATCH", "/guilds/{guild.id}/integrations/{integration.id}", std::to_string(guild_id), std::to_string(integration_id));
+                return request(route, args, token);
+            }
             
             pplx::task<void> rest_api_client::delete_guild_integration(uint64_t guild_id, uint64_t integration_id, const pplx::cancellation_token& token)
             {
