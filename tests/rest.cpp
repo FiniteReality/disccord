@@ -16,6 +16,7 @@
 
 using namespace disccord::rest::internal;
 using namespace disccord::models;
+using namespace disccord::rest::models;
 
 std::string environment_variable(std::string name)
 {
@@ -180,6 +181,31 @@ SCENARIO("REST api is successful", "[!mayfail]") {
             THEN("the req succeeds") {
                 if (!req_success)
                     FAIL("get_guild failed!");
+                REQUIRE(req_success);
+                req_success = false;
+            }
+        }
+        WHEN("We modify a guild") {
+            
+            modify_guild_args args;
+            args.set_name("disccord");
+            
+            api_client.modify_guild(g_id, args).then([&](pplx::task<guild> guild_task)
+            {
+                try
+                {
+                    auto guild = guild_task.wait();
+                    req_success = true;
+                }
+                catch (...)
+                {
+                    req_success = false;
+                }
+            }).wait();
+
+            THEN("the req succeeds") {
+                if (!req_success)
+                    FAIL("modify_guild failed!");
                 REQUIRE(req_success);
                 req_success = false;
             }
