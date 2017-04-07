@@ -121,12 +121,15 @@ SCENARIO("REST api is successful", "[!mayfail]") {
                 << "**Commit:** " << ci_commit << "\n"
                 << "**Compiler:** " << compiler << "\n";
             }
-
+            
+            uint64_t m_id;
+            
             api_client.create_message(c_id, message_builder.str()).then([&](pplx::task<message> message_task)
             {
                 try
                 {
-                    auto message = message_task.wait();
+                    auto message = message_task.get();
+                    m_id = message.get_id();
                     req_success = true;
                 }
                 catch (...)
@@ -135,6 +138,19 @@ SCENARIO("REST api is successful", "[!mayfail]") {
                 }
             }).wait();
 
+            api_client.create_reaction(c_id, m_id, "%E2%9C%85").then([&](pplx::task<void> react_task)
+            {
+                try
+                {
+                    react_task.wait();
+                    req_success = true;
+                }
+                catch (...)
+                {
+                    req_success = false;
+                }
+            }).wait();
+            
             THEN("the send succeeds") {
                 if (!req_success)
                     WARN("create_message failed!");
