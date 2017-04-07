@@ -6,6 +6,7 @@
 #include <rest/models/create_dm_channel_args.hpp>
 #include <rest/models/create_group_dm_args.hpp>
 #include <rest/models/create_message_args.hpp>
+#include <rest/models/create_guild_ban_args.hpp>
 
 namespace disccord
 {
@@ -289,12 +290,12 @@ namespace disccord
                 return request_multi_json<disccord::models::user>(route, token);
             }
             
-            /* pplx::task<void> rest_api_client::create_guild_ban(uint64_t guild_id, uint64_t user_id, uint8_t delete_message_days, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::create_guild_ban(uint64_t guild_id, uint64_t user_id, uint8_t delete_message_days, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::create_guild_ban_args args{delete_message_days};
                 auto route = get_route("PUT", "/guilds/{guild.id}/bans/{user.id}", std::to_string(guild_id), std::to_string(user_id));
                 return request(route, args, token);
-            } */
+            }
             
             pplx::task<void> rest_api_client::remove_guild_ban(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token)
             {

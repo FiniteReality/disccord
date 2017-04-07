@@ -182,6 +182,15 @@ namespace disccord
                     void setup_discord_handler();
 
                     pplx::task<void> request(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    template <typename TModel>
+                    pplx::task<void> request(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    {
+                        disccord::api::request_info* info = new disccord::api::request_info();
+
+                        info->set_body(body.encode());
+                        return request_empty_internal(route, info, token);
+                    }
 
                     template <typename TResponse>
                     pplx::task<TResponse> request_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
