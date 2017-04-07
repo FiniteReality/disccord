@@ -42,7 +42,8 @@ namespace disccord
                 {
                     if (response.status_code() != 204)
                     {
-                        throw web::http::http_exception("http response did not return a 204");
+                        std::string err = "HTTP Error: ["+std::to_string(response.status_code())+"] "+response.reason_phrase();
+                        throw web::http::http_exception(err);
                     }
                 });
             }
@@ -53,7 +54,8 @@ namespace disccord
                 {
                     if (response.status_code() != 204)
                     {
-                        throw web::http::http_exception("http response did not return a 204");
+                        std::string err = "HTTP Error: ["+std::to_string(response.status_code())+"] "+response.reason_phrase();
+                        throw web::http::http_exception(err);
                     }
                 });
             }
@@ -76,7 +78,14 @@ namespace disccord
 
             pplx::task<void> rest_api_client::request(route_info& route, const pplx::cancellation_token& token)
             {
-                return request_empty_internal(route, token);
+                if (route.method != "GET") //can be refactored, but need content-length for these requests to succeed.
+                {
+                    disccord::api::request_info* info = new disccord::api::request_info();
+                    info->set_body(web::json::value(""));
+                    return request_empty_internal(route, info, token);
+                }
+                else
+                    return request_empty_internal(route, token);
             }
 
             pplx::task<void> rest_api_client::request_multipart(route_info& route, disccord::api::multipart_request args, const pplx::cancellation_token& token)
