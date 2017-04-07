@@ -330,7 +330,6 @@ namespace disccord
                         info->set_body(body.encode_array());
                         return request_internal(route, info, token).then([](web::http::http_response response)
                         {
-                            std::cout << response.to_string()<< "\n";
                             return response.extract_json();
                         }).then([](web::json::value response)
                         {
