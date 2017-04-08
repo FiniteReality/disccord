@@ -9,16 +9,15 @@ namespace disccord
     {
         namespace models
         {
-            class modify_positions_args : public disccord::models::model
+            class modify_positions_args
             {
                 public:
                     modify_positions_args(std::vector<std::pair<uint64_t, uint8_t>> id_pos_params);
                     virtual ~modify_positions_args();
 
-                    std::vector<std::pair<uint64_t, uint8_t>> get_id_pos_params();
+                    web::json::value encode();
 
-                protected:
-                    virtual void encode_to(std::vector<web::json::value>& info) override;
+                    std::vector<std::pair<uint64_t, uint8_t>> get_id_pos_params();
 
                 private:
                     std::vector<std::pair<uint64_t, uint8_t>> id_pos_params;

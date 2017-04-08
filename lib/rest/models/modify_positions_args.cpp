@@ -13,7 +13,7 @@ namespace disccord
             modify_positions_args::~modify_positions_args()
             { }
 
-            void modify_positions_args::encode_to(std::vector<web::json::value>& info)
+            web::json::value modify_positions_args::encode()
             {
                 auto _params = get_id_pos_params();
                 std::vector<web::json::value> params_array(_params.size());
@@ -24,7 +24,8 @@ namespace disccord
                         obj["position"] = web::json::value(param.second);
                         return obj;
                     });
-                info = params_array;
+                
+                return web::json::value::array(params_array);
             }
 
             std::vector<std::pair<uint64_t, uint8_t>> modify_positions_args::get_id_pos_params()
