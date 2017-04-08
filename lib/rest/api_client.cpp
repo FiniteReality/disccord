@@ -239,7 +239,7 @@ namespace disccord
             {
                 disccord::rest::models::modify_positions_args args{id_pos_params};
                 auto route = get_route("PATCH", "/guilds/{guild.id}/channels", std::to_string(guild_id));
-                return request_json_array(route, args, token);
+                return request_multi_json(route, args, token);
             }
             
             pplx::task<disccord::models::guild_member> rest_api_client::get_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token)
@@ -339,7 +339,7 @@ namespace disccord
             {
                 disccord::rest::models::modify_positions_args args{id_pos_params};
                 auto route = get_route("PATCH", "/guilds/{guild.id}/roles", std::to_string(guild_id));
-                return request_json_array(route, args, token);
+                return request_multi_json(route, args, token);
             }
             
             pplx::task<disccord::models::role> rest_api_client::modify_guild_role(uint64_t guild_id, disccord::rest::models::guild_role_args args, const pplx::cancellation_token& token)
