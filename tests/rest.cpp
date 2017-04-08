@@ -90,15 +90,15 @@ SCENARIO("REST api is successful", "[!mayfail]") {
             api_client.create_message(237990708101775361, message_builder.str()).then([&](pplx::task<message> message_task)
             {
                 try
-                    {
-                        auto message = message_task.wait();
-                        success = true;
-                    }
-                    catch (std::exception e)
-                    {
-                        WARN("create_message failed with" << e.what());
-                        success = false;
-                    }
+                {
+                    auto message = message_task.wait();
+                    success = true;
+                }
+                catch (std::exception e)
+                {
+                    WARN("create_message failed with" << e.what());
+                    success = false;
+                }
             }).wait();
 
             THEN("the send succeeds") {
