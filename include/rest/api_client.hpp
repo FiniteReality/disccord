@@ -30,6 +30,9 @@
 #include <rest/models/modify_guild_member_args.hpp>
 #include <rest/models/guild_role_args.hpp>
 #include <rest/models/modify_guild_embed_args.hpp>
+#include <rest/models/modify_channel_args.hpp>
+#include <rest/models/edit_message_args.hpp>
+#include <rest/models/create_channel_invite_args.hpp>
 
 namespace disccord
 {
@@ -83,16 +86,21 @@ namespace disccord
                     // Channel API
                     pplx::task<disccord::models::channel> get_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    //TODO: modify_channel
+                    pplx::task<disccord::models::channel> modify_channel(uint64_t channel_id, disccord::rest::models::modify_channel_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     pplx::task<disccord::models::channel> delete_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    //TODO: add query param overloads
-                    pplx::task<std::vector<disccord::models::message>> get_messages(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, uint8_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, std::string query, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, std::string query, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     pplx::task<disccord::models::message> get_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    //TODO: add json body overloads
+                    //TODO: build rest model for json args
                     pplx::task<disccord::models::message> create_message(uint64_t channel_id, std::string content, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     pplx::task<void> create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -100,6 +108,36 @@ namespace disccord
                     pplx::task<void> delete_own_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     pplx::task<void> delete_user_reaction(uint64_t channel_id, uint64_t message_id, uint64_t user_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<std::vector<disccord::models::user>> get_reactions(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> delete_all_reactions(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<disccord::models::message> edit_message(uint64_t channel_id, uint64_t message_id, disccord::rest::models::edit_message_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> delete_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> bulk_delete_messages(uint64_t channel_id, std::vector<uint64_t> message_ids, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> edit_channel_permissions(uint64_t channel_id, uint64_t overwrite_id, uint32_t allow, uint32_t deny, std::string type, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<std::vector<disccord::models::invite>> get_channel_invites(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<disccord::models::invite> create_channel_invite(uint64_t channel_id, disccord::rest::models::create_channel_invite_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> delete_channel_permissions(uint64_t channel_id, uint64_t overwrite_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> trigger_typing(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<std::vector<disccord::models::message>> get_pinned_messages(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> pin_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> unpin_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> add_dm_recipient(uint64_t channel_id, uint64_t user_id, std::string access_token, std::string nick, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> remove_dm_recipient(uint64_t channel_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     // Guild API
                     pplx::task<disccord::models::guild> get_guild(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -189,6 +227,15 @@ namespace disccord
                     void setup_discord_handler();
 
                     pplx::task<void> request(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    template <typename TModel>
+                    pplx::task<void> request(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    {
+                        disccord::api::request_info* info = new disccord::api::request_info();
+
+                        info->set_body(body.encode());
+                        return request_empty_internal(route, info, token);
+                    }
 
                     template <typename TResponse>
                     pplx::task<TResponse> request_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())
@@ -231,23 +278,13 @@ namespace disccord
                         {});
                     }
                     template <typename TModel>
-                    pplx::task<void> request_multi_json(route_info& route, std::vector<TModel> body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    pplx::task<void> request_multi_json(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
-                        std::vector<web::json::value> body_arr(body.size());
-                        std::transform(body.begin(), body.end(), body_arr.size(), [](TModel value)
-                        {
-                            return value.encode();
-                        });
-
-                        web::json::value _body = web::json::value::array(body_arr);
-
-                        info->set_body(_body);
+                        info->set_body(body.encode_array());
                         return request_internal(route, info, token).then([](web::http::http_response response)
-                        {
-                            return response.extract_json();
-                        });
+                        {});
                     }
 
                     template <typename TResponse>
@@ -282,19 +319,11 @@ namespace disccord
                     }
 
                     template <typename TResponse, typename TModel>
-                    pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, std::vector<TModel> body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    pplx::task<std::vector<TResponse>> request_multi_json(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
                     {
                         disccord::api::request_info* info = new disccord::api::request_info();
 
-                        std::vector<web::json::value> body_arr(body.size());
-                        std::transform(body.begin(), body.end(), body_arr.size(), [](TModel value)
-                        {
-                            return value.encode();
-                        });
-
-                        web::json::value _body = web::json::value::array(body_arr);
-
-                        info->set_body(_body);
+                        info->set_body(body.encode_array());
                         return request_internal(route, info, token).then([](web::http::http_response response)
                         {
                             return response.extract_json();
