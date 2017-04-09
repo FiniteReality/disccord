@@ -23,6 +23,7 @@
 #include <models/role.hpp>
 #include <models/user.hpp>
 #include <models/user_guild.hpp>
+#include <models/voice_region.hpp>
 
 #include <rest/models/add_guild_member_args.hpp>
 #include <rest/models/create_channel_invite_args.hpp>
@@ -191,9 +192,8 @@ namespace disccord
 
                     //TODO: begin_guild_prune
 
-                    //TODO: get_guild_voice_regions
+                    pplx::task<std::vector<disccord::models::voice_region>> get_guild_voice_regions(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    //NOTE: invite_metadata is also retrieved here, will want to grab that data as well
                     pplx::task<std::vector<disccord::models::invite>> get_guild_invites(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::integration>> get_guild_integrations(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());

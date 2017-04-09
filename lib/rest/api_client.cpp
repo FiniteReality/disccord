@@ -503,9 +503,12 @@ namespace disccord
 
             //TODO: begin_guild_prune
 
-            //TODO: get_guild_voice_regions
+            pplx::task<std::vector<disccord::models::voice_region>> rest_api_client::get_guild_voice_regions(uint64_t guild_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/guilds/{guild.id}/regions", std::to_string(guild_id));
+                return request_multi_json<disccord::models::voice_region>(route, token);
+            }
 
-            //NOTE: invite_metadata is also retrieved here, will want to grab that data as well
             pplx::task<std::vector<disccord::models::invite>> rest_api_client::get_guild_invites(uint64_t guild_id, const pplx::cancellation_token& token)
             {
                 auto route = get_route("GET", "/guilds/{guild.id}/invites", std::to_string(guild_id));
