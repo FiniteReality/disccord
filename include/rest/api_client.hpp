@@ -90,23 +90,16 @@ namespace disccord
 
                     pplx::task<disccord::models::channel> delete_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, uint8_t limit = 50, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, uint8_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::message>> get_channel_messages_before(uint64_t channel_id, uint64_t message_id, uint8_t limit = 50, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, std::string query, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-
-                    pplx::task<std::vector<disccord::models::message>> get_channel_messages(uint64_t channel_id, std::string query, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::message>> get_channel_messages_after(uint64_t channel_id, uint64_t message_id, uint8_t limit = 50, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<disccord::models::message> get_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-
-                    //TODO: modify_channel
-
-                    //TODO: add query param overloads
-                    pplx::task<std::vector<disccord::models::message>> get_messages(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-
                     pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::rest::models::create_message_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
                     pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::api::multipart_request args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());

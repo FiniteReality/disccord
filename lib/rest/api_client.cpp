@@ -210,27 +210,21 @@ namespace disccord
                 return request_json<disccord::models::channel>(route, token);
             }
 
-            pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages(uint64_t channel_id, const pplx::cancellation_token& token)
-            {
-                auto route = get_route("GET", "/channels/{channel.id}/messages", std::to_string(channel_id));
-                return request_multi_json<disccord::models::message>(route, token);
-            }
-
             pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages(uint64_t channel_id, uint8_t limit, const pplx::cancellation_token& token)
             {
                 auto route = get_route("GET", "/channels/{channel.id}/messages?limit={limit}", std::to_string(channel_id), std::to_string(limit));
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
-            pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages(uint64_t channel_id, std::string query, uint64_t message_id, const pplx::cancellation_token& token)
+            pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages_before(uint64_t channel_id, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages?{query}={message_id}", std::to_string(channel_id), query, std::to_string(message_id));
+                auto route = get_route("GET", "/channels/{channel.id}/messages?before={message}&limit=limit", std::to_string(channel_id), std::to_string(message_id));
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
-            pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages(uint64_t channel_id, std::string query, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token)
+            pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages_after(uint64_t channel_id, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages?{query}={message_id}&limit={limit}", std::to_string(channel_id), query, std::to_string(message_id), std::to_string(limit));
+                auto route = get_route("GET", "/channels/{channel.id}/messages?after={message}&limit={limit}", std::to_string(channel_id), std::to_string(message_id), std::to_string(limit));
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
