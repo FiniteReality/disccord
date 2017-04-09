@@ -122,6 +122,8 @@ namespace disccord
                 return request_json<disccord::models::user>(route, token);
             }
 
+            //TODO: modify_current_user
+
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(uint8_t limit, const pplx::cancellation_token& token)
             {
                 auto route = get_route("GET", "/users/@me/guilds?limit={limit}", std::to_string(limit));
