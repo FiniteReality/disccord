@@ -20,7 +20,7 @@ namespace disccord
             max_age = json.at("max_age").as_integer();
             temporary = json.at("temporary").as_bool();
             revoked = json.at("revoked").as_bool();
-            
+
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -35,7 +35,7 @@ namespace disccord
                     var = decltype(var)(); \
                 }
             get_composite_field(inviter, user);
-            
+
             #undef get_composite_field
         }
 
@@ -47,11 +47,11 @@ namespace disccord
             info["max_age"] = web::json::value(max_age);
             info["temporary"] = web::json::value(temporary);
             info["revoked"] = web::json::value(revoked);
-            
+
             if (inviter.is_specified())
                 info["inviter"] = inviter.get_value().encode();
         }
-        
+
         #define define_get_method(field_name) \
             decltype(invite_metadata::field_name) invite_metadata::get_##field_name() { \
                 return field_name; \
@@ -64,7 +64,7 @@ namespace disccord
         define_get_method(temporary)
         define_get_method(revoked)
         define_get_method(inviter)
-        
+
         #undef define_get_method
     }
 }

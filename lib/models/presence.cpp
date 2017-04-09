@@ -18,7 +18,7 @@ namespace disccord
         {
             status = json.at("status").as_string();
             guild_id = std::stoull(json.at("guild_id").as_string());
-            
+
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -35,7 +35,7 @@ namespace disccord
 
             get_composite_field(user, models::user);
             get_composite_field(game, models::game);
-            
+
             if (json.has_field("roles"))
             {
                 auto _roles_array = json.at("roles").as_array();
@@ -46,7 +46,7 @@ namespace disccord
                     });
                 roles = roles_array;
             }
-            
+
             #undef get_composite_field
         }
 
@@ -68,7 +68,7 @@ namespace disccord
                 info["roles"] = web::json::value::array(roles_array);
             }
         }
-        
+
         #define define_get_method(field_name) \
             decltype(presence::field_name) presence::get_##field_name() { \
                 return field_name; \
@@ -79,7 +79,7 @@ namespace disccord
         define_get_method(user)
         define_get_method(game)
         define_get_method(roles)
-        
+
         #undef define_get_method
     }
 }

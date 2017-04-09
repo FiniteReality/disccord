@@ -24,7 +24,7 @@ namespace disccord
             info["enabled"] = web::json::value(enabled);
             info["channel_id"] = web::json::value(std::to_string(channel_id));
         }
-        
+
         #define define_get_method(field_name) \
             decltype(guild_embed::field_name) guild_embed::get_##field_name() { \
                 return field_name; \
@@ -32,7 +32,7 @@ namespace disccord
 
         define_get_method(enabled)
         define_get_method(channel_id)
-        
+
         #undef define_get_method
     }
 }

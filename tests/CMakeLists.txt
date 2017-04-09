@@ -8,7 +8,7 @@ macro(add_test_executable name sources)
   add_executable("${name}_test" "${sources}")
   add_dependencies("${name}_test" disccord)
   target_link_libraries("${name}_test" disccord ${LIBS})
-  
+
   if(DISCCORD_IGNORE_UNSAFE_TESTS)
     add_test(NAME "${name}" COMMAND "${name}_test" -e)
   else()

@@ -123,7 +123,7 @@ namespace disccord
                 info["features"] = web::json::value::array(features_array);
             }
             // TODO: see guild.hpp
-            
+
             #define encode_composite_vector(var, type) \
                 if (var.is_specified()) { \
                     auto _array = get_##var().get_value(); \
@@ -134,13 +134,13 @@ namespace disccord
                     }); \
                     info[#var] = web::json::value::array(array); \
                 }
-                
+
             encode_composite_vector(roles, role);
             encode_composite_vector(emojis, emoji);
             encode_composite_vector(members, guild_member);
             encode_composite_vector(channels, channel);
             encode_composite_vector(presences, presence);   
-                
+
             #undef encode_composite_vector
         }
 

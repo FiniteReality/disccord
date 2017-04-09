@@ -17,7 +17,7 @@ namespace disccord
             joined_at = json.at("joined_at").as_string();
             deaf = json.at("deaf").as_bool();
             mute = json.at("mute").as_bool();
-            
+
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -44,7 +44,7 @@ namespace disccord
                 }
             get_field(nick, as_string);
             get_composite_field(member, user);
-            
+
             if (json.has_field("roles"))
             {
                 auto _roles_array = json.at("roles").as_array();
@@ -55,7 +55,7 @@ namespace disccord
                     });
                 roles = roles_array;
             }
-            
+
             #undef get_field
             #undef get_composite_field
         }
@@ -80,7 +80,7 @@ namespace disccord
                 info["roles"] = web::json::value::array(roles_array);
             }
         }
-        
+
         #define define_get_method(field_name) \
             decltype(guild_member::field_name) guild_member::get_##field_name() { \
                 return field_name; \
@@ -92,7 +92,7 @@ namespace disccord
         define_get_method(nick)
         define_get_method(member)
         define_get_method(roles)
-        
+
         #undef define_get_method
     }
 }

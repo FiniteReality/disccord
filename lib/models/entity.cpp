@@ -10,7 +10,7 @@ namespace disccord
         entity::entity()
             : id(0)
         { }
-        
+
         entity::~entity()
         { }
 
@@ -23,7 +23,7 @@ namespace disccord
         {
             info["id"] = web::json::value::string(std::to_string(get_id()));
         }
-        
+
         uint64_t entity::get_id()
         {
             return id;

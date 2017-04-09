@@ -9,7 +9,7 @@ namespace disccord
             create_guild_integration_args::create_guild_integration_args(std::string _type, uint64_t _id)
             : type(_type), id(_id)
             { }
-            
+
             create_guild_integration_args::~create_guild_integration_args()
             { }
 
@@ -23,7 +23,7 @@ namespace disccord
             {
                 return type;
             }
-            
+
             uint64_t create_guild_integration_args::get_id()
             {
                 return id;

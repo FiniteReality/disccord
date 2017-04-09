@@ -15,7 +15,7 @@ namespace disccord
         {
             count = json.at("count").as_integer();
             me = json.at("me").as_bool();
-            
+
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -29,9 +29,9 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-                
+
             get_composite_field(emoji_, emoji);    
-                
+
             #undef get_composite_field
         }
 
@@ -42,7 +42,7 @@ namespace disccord
             if (emoji_.is_specified())
                 info["emoji"] = emoji_.get_value().encode();
         }
-        
+
         #define define_get_method(field_name) \
             decltype(reaction::field_name) reaction::get_##field_name() { \
                 return field_name; \
@@ -51,7 +51,7 @@ namespace disccord
         define_get_method(count)
         define_get_method(me)
         define_get_method(emoji_)
-        
+
         #undef define_get_method
     }
 }

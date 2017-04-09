@@ -15,7 +15,7 @@ namespace disccord
                 public:
                     add_guild_member_args(std::string access_token);
                     virtual ~add_guild_member_args();
-                    
+
                     void set_nick(std::string nick);
                     void set_roles(std::vector<uint64_t> roles);
                     void set_mute(bool mute);

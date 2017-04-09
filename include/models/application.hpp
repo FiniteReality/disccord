@@ -33,7 +33,7 @@ namespace disccord
                 util::optional<std::vector<std::string>> rpc_origins;
                 bool bot_public, bot_requires_code_grant;
                 util::optional<user> owner;
-                
+
         };
     }
 }

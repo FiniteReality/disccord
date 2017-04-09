@@ -14,7 +14,7 @@ namespace disccord
         void game::decode(web::json::value json)
         {
             name = json.at("name").as_string();
-            
+
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
                     auto field = json.at(#var); \
@@ -29,7 +29,7 @@ namespace disccord
 
             get_field(url, as_string);
             get_field(type, as_integer);
-            
+
             #undef get_field
         }
 
@@ -41,7 +41,7 @@ namespace disccord
             if (type.is_specified())
                 info["type"] = web::json::value(type.get_value());
         }
-        
+
         #define define_get_method(field_name) \
             decltype(game::field_name) game::get_##field_name() { \
                 return field_name; \
@@ -50,7 +50,7 @@ namespace disccord
         define_get_method(name)
         define_get_method(url)
         define_get_method(type)
-        
+
         #undef define_get_method
     }
 }

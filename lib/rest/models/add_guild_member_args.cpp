@@ -9,18 +9,18 @@ namespace disccord
             add_guild_member_args::add_guild_member_args(std::string _access_token)
             : access_token(_access_token)
             { }
-            
+
             add_guild_member_args::~add_guild_member_args()
             { }
 
             void add_guild_member_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
             {
                 info["access_token"] = web::json::value(access_token);
-                
+
                 #define encode_field(var) \
                     if (var.is_specified()) \
                         info[#var] = web::json::value(var.get_value());
-                        
+
                 encode_field(nick);
                 encode_field(mute);
                 encode_field(deaf);
@@ -34,7 +34,7 @@ namespace disccord
                         });
                     info["roles"] = web::json::value::array(roles_array);
                 }
-                
+
                 #undef encode_field
             }
 
@@ -42,12 +42,12 @@ namespace disccord
                 void add_guild_member_args::set_##field_name(type val) { \
                     field_name = decltype(field_name)(val); \
                 }
-            
+
             define_set_method(nick, std::string)
             define_set_method(mute, bool)
             define_set_method(deaf, bool)
             define_set_method(roles, std::vector<uint64_t>)
-            
+
             #undef define_set_method
         }
     }

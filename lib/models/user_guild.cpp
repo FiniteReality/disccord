@@ -32,12 +32,12 @@ namespace disccord
             info["owner"] = web::json::value(get_owner());
             info["permissions"] = web::json::value(std::to_string(get_permissions()));
         }
-        
+
         int64_t user_guild::get_id()
         {
             return id;
         }
-        
+
         std::string user_guild::get_name()
         {
             return name;

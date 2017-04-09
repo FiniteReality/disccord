@@ -15,7 +15,7 @@ namespace disccord
                 public:
                     modify_guild_embed_args();
                     virtual ~modify_guild_embed_args();
-                    
+
                     void set_enabled(bool enabled);
                     void set_channel_id(uint64_t channel_id);
 

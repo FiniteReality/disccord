@@ -16,7 +16,7 @@ namespace disccord
                 public:
                     create_guild_channel_args(std::string name);
                     virtual ~create_guild_channel_args();
-                    
+
                     void set_type(uint8_t type);
                     void set_bitrate(uint32_t bitrate);
                     void set_user_limit(uint32_t user_limit);

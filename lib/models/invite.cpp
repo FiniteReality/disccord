@@ -31,14 +31,14 @@ namespace disccord
 
             get_composite_field(guild, invite_guild);
             get_composite_field(channel, invite_channel);
-            
+
             #undef get_composite_field
         }
 
         void invite::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             info["code"] = web::json::value(code);
-            
+
             if (guild.is_specified())
                 info["guild"] = guild.get_value().encode();
             if (channel.is_specified())

@@ -40,7 +40,7 @@ if(DISCCORD_BUILD_STATIC)
 else()
     message("-- Building disccord as a shared library")
     add_library(disccord SHARED ${SOURCE_FILES})
-    
+
     set_target_properties(disccord PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 

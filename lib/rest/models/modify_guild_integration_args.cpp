@@ -9,7 +9,7 @@ namespace disccord
             modify_guild_integration_args::modify_guild_integration_args(uint32_t _expire_behavior, uint32_t _expire_grace_period, bool _enable_emoticons)
             : expire_behavior(_expire_behavior), expire_grace_period(_expire_grace_period), enable_emoticons(_enable_emoticons)
             { }
-            
+
             modify_guild_integration_args::~modify_guild_integration_args()
             { }
 
@@ -24,12 +24,12 @@ namespace disccord
             {
                 return expire_behavior;
             }
-            
+
             uint32_t modify_guild_integration_args::get_expire_grace_period()
             {
                 return expire_grace_period;
             }
-            
+
             bool modify_guild_integration_args::get_enable_emoticons()
             {
                 return enable_emoticons;

@@ -42,7 +42,7 @@ namespace disccord
                 util::optional<bool> is_private;
                 util::optional<user> recipient;
                 util::optional<std::vector<overwrite>> permission_overwrites;
-                
+
         };
     }
 }

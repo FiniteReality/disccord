@@ -15,7 +15,7 @@ namespace disccord
                 public:
                     guild_role_args();
                     virtual ~guild_role_args();
-                    
+
                     void set_permissions(uint32_t permissions);
                     void set_color(uint32_t color);
                     void set_name(std::string name);

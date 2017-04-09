@@ -61,9 +61,9 @@ namespace disccord
                     pplx::task<disccord::models::user> modify_current_user(std::string username, std::string avatar, const pplx::cancellation_token& token = pplx::cancellation_token::none()); */
 
                     pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds_before(uint64_t guild_id, uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds_after(uint64_t guild_id, uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> leave_guild(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -85,6 +85,7 @@ namespace disccord
 
                     // Channel API
                     pplx::task<disccord::models::channel> get_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+<<<<<<< HEAD
                     
                     pplx::task<disccord::models::channel> modify_channel(uint64_t channel_id, disccord::rest::models::modify_channel_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
@@ -106,11 +107,28 @@ namespace disccord
                     
                     //pplx::task<disccord::models::message> create_file(uint64_t channel_id, std::string filename, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
+=======
+
+                    //TODO: modify_channel
+
+                    pplx::task<disccord::models::channel> delete_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    //TODO: add query param overloads
+                    pplx::task<std::vector<disccord::models::message>> get_messages(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::message> get_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    //TODO: add json body overloads
+                    pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::rest::models::create_messaeg_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::api::multipart_request args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+>>>>>>> Remove extraneous whitespace, tweak api methods
                     pplx::task<void> create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> delete_own_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> delete_user_reaction(uint64_t channel_id, uint64_t message_id, uint64_t user_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+<<<<<<< HEAD
                     
                     pplx::task<std::vector<disccord::models::user>> get_reactions(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
@@ -142,21 +160,24 @@ namespace disccord
                     
                     pplx::task<void> remove_dm_recipient(uint64_t channel_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
+=======
+
+>>>>>>> Remove extraneous whitespace, tweak api methods
                     // Guild API
                     pplx::task<disccord::models::guild> get_guild(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<disccord::models::guild> modify_guild(uint64_t guild_id, disccord::rest::models::modify_guild_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<disccord::models::guild> delete_guild(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<std::vector<disccord::models::channel>> get_guild_channels(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<disccord::models::channel> create_guild_channel(uint64_t guild_id, disccord::rest::models::create_guild_channel_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
-                    pplx::task<void> modify_guild_channel_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
+                    pplx::task<void> modify_guild_channel_positions(uint64_t guild_id, disccord::rest::models::modify_positions_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
                     pplx::task<disccord::models::guild_member> get_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<std::vector<disccord::models::guild_member>> list_guild_members(uint64_t guild_id, uint16_t limit = 1, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::guild_member>> list_guild_members_before(uint64_t guild_id, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -164,56 +185,56 @@ namespace disccord
                     pplx::task<std::vector<disccord::models::guild_member>> list_guild_members_after(uint64_t guild_id, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<disccord::models::guild_member> add_guild_member(uint64_t guild_id, uint64_t user_id, disccord::rest::models::add_guild_member_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> modify_guild_member(uint64_t guild_id, uint64_t user_id, disccord::rest::models::modify_guild_member_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     //TODO: modify_current_nick
-                    
+
                     pplx::task<void> add_guild_member_role(uint64_t guild_id, uint64_t user_id, uint64_t role_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> remove_guild_member_role(uint64_t guild_id, uint64_t user_id, uint64_t role_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> remove_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<std::vector<disccord::models::user>> get_guild_bans(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> create_guild_ban(uint64_t guild_id, uint64_t user_id, uint8_t delete_message_days, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> remove_guild_ban(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<std::vector<disccord::models::role>> get_guild_roles(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<disccord::models::role> create_guild_role(uint64_t guild_id, disccord::rest::models::guild_role_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> modify_guild_role_positions(uint64_t guild_id, disccord::rest::models::modify_positions_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<disccord::models::role> modify_guild_role(uint64_t guild_id, disccord::rest::models::guild_role_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> delete_guild_role(uint64_t guild_id, uint64_t role_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     //TODO: get_guild_prune_count
-                    
+
                     //TODO: begin_guild_prune
-                    
+
                     //TODO: get_guild_voice_regions
-                    
+
                     //NOTE: invite_metadata is also retrieved here, will want to grab that data as well
                     pplx::task<std::vector<disccord::models::invite>> get_guild_invites(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<std::vector<disccord::models::integration>> get_guild_integrations(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> create_guild_integration(uint64_t guild_id, uint64_t integration_id, std::string type, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> modify_guild_integration(uint64_t guild_id, uint64_t integration_id, uint32_t expire_behavior, uint32_t expire_grace_period, bool enable_emoticons, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> delete_guild_integration(uint64_t guild_id, uint64_t integration_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> sync_guild_integration(uint64_t guild_id, uint64_t integration_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<disccord::models::guild_embed> get_guild_embed(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<disccord::models::guild_embed> modify_guild_embed(uint64_t guild_id, disccord::rest::models::modify_guild_embed_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                 private:
                     pplx::task<void> request_empty_internal(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     pplx::task<void> request_empty_internal(route_info& route, disccord::api::request_info* request, const pplx::cancellation_token& token = pplx::cancellation_token::none());

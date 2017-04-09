@@ -15,7 +15,7 @@ namespace disccord
                 public:
                     modify_guild_member_args();
                     virtual ~modify_guild_member_args();
-                    
+
                     void set_channel_id(uint64_t channel_id);
                     void set_nick(std::string nick);
                     void set_roles(std::vector<uint64_t> roles);
