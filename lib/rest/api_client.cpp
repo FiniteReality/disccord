@@ -561,6 +561,13 @@ namespace disccord
                 return request_json<disccord::models::guild_embed>(route, args, token);
             }
 
+            // Voice API
+            pplx::task<std::vector<disccord::models::voice_region>> rest_api_client::list_voice_regions(const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/voice/regions");
+                return request_multi_json<disccord::models::voice_region>(route, token);
+            }
+
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
