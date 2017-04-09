@@ -9,7 +9,7 @@ namespace disccord
             bulk_delete_message_args::bulk_delete_message_args(std::vector<uint64_t> _message_ids)
             : message_ids(_message_ids)
             { }
-            
+
             bulk_delete_message_args::~bulk_delete_message_args()
             { }
 

@@ -8,7 +8,7 @@ namespace disccord
         {
             modify_channel_args::modify_channel_args()
             { }
-            
+
             modify_channel_args::~modify_channel_args()
             { }
 
@@ -17,7 +17,7 @@ namespace disccord
                 #define encode_field(var) \
                     if (var.is_specified()) \
                         info[#var] = web::json::value(var.get_value());
-                        
+
                 encode_field(name);
                 encode_field(topic);
                 encode_field(position);
@@ -30,13 +30,13 @@ namespace disccord
                 void modify_channel_args::set_##field_name(type val) { \
                     field_name = decltype(field_name)(val); \
                 }
-            
+
             define_set_method(name, std::string)
             define_set_method(topic, std::string)
             define_set_method(position, uint16_t)
             define_set_method(user_limit, uint16_t)
             define_set_method(bitrate, uint32_t)
-            
+
             #undef define_set_method
         }
     }

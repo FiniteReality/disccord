@@ -8,7 +8,7 @@ namespace disccord
         {
             edit_message_args::edit_message_args()
             { }
-            
+
             edit_message_args::~edit_message_args()
             { }
 
@@ -17,11 +17,11 @@ namespace disccord
                 #define encode_field(var) \
                     if (var.is_specified()) \
                         info[#var] = web::json::value(var.get_value());
-                        
+
                 encode_field(content);
                 if (embed.is_specified())
                     info["embed"] = embed.get_value().encode();
-                
+
                 #undef encode_field
             }
 
@@ -29,10 +29,10 @@ namespace disccord
                 void edit_message_args::set_##field_name(type val) { \
                     field_name = decltype(field_name)(val); \
                 }
-            
+
             define_set_method(content, std::string)
             define_set_method(embed, disccord::models::embed)
-            
+
             #undef define_set_method
         }
     }
