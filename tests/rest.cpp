@@ -85,9 +85,11 @@ SCENARIO("REST api is successful", "[!mayfail]") {
                 << "**Compiler:** " << compiler << "\n";
             }
 
+            disccord::rest::models::create_message_args args{message_builder.str()};
+
             bool success;
 
-            api_client.create_message(237990708101775361, message_builder.str()).then([&](pplx::task<message> message_task)
+            api_client.create_message(237990708101775361, args).then([&](pplx::task<message> message_task)
             {
                 try
                 {

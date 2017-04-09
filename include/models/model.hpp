@@ -1,6 +1,9 @@
 #ifndef _model_hpp_
 #define _model_hpp_
 
+#include <string>
+#include <unordered_map>
+
 #include <json.h>
 
 namespace disccord
@@ -12,6 +15,8 @@ namespace disccord
             public:
                 model();
                 virtual ~model();
+
+                void decode_string(std::string info);
 
                 virtual void decode(web::json::value json);
                 web::json::value encode();

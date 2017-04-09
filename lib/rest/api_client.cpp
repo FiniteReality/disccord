@@ -249,7 +249,7 @@ namespace disccord
             pplx::task<disccord::models::message> rest_api_client::create_message(uint64_t channel_id, disccord::api::multipart_request args, const pplx::cancellation_token& token)
             {
                 auto route = get_route("POST", "/channels/{channel.id}/messages", std::to_string(channel_id));
-                return request_json<disccord::models::message>(route, args, token);
+                return request_multipart<disccord::models::message>(route, args, token);
             }
 
             pplx::task<void> rest_api_client::create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)

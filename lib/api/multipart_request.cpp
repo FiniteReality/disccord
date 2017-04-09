@@ -40,6 +40,11 @@ namespace disccord
             return "multipart/" + content_type_suffix;
         }
 
+        void multipart_request::add_field(multipart_field field)
+        {
+            fields.push_back(field);
+        }
+
         std::string multipart_request::generate_boundary()
         {
             auto current_time = high_resolution_clock::now().time_since_epoch();

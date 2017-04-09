@@ -19,6 +19,8 @@ namespace disccord
                 std::string encode();
                 std::string get_content_type();
 
+                void add_field(multipart_field field);
+
             private:
                 static std::string generate_boundary();
 

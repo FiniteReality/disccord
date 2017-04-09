@@ -85,7 +85,6 @@ namespace disccord
 
                     // Channel API
                     pplx::task<disccord::models::channel> get_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-<<<<<<< HEAD
                     
                     pplx::task<disccord::models::channel> modify_channel(uint64_t channel_id, disccord::rest::models::modify_channel_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
@@ -101,34 +100,20 @@ namespace disccord
                     
                     pplx::task<disccord::models::message> get_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    pplx::task<disccord::models::message> create_message(uint64_t channel_id, std::string content, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
-                    pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::rest::models::create_message_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
-                    //pplx::task<disccord::models::message> create_file(uint64_t channel_id, std::string filename, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
-=======
 
                     //TODO: modify_channel
-
-                    pplx::task<disccord::models::channel> delete_channel(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     //TODO: add query param overloads
                     pplx::task<std::vector<disccord::models::message>> get_messages(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::message> get_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-
-                    //TODO: add json body overloads
-                    pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::rest::models::create_messaeg_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::rest::models::create_message_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::api::multipart_request args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
->>>>>>> Remove extraneous whitespace, tweak api methods
                     pplx::task<void> create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> delete_own_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> delete_user_reaction(uint64_t channel_id, uint64_t message_id, uint64_t user_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-<<<<<<< HEAD
                     
                     pplx::task<std::vector<disccord::models::user>> get_reactions(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
@@ -160,9 +145,6 @@ namespace disccord
                     
                     pplx::task<void> remove_dm_recipient(uint64_t channel_id, uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-=======
-
->>>>>>> Remove extraneous whitespace, tweak api methods
                     // Guild API
                     pplx::task<disccord::models::guild> get_guild(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 

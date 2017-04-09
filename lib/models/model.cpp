@@ -20,6 +20,11 @@ namespace disccord
             return web::json::value::object(fields);
         }
 
+        void model::decode_string(std::string info)
+        {
+            decode(web::json::value::parse(info));
+        }
+
         void model::decode(web::json::value json)
         { }
 

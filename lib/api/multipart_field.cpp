@@ -1,5 +1,7 @@
 #include <api/multipart_field.hpp>
 
+#include <stdexcept>
+
 namespace disccord
 {
     namespace api
@@ -14,6 +16,11 @@ namespace disccord
         std::string multipart_field::get_content_type()
         {
             return content_type;
+        }
+
+        std::string multipart_field::get_content()
+        {
+            throw new std::runtime_error("multipart_field::get_content() not overloaded!");
         }
 
         std::string multipart_field::get_name()

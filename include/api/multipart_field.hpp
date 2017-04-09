@@ -15,7 +15,7 @@ namespace disccord
                 virtual ~multipart_field();
 
                 std::string get_content_type();
-                virtual std::string get_content() = 0;
+                virtual std::string get_content();
 
                 virtual std::unordered_map<std::string, std::string> get_attributes();
 
