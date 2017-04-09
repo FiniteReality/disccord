@@ -3,11 +3,18 @@
 #include <rest/api_client.hpp>
 #include <rest.hpp>
 
+#include <rest/models/add_guild_member_args.hpp>
 #include <rest/models/create_dm_channel_args.hpp>
 #include <rest/models/create_group_dm_args.hpp>
 #include <rest/models/create_guild_ban_args.hpp>
+#include <rest/models/create_guild_channel_args.hpp>
 #include <rest/models/create_guild_integration_args.hpp>
+#include <rest/models/create_message_args.hpp>
+#include <rest/models/guild_role_args.hpp>
+#include <rest/models/modify_guild_args.hpp>
+#include <rest/models/modify_guild_embed_args.hpp>
 #include <rest/models/modify_guild_integration_args.hpp>
+#include <rest/models/modify_guild_member_args.hpp>
 #include <rest/models/modify_positions_args.hpp>
 #include <rest/models/bulk_delete_message_args.hpp>
 #include <rest/models/edit_channel_permissions_args.hpp>
@@ -115,29 +122,21 @@ namespace disccord
                 return request_json<disccord::models::user>(route, token);
             }
 
-            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(const pplx::cancellation_token& token)
-            {
-                auto route = get_route("GET", "/users/@me/guilds");
-                return request_multi_json<disccord::models::user_guild>(route, token);
-            }
-
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(uint8_t limit, const pplx::cancellation_token& token)
             {
                 auto route = get_route("GET", "/users/@me/guilds?limit={limit}", std::to_string(limit));
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
 
-            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(std::string query, uint64_t guild_id, const pplx::cancellation_token& token)
+            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds_before(uint64_t guild_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                // Here we could be forgiving and default if the user enters a non-existant query param
-                // or can be less forgiving and let the bad request go through.
-                auto route = get_route("GET", "/users/@me/guilds?{query}={guild}",query,std::to_string(guild_id));
+                auto route = get_route("GET", "/users/@me/guilds?before={guild}&limit={limit}", std::to_string(guild_id), std::to_string(limit));
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
 
-            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(std::string query, uint64_t guild_id, uint8_t limit, const pplx::cancellation_token& token)
+            pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds_after(uint64_t guild_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/@me/guilds?{query}={guild}&limit="+std::to_string(limit), query, std::to_string(guild_id));
+                auto route = get_route("GET", "/users/@me/guilds?after={guild}&limit={limit}", std::to_string(guild_id), std::to_string(limit));
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
 
@@ -256,7 +255,7 @@ namespace disccord
             
             pplx::task<void> rest_api_client::create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/"+emoji+"/@me", std::to_string(channel_id), std::to_string(message_id));
+                auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", std::to_string(channel_id), std::to_string(message_id), emoji);
                 return request(route, token);
             }
             
@@ -408,28 +407,22 @@ namespace disccord
                 auto route = get_route("GET", "/guilds/{guild.id}/members/{user.id}", std::to_string(guild_id), std::to_string(user_id));
                 return request_json<disccord::models::guild_member>(route, token);
             }
-            
-            pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, const pplx::cancellation_token& token)
-            {
-                auto route = get_route("GET", "/guilds/{guild.id}/members", std::to_string(guild_id));
-                return request_multi_json<disccord::models::guild_member>(route, token);
-            }
-            
+
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, uint16_t limit, const pplx::cancellation_token& token)
             {
                 auto route = get_route("GET", "/guilds/{guild.id}/members?limit={limit}", std::to_string(guild_id), std::to_string(limit));
                 return request_multi_json<disccord::models::guild_member>(route, token);
             }
             
-            pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, std::string query, uint64_t user_id, const pplx::cancellation_token& token)
+            pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members_before(uint64_t guild_id, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/members?{query}={user}", std::to_string(guild_id), query, std::to_string(user_id));
+                auto route = get_route("GET", "/guilds/{guild.id}/members?before={user}&limit={limit}", std::to_string(guild_id), std::to_string(user_id));
                 return request_multi_json<disccord::models::guild_member>(route, token);
             }
             
-            pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, std::string query, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token)
+            pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members_after(uint64_t guild_id, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/members?{query}={user}&limit={limit}", std::to_string(guild_id), query, std::to_string(user_id), std::to_string(limit));
+                auto route = get_route("GET", "/guilds/{guild.id}/members?after={user}&limit={limit}", std::to_string(guild_id), std::to_string(user_id), std::to_string(limit));
                 return request_multi_json<disccord::models::guild_member>(route, token);
             }
             
@@ -496,9 +489,8 @@ namespace disccord
                 return request_json<disccord::models::role>(route, args, token);
             }
             
-            pplx::task<void> rest_api_client::modify_guild_role_positions(uint64_t guild_id, std::vector<std::pair<uint64_t, uint8_t>> id_pos_params, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::modify_guild_role_positions(uint64_t guild_id, disccord::rest::models::modify_positions_args args, const pplx::cancellation_token& token)
             {
-                disccord::rest::models::modify_positions_args args{id_pos_params};
                 auto route = get_route("PATCH", "/guilds/{guild.id}/roles", std::to_string(guild_id));
                 return request_json(route, args, token);
             }
