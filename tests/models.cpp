@@ -14,6 +14,8 @@
 #include <models/relationship.hpp>
 #include <models/ban.hpp>
 #include <models/application.hpp>
+#include <models/voice_region.hpp>
+#include <models/voice_state.hpp>
 #include <util/optional.hpp>
 
 #include <iostream>
@@ -837,4 +839,65 @@ TEST_CASE( "Application model correctly instantiated" ){
     REQUIRE(test_app.get_rpc_origins().get_value()[0] == "WHAT");
     REQUIRE(test_app.get_rpc_origins().get_value()[1] == "THIS");
     REQUIRE(test_app.get_rpc_origins().get_value()[2] == "APPLICATION");
+}
+
+TEST_CASE( "Voice region model correctly instantiated" ){
+    voice_region test_vr;
+    if (!test_vr.get_id().empty()  && !test_vr.get_name().empty() &&
+        test_vr.get_vip() && test_vr.get_optimal() &&
+        test_vr.get_deprecated() && test_vr.get_custom())
+    {
+        FAIL("Default constructor for Voice region model not correctly instantiated");
+    }
+
+    std::string json = R"({
+    "name": "London",
+    "deprecated": true,
+    "custom": false,
+    "vip": false,
+    "optimal": true,
+    "id": "london"
+})";
+
+    REQUIRE_NOTHROW(test_vr.decode(web::json::value::parse(json)));
+
+    REQUIRE(test_vr.get_id() == "london");
+    REQUIRE(test_vr.get_name() == "London");
+    REQUIRE(test_vr.get_vip() == false);
+    REQUIRE(test_vr.get_optimal() == true);
+    REQUIRE(test_vr.get_deprecated() == true);
+    REQUIRE(test_vr.get_custom() == false);
+}
+
+TEST_CASE( "Voice state model correctly instantiated" ){
+    voice_state test_vs;
+    if (test_vs.get_channel_id() != 0 && test_vs.get_user_id() != 0 &&
+        !test_vs.get_session_id().empty()  && test_vs.get_deaf() &&
+        test_vs.get_mute() && test_vs.get_self_deaf() &&
+        test_vs.get_self_mute() && test_vs.get_suppress())
+    {
+        FAIL("Default constructor for Voice state model not correctly instantiated");
+    }
+
+    std::string json = R"({
+    "channel_id": "157733188964188161",
+    "user_id": "80351110224678912",
+    "session_id": "90326bd25d71d39b9ef95b299e3872ff",
+    "deaf": false,
+    "mute": false,
+    "self_deaf": false,
+    "self_mute": true,
+    "suppress": false
+})";
+
+    REQUIRE_NOTHROW(test_vs.decode(web::json::value::parse(json)));
+
+    REQUIRE(test_vs.get_channel_id() == 157733188964188161);
+    REQUIRE(test_vs.get_user_id() == 80351110224678912);
+    REQUIRE(test_vs.get_session_id() == "90326bd25d71d39b9ef95b299e3872ff");
+    REQUIRE(test_vs.get_deaf() == false);
+    REQUIRE(test_vs.get_mute() == false);
+    REQUIRE(test_vs.get_self_deaf() == false);
+    REQUIRE(test_vs.get_self_mute() == true);
+    REQUIRE(test_vs.get_suppress() == false);
 }
