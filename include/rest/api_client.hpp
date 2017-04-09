@@ -33,6 +33,7 @@
 #include <rest/models/modify_channel_args.hpp>
 #include <rest/models/edit_message_args.hpp>
 #include <rest/models/create_channel_invite_args.hpp>
+#include <rest/models/create_message_args.hpp>
 
 namespace disccord
 {
@@ -100,8 +101,11 @@ namespace disccord
                     
                     pplx::task<disccord::models::message> get_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    //TODO: build rest model for json args
                     pplx::task<disccord::models::message> create_message(uint64_t channel_id, std::string content, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<disccord::models::message> create_message(uint64_t channel_id, disccord::rest::models::create_message_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    //pplx::task<disccord::models::message> create_file(uint64_t channel_id, std::string filename, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
                     pplx::task<void> create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     

@@ -3,6 +3,7 @@
 
 #include <models/model.hpp>
 #include <models/embed.hpp>
+#include <util/optional.hpp>
 
 namespace disccord
 {
@@ -16,13 +17,18 @@ namespace disccord
                     create_message_args(std::string content);
                     virtual ~create_message_args();
 
-                    std::string get_content();
+                    void set_nonce(uint64_t nonce);
+                    void set_tts(bool tts);
+                    void set_embed(disccord::models::embed embed);
 
                 protected:
                     virtual void encode_to(std::unordered_map<std::string, web::json::value>& info) override;
 
                 private:
                     std::string content;
+                    util::optional<uint64_t> nonce;
+                    util::optional<bool> tts;
+                    util::optional<disccord::models::embed> embed;
             };
         }
     }

@@ -5,7 +5,6 @@
 
 #include <rest/models/create_dm_channel_args.hpp>
 #include <rest/models/create_group_dm_args.hpp>
-#include <rest/models/create_message_args.hpp>
 #include <rest/models/create_guild_ban_args.hpp>
 #include <rest/models/create_guild_integration_args.hpp>
 #include <rest/models/modify_guild_integration_args.hpp>
@@ -242,10 +241,15 @@ namespace disccord
                 return request_json<disccord::models::message>(route, token);
             }
             
-            //TODO: build rest model for json args
             pplx::task<disccord::models::message> rest_api_client::create_message(uint64_t channel_id, std::string content, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::create_message_args args{content};
+                auto route = get_route("POST", "/channels/{channel.id}/messages",std::to_string(channel_id));
+                return request_json<disccord::models::message>(route, args, token);
+            }
+            
+            pplx::task<disccord::models::message> rest_api_client::create_message(uint64_t channel_id, disccord::rest::models::create_message_args args, const pplx::cancellation_token& token)
+            {
                 auto route = get_route("POST", "/channels/{channel.id}/messages",std::to_string(channel_id));
                 return request_json<disccord::models::message>(route, args, token);
             }
