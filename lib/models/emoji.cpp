@@ -1,6 +1,6 @@
 #include <string>
 
-#include <models/emoji.hpp>
+#include <disccord/models/emoji.hpp>
 
 namespace disccord
 {

@@ -1,6 +1,6 @@
 #include <string>
 
-#include <models/guild_embed.hpp>
+#include <disccord/models/guild_embed.hpp>
 
 namespace disccord
 {

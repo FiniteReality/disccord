@@ -1,6 +1,6 @@
 #include <limits>
 
-#include <util/semaphore.hpp>
+#include <disccord/util/semaphore.hpp>
 
 namespace disccord
 {

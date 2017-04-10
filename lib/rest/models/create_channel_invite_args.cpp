@@ -1,4 +1,4 @@
-#include <rest/models/create_channel_invite_args.hpp>
+#include <disccord/rest/models/create_channel_invite_args.hpp>
 
 namespace disccord
 {

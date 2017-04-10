@@ -1,4 +1,4 @@
-#include <rest/models/modify_channel_args.hpp>
+#include <disccord/rest/models/modify_channel_args.hpp>
 
 namespace disccord
 {

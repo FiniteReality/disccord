@@ -1,6 +1,6 @@
 #include <exception>
 
-#include <api/bucket_info.hpp>
+#include <disccord/api/bucket_info.hpp>
 
 namespace disccord
 {

@@ -1,6 +1,6 @@
 #include <string>
 
-#include <models/attachment.hpp>
+#include <disccord/models/attachment.hpp>
 
 namespace disccord
 {

@@ -1,6 +1,6 @@
 #include <string>
 
-#include <models/relationship.hpp>
+#include <disccord/models/relationship.hpp>
 
 namespace disccord
 {

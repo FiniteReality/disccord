@@ -1,24 +1,24 @@
 #include <type_traits>
 
-#include <rest/api_client.hpp>
-#include <rest.hpp>
+#include <disccord/rest/api_client.hpp>
+#include <disccord/rest.hpp>
 
-#include <rest/models/add_guild_member_args.hpp>
-#include <rest/models/create_dm_channel_args.hpp>
-#include <rest/models/create_group_dm_args.hpp>
-#include <rest/models/create_guild_ban_args.hpp>
-#include <rest/models/create_guild_channel_args.hpp>
-#include <rest/models/create_guild_integration_args.hpp>
-#include <rest/models/create_message_args.hpp>
-#include <rest/models/guild_role_args.hpp>
-#include <rest/models/modify_guild_args.hpp>
-#include <rest/models/modify_guild_embed_args.hpp>
-#include <rest/models/modify_guild_integration_args.hpp>
-#include <rest/models/modify_guild_member_args.hpp>
-#include <rest/models/modify_positions_args.hpp>
-#include <rest/models/bulk_delete_message_args.hpp>
-#include <rest/models/edit_channel_permissions_args.hpp>
-#include <rest/models/add_dm_recipient_args.hpp>
+#include <disccord/rest/models/add_guild_member_args.hpp>
+#include <disccord/rest/models/create_dm_channel_args.hpp>
+#include <disccord/rest/models/create_group_dm_args.hpp>
+#include <disccord/rest/models/create_guild_ban_args.hpp>
+#include <disccord/rest/models/create_guild_channel_args.hpp>
+#include <disccord/rest/models/create_guild_integration_args.hpp>
+#include <disccord/rest/models/create_message_args.hpp>
+#include <disccord/rest/models/guild_role_args.hpp>
+#include <disccord/rest/models/modify_guild_args.hpp>
+#include <disccord/rest/models/modify_guild_embed_args.hpp>
+#include <disccord/rest/models/modify_guild_integration_args.hpp>
+#include <disccord/rest/models/modify_guild_member_args.hpp>
+#include <disccord/rest/models/modify_positions_args.hpp>
+#include <disccord/rest/models/bulk_delete_message_args.hpp>
+#include <disccord/rest/models/edit_channel_permissions_args.hpp>
+#include <disccord/rest/models/add_dm_recipient_args.hpp>
 
 namespace disccord
 {

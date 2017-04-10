@@ -1,4 +1,4 @@
-#include <models/embed_footer.hpp>
+#include <disccord/models/embed_footer.hpp>
 
 namespace disccord
 {

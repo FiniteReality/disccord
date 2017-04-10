@@ -1,6 +1,6 @@
 #include <string>
 
-#include <models/invite_channel.hpp>
+#include <disccord/models/invite_channel.hpp>
 
 namespace disccord
 {
