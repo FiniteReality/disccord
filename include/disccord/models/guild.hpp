@@ -3,13 +3,13 @@
 
 #include <vector>
 
-#include <models/entity.hpp>
-#include <models/role.hpp>
-#include <models/emoji.hpp>
-#include <models/guild_member.hpp>
-#include <models/channel.hpp>
-#include <models/presence.hpp>
-#include <models/voice_state.hpp>
+#include <disccord/models/entity.hpp>
+#include <disccord/models/role.hpp>
+#include <disccord/models/emoji.hpp>
+#include <disccord/models/guild_member.hpp>
+#include <disccord/models/channel.hpp>
+#include <disccord/models/presence.hpp>
+#include <disccord/models/voice_state.hpp>
 
 namespace disccord
 {
