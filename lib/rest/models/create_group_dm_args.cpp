@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <utility>
 
-#include <rest/models/create_group_dm_args.hpp>
+#include <disccord/rest/models/create_group_dm_args.hpp>
 
 namespace disccord
 {

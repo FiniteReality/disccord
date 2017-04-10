@@ -1,4 +1,4 @@
-#include <models/ban.hpp>
+#include <disccord/models/ban.hpp>
 
 namespace disccord
 {

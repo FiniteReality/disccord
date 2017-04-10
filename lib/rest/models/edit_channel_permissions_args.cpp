@@ -1,4 +1,4 @@
-#include <rest/models/edit_channel_permissions_args.hpp>
+#include <disccord/rest/models/edit_channel_permissions_args.hpp>
 
 namespace disccord
 {

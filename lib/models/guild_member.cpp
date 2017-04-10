@@ -1,4 +1,4 @@
-#include <models/guild_member.hpp>
+#include <disccord/models/guild_member.hpp>
 
 namespace disccord
 {

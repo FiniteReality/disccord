@@ -1,4 +1,4 @@
-#include <rest/models/bulk_delete_message_args.hpp>
+#include <disccord/rest/models/bulk_delete_message_args.hpp>
 
 namespace disccord
 {

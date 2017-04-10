@@ -1,4 +1,4 @@
-#include <models/embed_image.hpp>
+#include <disccord/models/embed_image.hpp>
 
 namespace disccord
 {

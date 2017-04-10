@@ -1,4 +1,4 @@
-#include <models/embed_author.hpp>
+#include <disccord/models/embed_author.hpp>
 
 namespace disccord
 {

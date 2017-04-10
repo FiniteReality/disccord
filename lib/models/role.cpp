@@ -1,6 +1,6 @@
 #include <string>
 
-#include <models/role.hpp>
+#include <disccord/models/role.hpp>
 
 namespace disccord
 {

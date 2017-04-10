@@ -1,4 +1,4 @@
-#include <rest/models/create_guild_ban_args.hpp>
+#include <disccord/rest/models/create_guild_ban_args.hpp>
 
 namespace disccord
 {

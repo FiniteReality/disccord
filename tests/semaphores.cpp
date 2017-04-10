@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-#include <util/semaphore.hpp>
+#include <disccord/util/semaphore.hpp>
 
 using namespace disccord::util;
 
