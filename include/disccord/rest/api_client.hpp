@@ -54,11 +54,7 @@ namespace disccord
 
                     pplx::task<disccord::models::user> get_user(uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::user> modify_current_user(std::string username, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-
-                    //avatar format: data:image/jpeg;base64,MY_BASE64_IMAGE_DATA_HERE, maybe should make an object for Avatars (models::avatar)?? thoughts
-                    /* pplx::task<disccord::models::user> modify_current_user(std::string avatar, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    pplx::task<disccord::models::user> modify_current_user(std::string username, std::string avatar, const pplx::cancellation_token& token = pplx::cancellation_token::none()); */
+                    //TODO: modify_current_user
 
                     pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -191,9 +187,8 @@ namespace disccord
 
                     //TODO: begin_guild_prune
 
-                    //TODO: get_guild_voice_regions
+                    pplx::task<std::vector<disccord::models::voice_region>> get_guild_voice_regions(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    //NOTE: invite_metadata is also retrieved here, will want to grab that data as well
                     pplx::task<std::vector<disccord::models::invite>> get_guild_invites(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::integration>> get_guild_integrations(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -209,6 +204,9 @@ namespace disccord
                     pplx::task<disccord::models::guild_embed> get_guild_embed(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<disccord::models::guild_embed> modify_guild_embed(uint64_t guild_id, disccord::rest::models::modify_guild_embed_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    // Voice API
+                    pplx::task<std::vector<disccord::models::voice_region>> list_voice_regions(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                 private:
                     pplx::task<void> request_empty_internal(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());

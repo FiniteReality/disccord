@@ -122,6 +122,8 @@ namespace disccord
                 return request_json<disccord::models::user>(route, token);
             }
 
+            //TODO: modify_current_user
+
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(uint8_t limit, const pplx::cancellation_token& token)
             {
                 auto route = get_route("GET", "/users/@me/guilds?limit={limit}", std::to_string(limit));
@@ -503,9 +505,12 @@ namespace disccord
 
             //TODO: begin_guild_prune
 
-            //TODO: get_guild_voice_regions
+            pplx::task<std::vector<disccord::models::voice_region>> rest_api_client::get_guild_voice_regions(uint64_t guild_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/guilds/{guild.id}/regions", std::to_string(guild_id));
+                return request_multi_json<disccord::models::voice_region>(route, token);
+            }
 
-            //NOTE: invite_metadata is also retrieved here, will want to grab that data as well
             pplx::task<std::vector<disccord::models::invite>> rest_api_client::get_guild_invites(uint64_t guild_id, const pplx::cancellation_token& token)
             {
                 auto route = get_route("GET", "/guilds/{guild.id}/invites", std::to_string(guild_id));
@@ -554,6 +559,13 @@ namespace disccord
             {
                 auto route = get_route("PATCH", "/guilds/{guild.id}/embed", std::to_string(guild_id));
                 return request_json<disccord::models::guild_embed>(route, args, token);
+            }
+
+            // Voice API
+            pplx::task<std::vector<disccord::models::voice_region>> rest_api_client::list_voice_regions(const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/voice/regions");
+                return request_multi_json<disccord::models::voice_region>(route, token);
             }
 
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
