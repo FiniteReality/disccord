@@ -23,6 +23,7 @@
 #include <disccord/models/role.hpp>
 #include <disccord/models/user.hpp>
 #include <disccord/models/user_guild.hpp>
+#include <disccord/models/voice_region.hpp>
 
 #include <disccord/rest/models/add_guild_member_args.hpp>
 #include <disccord/rest/models/create_channel_invite_args.hpp>
