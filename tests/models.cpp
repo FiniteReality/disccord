@@ -801,6 +801,18 @@ TEST_CASE( "Guild Member model correctly instantiated" ){
 })";
 
     REQUIRE_NOTHROW(test_guild_memb.decode(web::json::value::parse(json)));
+    
+    auto gmemb = test_guild_memb.get_member().get_value();
+    auto roles = test_guild_memb.get_roles().get_value();
+    REQUIRE(test_guild_memb.get_deaf() == false);
+    REQUIRE(test_guild_memb.get_joined_at() == "2016-12-11T19:10:41.288000+00:00");
+    REQUIRE(gmemb.get_username() == "Disccord test bot");
+    REQUIRE(gmemb.get_discriminator() == 3071);
+    REQUIRE(gmemb.get_bot() == true);
+    REQUIRE(gmemb.get_id() == 257584807716978688);
+    REQUIRE(roles[0] == 230773182120984577);
+    REQUIRE(roles[1] == 257584964726423554);
+    REQUIRE(test_guild_memb.get_mute() == false);
 }
 
 TEST_CASE( "Application model correctly instantiated" ){

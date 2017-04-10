@@ -29,21 +29,22 @@ namespace disccord
                 } else { \
                     var = decltype(var)(); \
                 }
-            #define get_composite_field(var, type) \
-                if (json.has_field(#var)) { \
-                    auto field = json.at(#var); \
-                    if (!field.is_null()) { \
-                        type val; \
-                        val.decode(field); \
-                        var = decltype(var)(val); \
-                    } else { \
-                        var = decltype(var)::no_value(); \
-                    } \
-                } else { \
-                    var = decltype(var)(); \
-                }
+
             get_field(nick, as_string);
-            get_composite_field(member, user);
+
+            if (json.has_field("user")) {
+                auto field = json.at("user");
+                if (!field.is_null()) {
+                    user val;
+                    val.decode(field);
+                    member = util::optional<user>(val);
+                } else {
+                    member = util::optional<user>::no_value();
+                }
+            }
+            else {
+                member = util::optional<user>();
+            }
 
             if (json.has_field("roles"))
             {
@@ -57,7 +58,6 @@ namespace disccord
             }
 
             #undef get_field
-            #undef get_composite_field
         }
 
         void guild_member::encode_to(std::unordered_map<std::string, web::json::value> &info)
