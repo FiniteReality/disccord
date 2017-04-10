@@ -112,7 +112,7 @@ namespace disccord
             info["embed_enabled"] = web::json::value(get_embed_enabled());
             if (get_embed_channel_id().is_specified())
                 info["embed_channel_id"] = web::json::value(std::to_string(get_embed_channel_id().get_value()));
-            // TODO: see guild.hpp
+
             {
                 auto _features = get_features();
                 std::vector<web::json::value> features_array(_features.size());
@@ -122,7 +122,6 @@ namespace disccord
                     });
                 info["features"] = web::json::value::array(features_array);
             }
-            // TODO: see guild.hpp
 
             #define encode_composite_vector(var, type) \
                 if (var.is_specified()) { \
@@ -135,6 +134,7 @@ namespace disccord
                     info[#var] = web::json::value::array(array); \
                 }
 
+            encode_composite_vector(voice_states, voice_state);
             encode_composite_vector(roles, role);
             encode_composite_vector(emojis, emoji);
             encode_composite_vector(members, guild_member);
@@ -161,7 +161,7 @@ namespace disccord
         define_get_method(default_message_notifications)
         define_get_method(embed_enabled)
         define_get_method(embed_channel_id)
-        // TODO: see guild.hpp
+        define_get_method(voice_states)
         define_get_method(features)
         define_get_method(roles)
         define_get_method(emojis)
