@@ -9,7 +9,7 @@
 #include <models/guild_member.hpp>
 #include <models/channel.hpp>
 #include <models/presence.hpp>
-//#include <models/voice_state.hpp>
+#include <models/voice_state.hpp>
 
 namespace disccord
 {
@@ -35,7 +35,7 @@ namespace disccord
                 int32_t get_default_message_notifications();
                 bool get_embed_enabled();
                 util::optional<uint64_t> get_embed_channel_id();
-                // TODO: voice states
+                util::optional<std::vector<voice_state>> get_voice_states();
                 std::vector<std::string> get_features();
                 util::optional<std::vector<role>> get_roles();
                 util::optional<std::vector<emoji>> get_emojis();
@@ -53,6 +53,7 @@ namespace disccord
                 util::optional<uint64_t> afk_channel_id, embed_channel_id;
                 int32_t afk_timeout, mfa_level, verification_level, default_message_notifications;
                 bool embed_enabled;
+                util::optional<std::vector<voice_state>> voice_states;
                 std::vector<std::string> features;
                 util::optional<std::vector<role>> roles;
                 util::optional<std::vector<emoji>> emojis;
