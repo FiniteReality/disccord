@@ -1,4 +1,4 @@
-#include <rest.hpp>
+#include <disccord/rest.hpp>
 
 namespace disccord
 {

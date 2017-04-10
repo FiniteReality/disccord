@@ -1,6 +1,6 @@
 #include <string>
 
-#include <models/user_guild.hpp>
+#include <disccord/models/user_guild.hpp>
 
 namespace disccord
 {

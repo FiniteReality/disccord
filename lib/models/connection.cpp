@@ -1,4 +1,4 @@
-#include <models/connection.hpp>
+#include <disccord/models/connection.hpp>
 
 namespace disccord
 {

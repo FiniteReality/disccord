@@ -1,6 +1,6 @@
 #include <string>
 
-#include <models/integration.hpp>
+#include <disccord/models/integration.hpp>
 
 namespace disccord
 {

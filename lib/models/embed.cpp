@@ -1,15 +1,15 @@
 #include <vector>
 
-#include <models/embed.hpp>
+#include <disccord/models/embed.hpp>
 
-#include <models/entity.hpp>
-#include <models/embed_author.hpp>
-#include <models/embed_field.hpp>
-#include <models/embed_footer.hpp>
-#include <models/embed_image.hpp>
-#include <models/embed_video.hpp>
-#include <models/embed_thumbnail.hpp>
-#include <models/embed_provider.hpp>
+#include <disccord/models/entity.hpp>
+#include <disccord/models/embed_author.hpp>
+#include <disccord/models/embed_field.hpp>
+#include <disccord/models/embed_footer.hpp>
+#include <disccord/models/embed_image.hpp>
+#include <disccord/models/embed_video.hpp>
+#include <disccord/models/embed_thumbnail.hpp>
+#include <disccord/models/embed_provider.hpp>
 
 namespace disccord
 {

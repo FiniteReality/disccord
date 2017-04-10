@@ -1,4 +1,4 @@
-#include <models/invite.hpp>
+#include <disccord/models/invite.hpp>
 
 namespace disccord
 {

@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-#include <models/entity.hpp>
+#include <disccord/models/entity.hpp>
 
 namespace disccord
 {

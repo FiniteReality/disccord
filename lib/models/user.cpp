@@ -1,6 +1,6 @@
 #include <boost/lexical_cast.hpp>
 
-#include <models/user.hpp>
+#include <disccord/models/user.hpp>
 
 namespace disccord
 {
