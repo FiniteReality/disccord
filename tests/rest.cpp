@@ -1,11 +1,11 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-#include <rest/api_client.hpp>
-#include <rest/route.hpp>
-#include <disccord.hpp>
+#include <disccord/rest/api_client.hpp>
+#include <disccord/rest/route.hpp>
+#include <disccord/disccord.hpp>
 
-#include <models/user.hpp>
+#include <disccord/models/user.hpp>
 
 #include <exception>
 #include <iostream>

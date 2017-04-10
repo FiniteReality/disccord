@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-#include <rest/route.hpp>
+#include <disccord/rest/route.hpp>
 
 using namespace disccord::rest;
 
