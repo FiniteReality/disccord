@@ -19,6 +19,7 @@
 #include <disccord/rest/models/bulk_delete_message_args.hpp>
 #include <disccord/rest/models/edit_channel_permissions_args.hpp>
 #include <disccord/rest/models/add_dm_recipient_args.hpp>
+#include <disccord/rest/models/modify_current_nick_args.hpp>
 
 namespace disccord
 {
@@ -99,6 +100,17 @@ namespace disccord
                 }
                 else
                     return request_empty_internal(route, token);
+            }
+
+            pplx::task<web::json::value> rest_api_client::request_raw_json(route_info& route, const pplx::cancellation_token& token)
+            {
+                return request_internal(route, token).then([](web::http::http_response response)
+                {
+                    return response.extract_json();
+                }).then([](web::json::value response)
+                {
+                    return response;
+                });
             }
 
             pplx::task<void> rest_api_client::request_multipart(route_info& route, disccord::api::multipart_request args, const pplx::cancellation_token& token)
@@ -436,7 +448,12 @@ namespace disccord
                 return request_json(route, args, token);
             }
 
-            //TODO: modify_current_nick
+            pplx::task<web::json::value> rest_api_client::modify_current_nick(uint64_t guild_id, std::string nick, const pplx::cancellation_token& token)
+            {
+                disccord::rest::models::modify_current_nick_args args(nick);
+                auto route = get_route("PATCH", "/guilds/{guild.id}/members/@me/nick", std::to_string(guild_id));
+                return request_raw_json(route, args, token);
+            }
 
             pplx::task<void> rest_api_client::add_guild_member_role(uint64_t guild_id, uint64_t user_id, uint64_t role_id, const pplx::cancellation_token& token)
             {
@@ -505,9 +522,17 @@ namespace disccord
                 return request(route, token);
             }
 
-            //TODO: get_guild_prune_count
+            pplx::task<web::json::value> rest_api_client::get_guild_prune_count(uint64_t guild_id, uint32_t days, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/guilds/{guild.id}/prune?days={days}", std::to_string(guild_id), std::to_string(days));
+                return request_raw_json(route, token);
+            }
 
-            //TODO: begin_guild_prune
+            pplx::task<web::json::value> rest_api_client::begin_guild_prune(uint64_t guild_id, uint32_t days, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("POST", "/guilds/{guild.id}/prune?days={days}", std::to_string(guild_id), std::to_string(days));
+                return request_raw_json(route, token);
+            }
 
             pplx::task<std::vector<disccord::models::voice_region>> rest_api_client::get_guild_voice_regions(uint64_t guild_id, const pplx::cancellation_token& token)
             {

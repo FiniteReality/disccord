@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include <utility>
+#include <type_traits>
 
 #include <cpprest/http_client.h>
 
@@ -161,7 +162,7 @@ namespace disccord
 
                     pplx::task<void> modify_guild_member(uint64_t guild_id, uint64_t user_id, disccord::rest::models::modify_guild_member_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    //TODO: modify_current_nick
+                    pplx::task<web::json::value> modify_current_nick(uint64_t guild_id, std::string nick, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> add_guild_member_role(uint64_t guild_id, uint64_t user_id, uint64_t role_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -185,9 +186,9 @@ namespace disccord
 
                     pplx::task<void> delete_guild_role(uint64_t guild_id, uint64_t role_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    //TODO: get_guild_prune_count
+                    pplx::task<web::json::value> get_guild_prune_count(uint64_t guild_id, uint32_t days = 1, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    //TODO: begin_guild_prune
+                    pplx::task<web::json::value> begin_guild_prune(uint64_t guild_id, uint32_t days = 1, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::voice_region>> get_guild_voice_regions(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -224,6 +225,23 @@ namespace disccord
                     void setup_discord_handler();
 
                     pplx::task<void> request(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<web::json::value> request_raw_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    template <typename TModel>
+                    pplx::task<web::json::value> request_raw_json(route_info& route, TModel body, const pplx::cancellation_token& token = pplx::cancellation_token::none())
+                    {
+                        disccord::api::request_info* info = new disccord::api::request_info();
+
+                        info->set_body(body.encode());
+                        return request_internal(route, info, token).then([](web::http::http_response response)
+                        {
+                            return response.extract_json();
+                        }).then([](web::json::value response)
+                        {
+                            return response;
+                        });
+                    }
 
                     template <typename TResponse>
                     pplx::task<TResponse> request_json(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none())

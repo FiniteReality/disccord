@@ -30,7 +30,8 @@ rest/models/modify_guild_member_args.cpp rest/models/guild_role_args.cpp
 rest/models/modify_guild_embed_args.cpp rest/models/modify_channel_args.cpp
 rest/models/edit_message_args.cpp rest/models/bulk_delete_message_args.cpp
 rest/models/edit_channel_permissions_args.cpp rest/models/create_channel_invite_args.cpp
-rest/models/add_dm_recipient_args.cpp rest/models/modify_current_user_args.cpp)
+rest/models/add_dm_recipient_args.cpp rest/models/modify_current_user_args.cpp
+rest/models/modify_current_nick_args.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
