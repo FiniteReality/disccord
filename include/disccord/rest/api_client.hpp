@@ -36,6 +36,7 @@
 #include <disccord/rest/models/modify_guild_embed_args.hpp>
 #include <disccord/rest/models/modify_guild_member_args.hpp>
 #include <disccord/rest/models/modify_positions_args.hpp>
+#include <disccord/rest/models/modify_current_user_args.hpp>
 
 namespace disccord
 {
@@ -55,7 +56,7 @@ namespace disccord
 
                     pplx::task<disccord::models::user> get_user(uint64_t user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    //TODO: modify_current_user
+                    pplx::task<disccord::models::user> modify_current_user(disccord::rest::models::modify_current_user_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
