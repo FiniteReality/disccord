@@ -450,7 +450,7 @@ namespace disccord
 
             pplx::task<web::json::value> rest_api_client::modify_current_nick(uint64_t guild_id, std::string nick, const pplx::cancellation_token& token)
             {
-                disccord::rest::models::modify_current_nick_args args(nick);
+                disccord::rest::models::modify_current_nick_args args{nick};
                 auto route = get_route("PATCH", "/guilds/{guild.id}/members/@me/nick", std::to_string(guild_id));
                 return request_raw_json(route, args, token);
             }
