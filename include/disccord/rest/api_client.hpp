@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <vector>
 #include <utility>
-#include <type_traits>
 
 #include <cpprest/http_client.h>
 
