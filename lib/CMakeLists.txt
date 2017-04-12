@@ -21,8 +21,9 @@ models/integration_account.cpp models/integration.cpp models/channel.cpp
 models/overwrite.cpp models/connection.cpp models/game.cpp models/presence.cpp
 models/guild_embed.cpp models/guild_member.cpp models/read_state.cpp models/relationship.cpp
 models/ban.cpp models/application.cpp models/voice_region.cpp models/voice_state.cpp
-rest/models/create_dm_channel_args.cpp rest/models/create_group_dm_args.cpp
-rest/models/create_message_args.cpp rest/models/create_guild_ban_args.cpp
+models/nickname.cpp models/guild_prune.cpp rest/models/create_dm_channel_args.cpp
+rest/models/create_group_dm_args.cpp rest/models/create_message_args.cpp
+rest/models/create_guild_ban_args.cpp rest/models/modify_current_nick_args.cpp
 rest/models/modify_guild_args.cpp rest/models/modify_guild_integration_args.cpp
 rest/models/create_guild_integration_args.cpp rest/models/modify_positions_args.cpp
 rest/models/create_guild_channel_args.cpp rest/models/add_guild_member_args.cpp
@@ -30,8 +31,7 @@ rest/models/modify_guild_member_args.cpp rest/models/guild_role_args.cpp
 rest/models/modify_guild_embed_args.cpp rest/models/modify_channel_args.cpp
 rest/models/edit_message_args.cpp rest/models/bulk_delete_message_args.cpp
 rest/models/edit_channel_permissions_args.cpp rest/models/create_channel_invite_args.cpp
-rest/models/add_dm_recipient_args.cpp rest/models/modify_current_user_args.cpp
-rest/models/modify_current_nick_args.cpp)
+rest/models/add_dm_recipient_args.cpp rest/models/modify_current_user_args.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
