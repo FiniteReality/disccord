@@ -31,14 +31,14 @@ namespace disccord
 
             define_set_method(name, std::string)
             
-            void modify_current_user_args::set_avatar(basic_istream<unsigned char> avatar_stream)
+            void modify_current_user_args::set_avatar(concurrency::streams::basic_istream<unsigned char> avatar_stream)
             {
-                container_buffer<std::vector<unsigned char>> stream_buffer;
+                concurrency::streams::container_buffer<std::vector<unsigned char>> stream_buffer;
                 avatar_stream.read_to_end(stream_buffer).get();
                 auto stream_bytes = std::move(stream_buffer.collection());
                 avatar_stream.close();
                 stream_buffer.close();
-                std::string avatar_body = "data:image/jpeg;base64," + to_base64(stream_bytes);
+                std::string avatar_body = "data:image/jpeg;base64," + utility::conversions::to_base64(stream_bytes);
                 avatar = util::optional<std::string>(avatar_body);
             }
 
