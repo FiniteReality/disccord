@@ -43,7 +43,7 @@ namespace disccord
             
             if (get_avatar().is_specified())
             {
-                std::string url = "https://images.discordapp.net/avatars/"+std::to_string(get_id())+"/"+get_avatar().get_value()+".png?size=1024";
+                std::string url = "https://cdn.discordapp.com/avatars/"+std::to_string(get_id())+"/"+get_avatar().get_value()+".png?size=1024";
                 avatar_url = util::optional<std::string>(url);
             }
             else
