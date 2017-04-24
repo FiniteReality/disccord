@@ -18,6 +18,7 @@ namespace disccord
                 std::string get_username();
                 uint16_t get_discriminator();
                 util::optional<std::string> get_avatar();
+                util::optional<std::string> get_avatar_url();
                 bool get_bot();
                 util::optional<bool> get_mfa_enabled();
                 util::optional<bool> get_verified();
@@ -28,7 +29,7 @@ namespace disccord
 
             private:
                 std::string username;
-                util::optional<std::string> avatar, email;
+                util::optional<std::string> avatar, email, avatar_url;
                 uint16_t discriminator;
                 bool bot;
                 util::optional<bool> mfa_enabled, verified;
