@@ -18,18 +18,19 @@ namespace disccord
                 std::string get_username();
                 uint16_t get_discriminator();
                 util::optional<std::string> get_avatar();
-                util::optional<std::string> get_avatar_url();
                 bool get_bot();
                 util::optional<bool> get_mfa_enabled();
                 util::optional<bool> get_verified();
                 util::optional<std::string> get_email();
+                
+                util::optional<std::string> get_avatar_url();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
                 std::string username;
-                util::optional<std::string> avatar, email, avatar_url;
+                util::optional<std::string> avatar, email;
                 uint16_t discriminator;
                 bool bot;
                 util::optional<bool> mfa_enabled, verified;

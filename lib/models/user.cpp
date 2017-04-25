@@ -7,8 +7,8 @@ namespace disccord
     namespace models
     {
         user::user()
-            : username(""), avatar(), email(), avatar_url(), 
-            discriminator(0), bot(false), mfa_enabled(), verified()
+            : username(""), avatar(), email(), discriminator(0),
+            bot(false), mfa_enabled(), verified()
         { }
 
         user::~user()
@@ -40,14 +40,6 @@ namespace disccord
             get_field(mfa_enabled, as_bool);
             get_field(verified, as_bool);
             get_field(email, as_string);
-            
-            if (get_avatar().is_specified())
-            {
-                std::string url = "https://cdn.discordapp.com/avatars/"+std::to_string(get_id())+"/"+get_avatar().get_value()+".png?size=1024";
-                avatar_url = util::optional<std::string>(url);
-            }
-            else
-                avatar_url = util::optional<std::string>::no_value();
 
             #undef get_field
         }
@@ -77,11 +69,21 @@ namespace disccord
         define_get_method(username)
         define_get_method(discriminator)
         define_get_method(avatar)
-        define_get_method(avatar_url)
         define_get_method(bot)
         define_get_method(mfa_enabled)
         define_get_method(verified)
         define_get_method(email)
+        
+        util::optional<std::string> user::get_avatar_url()
+        {
+            if (get_avatar().is_specified())
+            {
+                std::string url = "https://cdn.discordapp.com/avatars/"+std::to_string(get_id())+"/"+get_avatar().get_value()+".png?size=1024";
+                return util::optional<std::string>(url);
+            }
+            else
+                return util::optional<std::string>::no_value();
+        }
 
         #undef define_get_method
     }
