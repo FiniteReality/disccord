@@ -22,6 +22,8 @@ namespace disccord
                 util::optional<bool> get_mfa_enabled();
                 util::optional<bool> get_verified();
                 util::optional<std::string> get_email();
+                
+                util::optional<std::string> get_avatar_url();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;

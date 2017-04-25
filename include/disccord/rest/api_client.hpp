@@ -6,6 +6,7 @@
 #include <utility>
 
 #include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
 
 #include <disccord/api/bucket_info.hpp>
 #include <disccord/api/multipart_request.hpp>

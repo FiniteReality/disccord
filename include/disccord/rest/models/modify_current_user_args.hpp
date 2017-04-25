@@ -1,6 +1,9 @@
 #ifndef _modify_current_user_args_hpp_
 #define _modify_current_user_args_hpp_
 
+#include <cpprest/streams.h>
+#include <cpprest/containerstream.h>
+
 #include <disccord/models/model.hpp>
 #include <disccord/util/optional.hpp>
 
@@ -17,13 +20,13 @@ namespace disccord
                     virtual ~modify_current_user_args();
 
                     void set_name(std::string name);
-                    void set_avatar(std::string avatar);
+                    void set_avatar(concurrency::streams::basic_istream<unsigned char> avatar_stream);
 
                 protected:
                     virtual void encode_to(std::unordered_map<std::string, web::json::value>& info) override;
 
                 private:
-                    util::optional<std::string> name, avatar; //avatar must be passed image data converted to base64 data
+                    util::optional<std::string> name, avatar;
             };
         }
     }

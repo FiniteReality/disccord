@@ -73,6 +73,17 @@ namespace disccord
         define_get_method(mfa_enabled)
         define_get_method(verified)
         define_get_method(email)
+        
+        util::optional<std::string> user::get_avatar_url()
+        {
+            if (get_avatar().is_specified())
+            {
+                std::string url = "https://cdn.discordapp.com/avatars/"+std::to_string(get_id())+"/"+get_avatar().get_value()+".png?size=1024";
+                return util::optional<std::string>(url);
+            }
+            else
+                return util::optional<std::string>::no_value();
+        }
 
         #undef define_get_method
     }
