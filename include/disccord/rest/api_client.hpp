@@ -225,6 +225,7 @@ namespace disccord
                     std::string token;
                     disccord::token_type token_type;
                     void setup_discord_handler();
+                    std::string urlencode(const std::string s);
 
                     pplx::task<void> request(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
