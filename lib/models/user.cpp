@@ -8,7 +8,7 @@ namespace disccord
     {
         user::user()
             : username(""), avatar(), email(), discriminator(0),
-            bot(false), mfa_enabled(), verified()
+            bot(), mfa_enabled(), verified()
         { }
 
         user::~user()
@@ -35,8 +35,7 @@ namespace disccord
                 }
 
             get_field(avatar, as_string);
-            bot = json.at("bot").as_bool();
-            //get_field(bot, as_bool);
+            get_field(bot, as_bool);
             get_field(mfa_enabled, as_bool);
             get_field(verified, as_bool);
             get_field(email, as_string);
@@ -52,7 +51,8 @@ namespace disccord
             info["discriminator"] = web::json::value(std::to_string(get_discriminator()));
             if (get_avatar().is_specified())
                 info["avatar"] = get_avatar();
-            info["bot"] = web::json::value(get_bot());
+            if (get_bot().is_specified())
+                info["bot"] = get_bot();
             if (get_mfa_enabled().is_specified())
                 info["mfa_enabled"] = get_mfa_enabled();
             if (get_verified().is_specified())
