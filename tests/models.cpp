@@ -16,6 +16,7 @@
 #include <disccord/models/application.hpp>
 #include <disccord/models/voice_region.hpp>
 #include <disccord/models/voice_state.hpp>
+#include <disccord/models/webhook.hpp>
 #include <disccord/util/optional.hpp>
 
 #include <iostream>
@@ -912,4 +913,35 @@ TEST_CASE( "Voice state model correctly instantiated" ){
     REQUIRE(test_vs.get_self_deaf() == false);
     REQUIRE(test_vs.get_self_mute() == true);
     REQUIRE(test_vs.get_suppress() == false);
+}
+
+TEST_CASE( "Webhook model correctly instantiated" ){
+    webhook test_wh;
+    if (test_wh.get_channel_id() != 0 && !test_wh.get_token().empty())
+    {
+        FAIL("Default constructor for Webhook model not correctly instantiated");
+    }
+    
+    std::string json = R"({
+    "name": "test webhook",
+    "channel_id": "199737254929760256",
+    "token": "3d89bb7572e0fb30d8128367b3b1b44fecd1726de135cbe28a41f8b2f777c372ba2939e72279b94526ff5d1bd4358d65cf11",
+    "avatar": null,
+    "guild_id": "199737254929760256",
+    "id": "223704706495545344",
+    "user": {
+        "username": "test",
+        "discriminator": "7479",
+        "id": "190320984123768832",
+        "avatar": "b004ec1740a63ca06ae2e14c5cee11f3"
+    }
+})";
+
+    REQUIRE_NOTHROW(test_wh.decode(web::json::value::parse(json)));
+    
+    REQUIRE(test_wh.get_channel_id() == 199737254929760256);
+    REQUIRE(test_wh.get_guild_id().get_value() == 199737254929760256);
+    REQUIRE(test_wh.get_id() == 223704706495545344);
+    REQUIRE(test_wh.get_token() == "3d89bb7572e0fb30d8128367b3b1b44fecd1726de135cbe28a41f8b2f777c372ba2939e72279b94526ff5d1bd4358d65cf11");
+    REQUIRE(test_wh.get_name().get_value() == "test webhook");
 }

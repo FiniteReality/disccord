@@ -16,7 +16,7 @@ models/embed_footer.cpp models/embed_image.cpp models/embed_provider.cpp
 models/embed_thumbnail.cpp models/embed_video.cpp models/guild.cpp
 models/invite.cpp models/invite_channel.cpp models/invite_guild.cpp
 models/invite_metadata.cpp models/attachment.cpp models/emoji.cpp
-models/reaction.cpp models/role.cpp models/message.cpp
+models/reaction.cpp models/role.cpp models/message.cpp models/webhook.cpp
 models/integration_account.cpp models/integration.cpp models/channel.cpp
 models/overwrite.cpp models/connection.cpp models/game.cpp models/presence.cpp
 models/guild_embed.cpp models/guild_member.cpp models/read_state.cpp models/relationship.cpp
