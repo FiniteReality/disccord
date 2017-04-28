@@ -255,25 +255,25 @@ namespace disccord
 
             pplx::task<void> rest_api_client::create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/"+urlencode(emoji)+"/@me", std::to_string(channel_id), std::to_string(message_id));
+                auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/"+url_encode(emoji)+"/@me", std::to_string(channel_id), std::to_string(message_id));
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::delete_own_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/"+urlencode(emoji)+"/@me", std::to_string(channel_id), std::to_string(message_id));
+                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/"+url_encode(emoji)+"/@me", std::to_string(channel_id), std::to_string(message_id));
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::delete_user_reaction(uint64_t channel_id, uint64_t message_id, uint64_t user_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/"+urlencode(emoji)+"/{user.id}", std::to_string(channel_id), std::to_string(message_id), std::to_string(user_id));
+                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/"+url_encode(emoji)+"/{user.id}", std::to_string(channel_id), std::to_string(message_id), std::to_string(user_id));
                 return request(route, token);
             }
 
             pplx::task<std::vector<disccord::models::user>> rest_api_client::get_reactions(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}", std::to_string(channel_id), std::to_string(message_id), urlencode(emoji));
+                auto route = get_route("GET", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}", std::to_string(channel_id), std::to_string(message_id), url_encode(emoji));
                 return request_multi_json<disccord::models::user>(route, token);
             }
 
@@ -628,7 +628,7 @@ namespace disccord
                 });
             }
             
-            std::string rest_api_client::urlencode(const std::string s)
+            std::string rest_api_client::url_encode(const std::string s)
             {
                 std::string lookup = "0123456789ABCDEF";
                 std::stringstream e;
