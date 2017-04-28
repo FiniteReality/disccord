@@ -586,6 +586,82 @@ namespace disccord
                 return request_multi_json<disccord::models::voice_region>(route, token);
             }
 
+            // Webhook API
+            pplx::task<disccord::models::webhook> rest_api_client::create_webhook(uint64_t channel_id, disccord::rest::models::create_webhook_args args, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("POST", "/channels/{channel.id}/webhooks", std::to_string(channel_id));
+                return request_json<disccord::models::webhook>(route, args, token);
+            }
+
+            pplx::task<std::vector<disccord::models::webhook>> rest_api_client::get_channel_webhooks(uint64_t channel_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/channels/{channel.id}/webhooks", std::to_string(channel_id));
+                return request_multi_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<std::vector<disccord::models::webhook>> rest_api_client::get_guild_webhooks(uint64_t guild_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/guilds/{guild.id}/webhooks", std::to_string(guild_id));
+                return request_multi_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::get_webhook(uint64_t webhook_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/webhooks/{webhook.id}", std::to_string(webhook_id));
+                return request_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::get_webhook_token(uint64_t webhook_id, std::string webhook_token, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/webhooks/{webhook.id}/{webhook.token}", std::to_string(webhook_id), webhook_token);
+                return request_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::modify_webhook(uint64_t webhook_id, disccord::rest::models::modify_webhook_args args, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("PATCH", "/webhooks/{webhook.id}", std::to_string(webhook_id));
+                return request_json<disccord::models::webhook>(route, args, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::modify_webhook_token(uint64_t webhook_id, std::string webhook_token, disccord::rest::models::modify_webhook_args args, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("PATCH", "/webhooks/{webhook.id}/{webhook.token}", std::to_string(webhook_id), webhook_token);
+                return request_json<disccord::models::webhook>(route, args, token);
+            }
+
+            pplx::task<void> rest_api_client::delete_webhook(uint64_t webhook_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("DELETE", "/webhooks/{webhook.id}", std::to_string(webhook_id));
+                return request(route, token);
+            }
+
+            pplx::task<void> rest_api_client::delete_webhook_token(uint64_t webhook_id, std::string webhook_token, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("DELETE", "/webhooks/{webhook.id}/{webhook.token}", std::to_string(webhook_id), webhook_token);
+                return request(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::execute_webhook(uint64_t webhook_id, std::string webhook_token, disccord::rest::models::execute_webhook_args args, bool wait, const pplx::cancellation_token& token)
+            {
+                std::string wait_val = wait ? "true" : "false";
+                auto route = get_route("POST", "/webhooks/{webhook.id}/{webhook.token}?wait={wait}", std::to_string(webhook_id), webhook_token, wait_val);
+                return request_json<disccord::models::webhook>(route, args, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::execute_slack_webhook(uint64_t webhook_id, std::string webhook_token, bool wait, const pplx::cancellation_token& token)
+            {
+                std::string wait_val = wait ? "true" : "false";
+                auto route = get_route("POST", "/webhooks/{webhook.id}/{webhook.token}/slack?wait={wait}", std::to_string(webhook_id), webhook_token, wait_val);
+                return request_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::execute_github_webhook(uint64_t webhook_id, std::string webhook_token, bool wait, const pplx::cancellation_token& token)
+            {
+                std::string wait_val = wait ? "true" : "false";
+                auto route = get_route("POST", "/webhooks/{webhook.id}/{webhook.token}/github?wait={wait}", std::to_string(webhook_id), webhook_token, wait_val);
+                return request_json<disccord::models::webhook>(route, token);
+            }
+
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
