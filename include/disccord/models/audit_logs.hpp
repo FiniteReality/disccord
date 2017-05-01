@@ -9,7 +9,7 @@ namespace disccord
 {
     namespace models
     {
-        class audit_logs : public entity
+        class audit_logs : public model
         {
             public:
                 audit_logs();
