@@ -3,6 +3,7 @@
 
 #include <disccord/models/model.hpp>
 #include <disccord/models/user.hpp>
+//#include <disccord/models/webhook.hpp>
 #include <disccord/models/audit_log_entry.hpp>
 
 namespace disccord
@@ -17,6 +18,7 @@ namespace disccord
 
                 virtual void decode(web::json::value json) override;
 
+                //std::vector<webhook> get_webhooks();
                 std::vector<user> get_users();
                 std::vector<audit_log_entry> get_entries();
 
@@ -24,6 +26,7 @@ namespace disccord
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
+                //std::vector<webhook> webhooks;
                 std::vector<user> users;
                 std::vector<audit_log_entry> entries;
         };
