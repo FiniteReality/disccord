@@ -17,26 +17,15 @@ namespace disccord
                 virtual void decode(web::json::value json) override;
 
                 std::string get_key();
-                template <typename T>
-                T get_new_value()
-                {
-                    return new_value;
-                }
-                template <typename T>
-                util::optional<T> get_old_value()
-                {
-                    return old_value;
-                }
+                std::string get_new_value();
+                util::optional<std::string> get_old_value();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
-                std::string key;
-                template <typename T>
-                T new_value;
-                template <typename T>
-                util::optional<T> old_value;
+                std::string key, new_value;
+                util::optional<std::string> old_value;
         };
     } // namespace models
 } // namespace disccord
