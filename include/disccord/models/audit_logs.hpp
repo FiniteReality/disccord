@@ -19,16 +19,16 @@ namespace disccord
                 virtual void decode(web::json::value json) override;
 
                 //std::vector<webhook> get_webhooks();
-                std::vector<user> get_users();
-                std::vector<audit_log_entry> get_entries();
+                util::optional<std::vector<user>> get_users();
+                util::optional<std::vector<audit_log_entry>> get_entries();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
                 //std::vector<webhook> webhooks;
-                std::vector<user> users;
-                std::vector<audit_log_entry> entries;
+                util::optional<std::vector<user>> users;
+                util::optional<std::vector<audit_log_entry>> entries;
         };
     } // namespace models
 } // namespace disccord

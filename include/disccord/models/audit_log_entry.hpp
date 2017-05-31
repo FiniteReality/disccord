@@ -19,8 +19,8 @@ namespace disccord
 
                 util::optional<uint64_t> get_target_id();
                 uint64_t get_user_id();
-                audit_log_action_type get_action_type();
-                std::vector<audit_log_change> get_changes();
+                uint8_t get_action_type();
+                util::optional<std::vector<audit_log_change>> get_changes();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
@@ -28,8 +28,8 @@ namespace disccord
             private:
                 util::optional<uint64_t> target_id;
                 uint64_t user_id;
-                audit_log_action_type action_type;
-                std::vector<audit_log_change> changes;
+                uint8_t action_type;
+                util::optional<std::vector<audit_log_change>> changes;
         };
     } // namespace models
 } // namespace disccord
