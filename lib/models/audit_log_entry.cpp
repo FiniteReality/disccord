@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         audit_log_entry::audit_log_entry()
-            : target_id(), user_id(0), action_type(0), changes()
+            : target_id(), user_id(0), action_type(audit_log_action_type::all), changes()
         { }
 
         audit_log_entry::~audit_log_entry()
@@ -16,7 +16,7 @@ namespace disccord
         void audit_log_entry::decode(web::json::value json)
         {
             user_id = std::stoull(json.at("user_id").as_string());
-            action_type = json.at("action_type").as_integer();
+            action_type = audit_log_action_type(json.at("action_type").as_integer());
 
             #define get_id_field(var) \
                 if (json.has_field(#var)) { \
@@ -51,7 +51,7 @@ namespace disccord
         void audit_log_entry::encode_to(std::unordered_map<std::string, web::json::value> &info)
         {
             info["user_id"] = web::json::value(std::to_string(user_id));
-            info["action_type"] = web::json::value(action_type);
+            info["action_type"] = web::json::value((uint8_t)action_type);
             if (target_id.is_specified())
                 info["target_id"] = get_target_id();
             if (changes.is_specified())

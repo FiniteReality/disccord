@@ -19,7 +19,7 @@ namespace disccord
 
                 util::optional<uint64_t> get_target_id();
                 uint64_t get_user_id();
-                uint8_t get_action_type();
+                audit_log_action_type get_action_type();
                 util::optional<std::vector<audit_log_change>> get_changes();
 
             protected:
@@ -28,7 +28,7 @@ namespace disccord
             private:
                 util::optional<uint64_t> target_id;
                 uint64_t user_id;
-                uint8_t action_type;
+                audit_log_action_type action_type;
                 util::optional<std::vector<audit_log_change>> changes;
         };
     } // namespace models
