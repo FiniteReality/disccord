@@ -756,7 +756,7 @@ TEST_CASE( "Relationship model correctly instantiated" ){
     REQUIRE_NOTHROW(test_relationship.decode(web::json::value::parse(json)));
 
     REQUIRE(test_relationship.get_id() == 64234381431771993);
-    REQUIRE(test_relationship.get_type().get_value() == 4);
+    REQUIRE(test_relationship.get_type().get_value() == relationship_type::OutgoingPending);
 }
 
 TEST_CASE( "Ban model correctly instantiated" ){

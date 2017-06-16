@@ -18,14 +18,14 @@ namespace disccord
                 virtual void decode(web::json::value json) override;
 
                 util::optional<models::user> get_user();
-                util::optional<uint32_t> get_type();
+                util::optional<relationship_type> get_type();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
                 util::optional<models::user> user;
-                util::optional<uint32_t> type;
+                util::optional<relationship_type> type;
         };
     }
 }
