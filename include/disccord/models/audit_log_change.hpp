@@ -1,13 +1,33 @@
 #ifndef _audit_log_change_hpp_
 #define _audit_log_change_hpp_
 
-#include <disccord/models/model.hpp>
+#include <boost/variant.hpp>
+#include <boost/variant/get.hpp>
+
+#include <disccord/models/entity.hpp>
 #include <disccord/util/optional.hpp>
 
 namespace disccord
 {
     namespace models
     {
+        class roles_change: public entity // class wrapping role updates (from the change key $add or $remove)
+        {
+            public:
+                roles_change();
+                virtual ~roles_change();
+                
+                virtual void decode(web::json::value json) override;
+                
+                std::string get_name();
+                
+            protected:
+                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                
+            private:
+                std::string name;
+        };
+        
         class audit_log_change : public model
         {
             public:
@@ -17,15 +37,15 @@ namespace disccord
                 virtual void decode(web::json::value json) override;
 
                 std::string get_key();
-                std::string get_new_value();
-                util::optional<std::string> get_old_value();
+                util::optional<boost::variant<uint64_t, std::string, bool, std::vector<roles_change>>> get_new_value();
+                util::optional<boost::variant<uint64_t, std::string, bool, std::vector<roles_change>>> get_old_value();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
-                std::string key, new_value;
-                util::optional<std::string> old_value;
+                std::string key;
+                util::optional<boost::variant<uint64_t, std::string, bool, std::vector<roles_change>>> new_value, old_value;
         };
     } // namespace models
 } // namespace disccord
