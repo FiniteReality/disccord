@@ -31,21 +31,23 @@ namespace disccord
         class audit_log_change : public model
         {
             public:
+                using change_value = boost::variant<uint64_t, std::string, bool, std::vector<roles_change>>;
+
                 audit_log_change();
                 virtual ~audit_log_change();
 
                 virtual void decode(web::json::value json) override;
 
                 std::string get_key();
-                util::optional<boost::variant<uint64_t, std::string, bool, std::vector<roles_change>>> get_new_value();
-                util::optional<boost::variant<uint64_t, std::string, bool, std::vector<roles_change>>> get_old_value();
+                util::optional<change_value> get_new_value();
+                util::optional<change_value> get_old_value();
 
             protected:
                 virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
 
             private:
                 std::string key;
-                util::optional<boost::variant<uint64_t, std::string, bool, std::vector<roles_change>>> new_value, old_value;
+                util::optional<change_value> new_value, old_value;
         };
     } // namespace models
 } // namespace disccord
