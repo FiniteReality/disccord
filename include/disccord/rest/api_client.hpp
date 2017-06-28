@@ -238,10 +238,6 @@ namespace disccord
 
                     pplx::task<disccord::models::webhook> execute_webhook(uint64_t webhook_id, std::string webhook_token, disccord::rest::models::execute_webhook_args args, bool wait = false, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::webhook> execute_slack_webhook(uint64_t webhook_id, std::string webhook_token, bool wait = true, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-
-                    pplx::task<disccord::models::webhook> execute_github_webhook(uint64_t webhook_id, std::string webhook_token, bool wait = true, const pplx::cancellation_token& token = pplx::cancellation_token::none());
-
                 private:
                     pplx::task<void> request_empty_internal(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     pplx::task<void> request_empty_internal(route_info& route, disccord::api::request_info* request, const pplx::cancellation_token& token = pplx::cancellation_token::none());

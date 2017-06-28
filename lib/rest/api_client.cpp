@@ -648,20 +648,6 @@ namespace disccord
                 return request_json<disccord::models::webhook>(route, args, token);
             }
 
-            pplx::task<disccord::models::webhook> rest_api_client::execute_slack_webhook(uint64_t webhook_id, std::string webhook_token, bool wait, const pplx::cancellation_token& token)
-            {
-                std::string wait_val = wait ? "true" : "false";
-                auto route = get_route("POST", "/webhooks/{webhook.id}/{webhook.token}/slack?wait={wait}", std::to_string(webhook_id), webhook_token, wait_val);
-                return request_json<disccord::models::webhook>(route, token);
-            }
-
-            pplx::task<disccord::models::webhook> rest_api_client::execute_github_webhook(uint64_t webhook_id, std::string webhook_token, bool wait, const pplx::cancellation_token& token)
-            {
-                std::string wait_val = wait ? "true" : "false";
-                auto route = get_route("POST", "/webhooks/{webhook.id}/{webhook.token}/github?wait={wait}", std::to_string(webhook_id), webhook_token, wait_val);
-                return request_json<disccord::models::webhook>(route, token);
-            }
-
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
