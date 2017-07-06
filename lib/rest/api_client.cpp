@@ -110,6 +110,23 @@ namespace disccord
                 return request_empty_internal(route, info, token);
             }
 
+            // Websocket
+
+            pplx::task<disccord::models::gateway_info> rest_api_client::get_gateway(const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/gateway");
+                return request_json<disccord::models::gateway_info>(route, token);
+            }
+
+            pplx::task<disccord::models::gateway_info> rest_api_client::get_gateway_bot(const pplx::cancellation_token& token)
+            {
+                if (token_type != disccord::token_type::Bot)
+                    throw new std::runtime_error("token_type must be disccord::token_type::Bot"); // TODO: custom exception type?
+                
+                auto route = get_route("GET", "/gateway/bot");
+                return request_json<disccord::models::gateway_info>(route, token);
+            }
+
             // User API
             pplx::task<disccord::models::user> rest_api_client::get_current_user(const pplx::cancellation_token& token)
             {

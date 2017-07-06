@@ -9,7 +9,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(DISCCORD_BUILD_STATIC "build disccord as a static library" OFF)
-option(DISCCORD_BUILD_TESTS "build and run disccord tests" ON)
+option(DISCCORD_BUILD_TESTS "build disccord tests" ON)
+option(DISCCORD_BUILD_SAMPLES "build disccord samples" ON)
 option(DISCCORD_IGNORE_UNSAFE_TESTS "ignore tests which may cause errors" OFF)
 
 add_subdirectory(lib)
@@ -17,4 +18,8 @@ add_subdirectory(lib)
 if(DISCCORD_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
+endif()
+
+if (DISCCORD_BUILD_SAMPLES)
+    add_subdirectory(samples)
 endif()

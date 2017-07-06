@@ -4,6 +4,9 @@
 *.db-wal
 *.db-shm
 
+# External Dependencies
+casablanca/*
+
 # Build outputs
 build/*
 CMakeCache.txt

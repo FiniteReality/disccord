@@ -13,6 +13,7 @@
 #include <disccord/rest/route.hpp>
 #include <disccord/token_type.hpp>
 
+#include <disccord/models/gateway_info.hpp>
 #include <disccord/models/channel.hpp>
 #include <disccord/models/connection.hpp>
 #include <disccord/models/guild.hpp>
@@ -53,6 +54,11 @@ namespace disccord
                     rest_api_client(const web::uri& base_uri, std::string token, disccord::token_type type);
                     rest_api_client(const web::uri& base_uri, std::string token, disccord::token_type type, const web::http::client::http_client_config& client_config);
                     virtual ~rest_api_client();
+
+                    // Websockets
+                    pplx::task<disccord::models::gateway_info> get_gateway(const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::gateway_info> get_gateway_bot(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     // User API
                     pplx::task<disccord::models::user> get_current_user(const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -372,11 +378,11 @@ namespace disccord
                         info->set_body(args.encode(), args.get_content_type());
                         return request_internal(route, info, token).then([](web::http::http_response response)
                         {
-                            return response.extract_string();
-                        }).then([](std::string response)
+                            return response.extract_json();
+                        }).then([](web::json::value response)
                         {
                             TResponse result;
-                            result.decode_string(response);
+                            result.decode(response);
                             return result;
                         });
                     }
