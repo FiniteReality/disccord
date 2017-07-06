@@ -16,8 +16,6 @@ namespace disccord
                 model();
                 virtual ~model();
 
-                void decode_string(std::string info);
-
                 virtual void decode(web::json::value json);
                 web::json::value encode();
 

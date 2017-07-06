@@ -47,7 +47,7 @@ SCENARIO("REST api is successful", "[!mayfail]") {
     uint64_t id = std::stoull(user_id);
 
     GIVEN("an api client with our token and id") {
-        auto api_client = rest_api_client(web::uri("https://discordapp.com/api/v6"), token, disccord::token_type::Bot);
+        auto api_client = rest_api_client(web::uri(DISCORD_API_BASE_URL), token, disccord::token_type::Bot);
 
         WHEN("we retrieve the current user") {
             uint64_t retrieved_id;
