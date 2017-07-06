@@ -19,11 +19,11 @@ set(CPPREST_ROOT_DIR
 
 find_path(PPLX_INCLUDE_DIR
     NAMES
-    pplx.h
+    pplx/pplx.h
     HINTS
     "${PPLX_ROOT_DIR}"
     PATH_SUFFIXES
-    include/pplx
+    include
     cpprest
     PATHS
     /usr/local
@@ -75,6 +75,8 @@ find_package_handle_standard_args(cpprest
 # set options
 
 if (CPPREST_FOUND)
-    set(CPPREST_INCLUDE_DIRS "${PPLX_INCLUDE_DIR}" "${CPPREST_INCLUDE_DIR}")
+    # if cpprestsdk is found, the components for it are likely already
+    # present, right?
+    set(CPPREST_INCLUDE_DIRS "${PPLX_INCLUDE_DIR} ${CPPREST_INCLUDE_DIR}")
     set(CPPREST_LIBRARIES "${CPPREST_LIBRARY}")
 endif()
