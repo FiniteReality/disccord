@@ -26,19 +26,18 @@ namespace disccord
             ws_api_client::ws_api_client(const web::uri& base_uri, disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type)
                 : ws_client(), token(acct_token), token_type(type), rest_api_client(rest_api)
             {
-                setup_headers(ws_client);
-                ws_client.set_message_handler([this](const auto& msg)
+                //setup_headers(ws_client);
+                ws_client.set_message_handler([this](const websocket_incoming_message& msg)
                 {
-                    std::cout << "message" << std::endl;
                     this->handle_message(msg);
                 });
             }
 
-            ws_api_client::ws_api_client(const web::uri& base_uri, disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type, const web::websockets::client::websocket_client_config& client_config)
+            ws_api_client::ws_api_client(const web::uri& base_uri, disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type, const websocket_client_config& client_config)
                 : ws_client(client_config), token(acct_token), token_type(type), rest_api_client(rest_api)
             {
-                setup_headers(ws_client);
-                ws_client.set_message_handler([this](const auto& msg)
+                //setup_headers(ws_client);
+                ws_client.set_message_handler([this](const websocket_incoming_message& msg)
                 {
                     this->handle_message(msg);
                 });
@@ -49,15 +48,16 @@ namespace disccord
 
             pplx::task<void> ws_api_client::connect(const pplx::cancellation_token &token)
             {
-                return rest_api_client.get_gateway(token).then([this](pplx::task<disccord::models::gateway_info> info_task)
+                return rest_api_client.get_gateway(token).then([](disccord::models::gateway_info info)
                 {
-                    auto info = info_task.get();
                     auto builder = web::uri_builder(web::uri(info.get_url()));
                     builder
                         .append_query("encoding", "etf") // TODO: should this be an option?
-                        .append_query("version", DISCORD_GATEWAY_API_VERSION);
-                    std::cout << "info: " << builder.to_string() << std::endl;
-                    return ws_client.connect(builder.to_uri());
+                        .append_query("v", DISCORD_GATEWAY_API_VERSION);
+                    return builder.to_string();
+                }).then([this](std::string uri)
+                {
+                    return ws_client.connect(uri);
                 });
             }
 
@@ -69,9 +69,9 @@ namespace disccord
 
                 auto buf = body.streambuf();
                 const size_t size = buf.size();
-                std::vector<uint8_t> buffer;
+                std::vector<unsigned char> buffer;
                 buffer.reserve(size);
-                auto range = boost::iterator_range<std::vector<uint8_t>::iterator>(buffer.begin(), buffer.end());
+                auto range = boost::iterator_range<std::vector<unsigned char>::iterator>(buffer.begin(), buffer.end());
 
                 switch (message.message_type())
                 {
@@ -87,10 +87,10 @@ namespace disccord
                                 std::cout << "ETF type: " << (int)value.get_type() << std::endl;
                             }
 
-                            disccord::ws::models::gateway_model model;
-                            model.decode(values.front());
+                            //disccord::ws::models::gateway_model model;
+                            //model.decode(values.front());
 
-                            return model;
+                            //return model;
                         }).wait();
                         break;
                     case websocket_message_type::text_message:
