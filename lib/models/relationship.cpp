@@ -7,7 +7,7 @@ namespace disccord
     namespace models
     {
         relationship::relationship()
-            : entity(), user(), type()
+            : user(), type()
         { }
 
         relationship::~relationship()
@@ -17,24 +17,18 @@ namespace disccord
         {
             entity::decode(json);
 
-            switch(json.at("type").as_integer())
-            {
-                case uint32_t(relationship_type::Friend):
-                    type = util::optional<uint32_t>(1);
-                    break;
-                case uint32_t(relationship_type::Blocked):
-                    type = util::optional<uint32_t>(2);
-                    break;
-                case uint32_t(relationship_type::IncomingPending):
-                    type = util::optional<uint32_t>(3);
-                    break;
-                case uint32_t(relationship_type::OutgoingPending):
-                    type = util::optional<uint32_t>(4);
-                    break;
-                default:
-                    type = util::optional<uint32_t>::no_value();
-                    break;
-            }
+            #define get_enum_field(var, type) \
+                if (json.has_field(#var)) { \
+                    auto field = json.at(#var); \
+                    if (!field.is_null()) { \
+                        auto val = type(field.as_integer()); \
+                        var = decltype(var)(val); \
+                    } else { \
+                        var = decltype(var)::no_value(); \
+                    } \
+                } else { \
+                    var = decltype(var)(); \
+                }
 
             #define get_composite_field(var, type) \
                 if (json.has_field(#var)) { \
@@ -50,8 +44,10 @@ namespace disccord
                     var = decltype(var)(); \
                 }
 
+            get_enum_field(type, relationship_type);
             get_composite_field(user, models::user);
 
+            #undef get_enum_field
             #undef get_composite_field
         }
 
@@ -60,7 +56,7 @@ namespace disccord
             entity::encode_to(info);
 
             if (get_type().is_specified())
-                info["type"] = web::json::value(get_type().get_value());
+                info["type"] = web::json::value((uint8_t)get_type().get_value());
             if (get_user().is_specified())
                 info["user"] = get_user().get_value().encode();
         }

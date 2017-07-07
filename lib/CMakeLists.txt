@@ -16,7 +16,7 @@ models/embed_footer.cpp models/embed_image.cpp models/embed_provider.cpp
 models/embed_thumbnail.cpp models/embed_video.cpp models/guild.cpp
 models/invite.cpp models/invite_channel.cpp models/invite_guild.cpp
 models/invite_metadata.cpp models/attachment.cpp models/emoji.cpp
-models/reaction.cpp models/role.cpp models/message.cpp
+models/reaction.cpp models/role.cpp models/message.cpp models/webhook.cpp
 models/integration_account.cpp models/integration.cpp models/channel.cpp
 models/overwrite.cpp models/connection.cpp models/game.cpp models/presence.cpp
 models/guild_embed.cpp models/guild_member.cpp models/read_state.cpp models/relationship.cpp
@@ -31,7 +31,9 @@ rest/models/modify_guild_member_args.cpp rest/models/guild_role_args.cpp
 rest/models/modify_guild_embed_args.cpp rest/models/modify_channel_args.cpp
 rest/models/edit_message_args.cpp rest/models/bulk_delete_message_args.cpp
 rest/models/edit_channel_permissions_args.cpp rest/models/create_channel_invite_args.cpp
-rest/models/add_dm_recipient_args.cpp rest/models/modify_current_user_args.cpp)
+rest/models/add_dm_recipient_args.cpp rest/models/modify_current_user_args.cpp
+rest/models/execute_webhook_args.cpp rest/models/create_webhook_args.cpp
+rest/models/modify_webhook_args.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 

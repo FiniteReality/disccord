@@ -225,7 +225,7 @@ namespace disccord
 
             pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages_before(uint64_t channel_id, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages?before={message}&limit=limit", std::to_string(channel_id), std::to_string(message_id));
+                auto route = get_route("GET", "/channels/{channel.id}/messages?before={message}&limit={limit}", std::to_string(channel_id), std::to_string(message_id), std::to_string(limit));
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
@@ -255,25 +255,25 @@ namespace disccord
 
             pplx::task<void> rest_api_client::create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", std::to_string(channel_id), std::to_string(message_id), emoji);
+                auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/"+url_encode(emoji)+"/@me", std::to_string(channel_id), std::to_string(message_id));
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::delete_own_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", std::to_string(channel_id), emoji, std::to_string(message_id));
+                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/"+url_encode(emoji)+"/@me", std::to_string(channel_id), std::to_string(message_id));
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::delete_user_reaction(uint64_t channel_id, uint64_t message_id, uint64_t user_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/{user_id}", std::to_string(channel_id), std::to_string(message_id), emoji, std::to_string(user_id));
+                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/"+url_encode(emoji)+"/{user.id}", std::to_string(channel_id), std::to_string(message_id), std::to_string(user_id));
                 return request(route, token);
             }
 
             pplx::task<std::vector<disccord::models::user>> rest_api_client::get_reactions(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}", std::to_string(channel_id), std::to_string(message_id), emoji);
+                auto route = get_route("GET", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}", std::to_string(channel_id), std::to_string(message_id), url_encode(emoji));
                 return request_multi_json<disccord::models::user>(route, token);
             }
 
@@ -415,7 +415,7 @@ namespace disccord
 
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members_before(uint64_t guild_id, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/members?before={user}&limit={limit}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = get_route("GET", "/guilds/{guild.id}/members?before={user}&limit={limit}", std::to_string(guild_id), std::to_string(user_id), std::to_string(limit));
                 return request_multi_json<disccord::models::guild_member>(route, token);
             }
 
@@ -586,6 +586,68 @@ namespace disccord
                 return request_multi_json<disccord::models::voice_region>(route, token);
             }
 
+            // Webhook API
+            pplx::task<disccord::models::webhook> rest_api_client::create_webhook(uint64_t channel_id, disccord::rest::models::create_webhook_args args, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("POST", "/channels/{channel.id}/webhooks", std::to_string(channel_id));
+                return request_json<disccord::models::webhook>(route, args, token);
+            }
+
+            pplx::task<std::vector<disccord::models::webhook>> rest_api_client::get_channel_webhooks(uint64_t channel_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/channels/{channel.id}/webhooks", std::to_string(channel_id));
+                return request_multi_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<std::vector<disccord::models::webhook>> rest_api_client::get_guild_webhooks(uint64_t guild_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/guilds/{guild.id}/webhooks", std::to_string(guild_id));
+                return request_multi_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::get_webhook(uint64_t webhook_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/webhooks/{webhook.id}", std::to_string(webhook_id));
+                return request_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::get_webhook_token(uint64_t webhook_id, std::string webhook_token, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("GET", "/webhooks/{webhook.id}/{webhook.token}", std::to_string(webhook_id), webhook_token);
+                return request_json<disccord::models::webhook>(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::modify_webhook(uint64_t webhook_id, disccord::rest::models::modify_webhook_args args, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("PATCH", "/webhooks/{webhook.id}", std::to_string(webhook_id));
+                return request_json<disccord::models::webhook>(route, args, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::modify_webhook_token(uint64_t webhook_id, std::string webhook_token, disccord::rest::models::modify_webhook_args args, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("PATCH", "/webhooks/{webhook.id}/{webhook.token}", std::to_string(webhook_id), webhook_token);
+                return request_json<disccord::models::webhook>(route, args, token);
+            }
+
+            pplx::task<void> rest_api_client::delete_webhook(uint64_t webhook_id, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("DELETE", "/webhooks/{webhook.id}", std::to_string(webhook_id));
+                return request(route, token);
+            }
+
+            pplx::task<void> rest_api_client::delete_webhook_token(uint64_t webhook_id, std::string webhook_token, const pplx::cancellation_token& token)
+            {
+                auto route = get_route("DELETE", "/webhooks/{webhook.id}/{webhook.token}", std::to_string(webhook_id), webhook_token);
+                return request(route, token);
+            }
+
+            pplx::task<disccord::models::webhook> rest_api_client::execute_webhook(uint64_t webhook_id, std::string webhook_token, disccord::rest::models::execute_webhook_args args, bool wait, const pplx::cancellation_token& token)
+            {
+                std::string wait_val = wait ? "true" : "false";
+                auto route = get_route("POST", "/webhooks/{webhook.id}/{webhook.token}?wait={wait}", std::to_string(webhook_id), webhook_token, wait_val);
+                return request_json<disccord::models::webhook>(route, args, token);
+            }
+
             disccord::api::bucket_info* rest_api_client::get_bucket(route_info& info)
             {
                 auto bucket_itr = buckets.find(info.bucket_url);
@@ -626,6 +688,31 @@ namespace disccord
                     req.headers().add("Authorization", token_type_s + token);
                     return pipeline->propagate(req);
                 });
+            }
+            
+            std::string rest_api_client::url_encode(const std::string s)
+            {
+                std::string lookup = "0123456789ABCDEF";
+                std::stringstream e;
+                
+                for (const char &c : s) //RFC 3986 section 2.3 Unreserved Characters
+                {
+                    if (('0' <= c && c <= '9') ||
+                        ('a' <= c && c <= 'z') ||
+                        ('A' <= c && c <= 'Z') ||
+                        (c=='-' || c=='_' || c=='.' || c=='~') 
+                    )
+                    {
+                        e << c;
+                    }
+                    else
+                    {
+                        e << '%';
+                        e << lookup[(c & 0xF0) >> 4];
+                        e << lookup[(c & 0x0F)];
+                    }
+                }
+                return e.str();
             }
         }
     }

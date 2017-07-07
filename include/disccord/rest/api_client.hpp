@@ -25,6 +25,7 @@
 #include <disccord/models/user.hpp>
 #include <disccord/models/user_guild.hpp>
 #include <disccord/models/voice_region.hpp>
+#include <disccord/models/webhook.hpp>
 
 #include <disccord/rest/models/guild_prune.hpp>
 #include <disccord/rest/models/nickname.hpp>
@@ -40,6 +41,9 @@
 #include <disccord/rest/models/modify_guild_member_args.hpp>
 #include <disccord/rest/models/modify_positions_args.hpp>
 #include <disccord/rest/models/modify_current_user_args.hpp>
+#include <disccord/rest/models/execute_webhook_args.hpp>
+#include <disccord/rest/models/create_webhook_args.hpp>
+#include <disccord/rest/models/modify_webhook_args.hpp>
 
 namespace disccord
 {
@@ -213,6 +217,27 @@ namespace disccord
                     // Voice API
                     pplx::task<std::vector<disccord::models::voice_region>> list_voice_regions(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
+                    // Webhook API
+                    pplx::task<disccord::models::webhook> create_webhook(uint64_t channel_id, disccord::rest::models::create_webhook_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<std::vector<disccord::models::webhook>> get_channel_webhooks(uint64_t channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<std::vector<disccord::models::webhook>> get_guild_webhooks(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::webhook> get_webhook(uint64_t webhook_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::webhook> get_webhook_token(uint64_t webhook_id, std::string webhook_token, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::webhook> modify_webhook(uint64_t webhook_id, disccord::rest::models::modify_webhook_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::webhook> modify_webhook_token(uint64_t webhook_id, std::string webhook_token, disccord::rest::models::modify_webhook_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<void> delete_webhook(uint64_t webhook_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<void> delete_webhook_token(uint64_t webhook_id, std::string webhook_token, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::webhook> execute_webhook(uint64_t webhook_id, std::string webhook_token, disccord::rest::models::execute_webhook_args args, bool wait = false, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
                 private:
                     pplx::task<void> request_empty_internal(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     pplx::task<void> request_empty_internal(route_info& route, disccord::api::request_info* request, const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -225,6 +250,7 @@ namespace disccord
                     std::string token;
                     disccord::token_type token_type;
                     void setup_discord_handler();
+                    std::string url_encode(const std::string s);
 
                     pplx::task<void> request(route_info& route, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
