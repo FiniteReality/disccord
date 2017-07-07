@@ -48,16 +48,13 @@ namespace disccord
 
             pplx::task<void> ws_api_client::connect(const pplx::cancellation_token &token)
             {
-                return rest_api_client.get_gateway(token).then([](disccord::models::gateway_info info)
+                return rest_api_client.get_gateway(token).then([this](disccord::models::gateway_info info)
                 {
                     auto builder = web::uri_builder(web::uri(info.get_url()));
                     builder
                         .append_query("encoding", "etf") // TODO: should this be an option?
                         .append_query("v", DISCORD_GATEWAY_API_VERSION);
-                    return builder.to_string();
-                }).then([this](std::string uri)
-                {
-                    return ws_client.connect(uri);
+                    return ws_client.connect(builder.to_uri());
                 });
             }
 
