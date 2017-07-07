@@ -64,7 +64,7 @@ namespace disccord
 
                 auto req = client.request(request, token);
                 return req;
-            }).then([this,info](web::http::http_response response)
+            }).then([this,info](web::http::http_response response) mutable -> web::http::http_response
             {
                 // only delete the request info once the request has completed to prevent memory corruption
                 delete info;

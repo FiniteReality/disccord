@@ -20,7 +20,7 @@ namespace disccord
                 discord_ws_client(std::string token, disccord::token_type type);
                 virtual ~discord_ws_client();
 
-                pplx::task<void> connect();
+                pplx::task<void> connect(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
             private:
                 disccord::rest::internal::rest_api_client rest_api_client;

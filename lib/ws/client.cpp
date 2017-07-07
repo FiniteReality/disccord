@@ -14,9 +14,9 @@ namespace disccord
         discord_ws_client::~discord_ws_client()
         { }
 
-        pplx::task<void> discord_ws_client::connect()
+        pplx::task<void> discord_ws_client::connect(const pplx::cancellation_token& token)
         {
-            return ws_api_client.connect();
+            return ws_api_client.connect(token);
         }
     }
 }

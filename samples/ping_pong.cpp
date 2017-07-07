@@ -52,8 +52,10 @@ int main()
 
     client.connect().then([]()
     {
-        std::cout << "Press any key to exit..." << std::endl;
+        std::cout << "Connected." << std::endl;
     }).wait();
 
-    std::cin.get();
+    pplx::task_completion_event<void> event;
+
+    pplx::create_task(event).wait();
 }
