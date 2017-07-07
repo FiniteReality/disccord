@@ -25,6 +25,8 @@
 #include <disccord/models/user.hpp>
 #include <disccord/models/user_guild.hpp>
 #include <disccord/models/voice_region.hpp>
+#include <disccord/models/audit_logs.hpp>
+#include <disccord/models/audit_log_action_type.hpp>
 
 #include <disccord/rest/models/guild_prune.hpp>
 #include <disccord/rest/models/nickname.hpp>
@@ -209,6 +211,12 @@ namespace disccord
                     pplx::task<disccord::models::guild_embed> get_guild_embed(uint64_t guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<disccord::models::guild_embed> modify_guild_embed(uint64_t guild_id, disccord::rest::models::modify_guild_embed_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::audit_logs> get_audit_logs(uint64_t guild_id, disccord::models::audit_log_action_type action_type = disccord::models::audit_log_action_type::all, uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::audit_logs> get_audit_logs_before(uint64_t guild_id, uint64_t user_id, disccord::models::audit_log_action_type action_type = disccord::models::audit_log_action_type::all, uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+
+                    pplx::task<disccord::models::audit_logs> get_audit_logs_after(uint64_t guild_id, uint64_t user_id, disccord::models::audit_log_action_type action_type = disccord::models::audit_log_action_type::all, uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     // Voice API
                     pplx::task<std::vector<disccord::models::voice_region>> list_voice_regions(const pplx::cancellation_token& token = pplx::cancellation_token::none());

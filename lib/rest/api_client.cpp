@@ -579,6 +579,42 @@ namespace disccord
                 return request_json<disccord::models::guild_embed>(route, args, token);
             }
 
+            pplx::task<disccord::models::audit_logs> rest_api_client::get_audit_logs(uint64_t guild_id, disccord::models::audit_log_action_type action_type, uint8_t limit, const pplx::cancellation_token& token)
+            {
+                if (action_type == disccord::models::audit_log_action_type::all){
+                    auto route = get_route("GET", "/guilds/{guild.id}/audit-logs?limit={limit}", std::to_string(guild_id), std::to_string(limit));
+                    return request_json<disccord::models::audit_logs>(route, token);
+                }
+                else {
+                    auto route = get_route("GET", "/guilds/{guild.id}/audit-logs?limit={limit}&action_type={type}", std::to_string(guild_id), std::to_string(limit), std::to_string((uint8_t)action_type));
+                    return request_json<disccord::models::audit_logs>(route, token);
+                }
+            }
+
+            pplx::task<disccord::models::audit_logs> rest_api_client::get_audit_logs_before(uint64_t guild_id, uint64_t user_id, disccord::models::audit_log_action_type action_type, uint8_t limit, const pplx::cancellation_token& token)
+            {
+                if (action_type == disccord::models::audit_log_action_type::all){
+                    auto route = get_route("GET", "/guilds/{guild.id}/audit-logs?limit={limit}&before={user.id}", std::to_string(guild_id), std::to_string(limit), std::to_string(user_id));
+                    return request_json<disccord::models::audit_logs>(route, token);
+                }
+                else {
+                    auto route = get_route("GET", "/guilds/{guild.id}/audit-logs?limit={limit}&before={user.id}&action_type={type}", std::to_string(guild_id), std::to_string(limit), std::to_string((uint8_t)action_type));
+                    return request_json<disccord::models::audit_logs>(route, token);
+                }
+            }
+
+            pplx::task<disccord::models::audit_logs> rest_api_client::get_audit_logs_after(uint64_t guild_id, uint64_t user_id, disccord::models::audit_log_action_type action_type, uint8_t limit, const pplx::cancellation_token& token)
+            {
+                if (action_type == disccord::models::audit_log_action_type::all){
+                    auto route = get_route("GET", "/guilds/{guild.id}/audit-logs?limit={limit}&after={user.id}", std::to_string(guild_id), std::to_string(limit), std::to_string(user_id));
+                    return request_json<disccord::models::audit_logs>(route, token);
+                }
+                else {
+                    auto route = get_route("GET", "/guilds/{guild.id}/audit-logs?limit={limit}&after={user.id}&action_type={type}", std::to_string(guild_id), std::to_string(limit), std::to_string((uint8_t)action_type));
+                    return request_json<disccord::models::audit_logs>(route, token);
+                }
+            }
+
             // Voice API
             pplx::task<std::vector<disccord::models::voice_region>> rest_api_client::list_voice_regions(const pplx::cancellation_token& token)
             {
