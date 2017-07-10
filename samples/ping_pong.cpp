@@ -2,6 +2,8 @@
 #include <string>
 #include <cstdlib>
 
+#include <cpprest/interopstream.h>
+
 #include <disccord/ws/client.hpp>
 
 using namespace disccord::ws;
@@ -52,7 +54,7 @@ int main()
 
     client.connect().then([]()
     {
-        std::cout << "Connected." << std::endl;
+        std::cout << "Connected. Press any key to exit." << std::endl;
     }).wait();
 
     pplx::task_completion_event<void> event;

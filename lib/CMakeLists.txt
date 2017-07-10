@@ -1,15 +1,13 @@
 find_package(cpprest REQUIRED)
-find_package(libbert REQUIRED)
 find_package(Boost 1.54.0 REQUIRED COMPONENTS system filesystem atomic chrono
     random regex)
 find_package(OpenSSL REQUIRED)
 find_package(ZLIB REQUIRED)
 
 include_directories(${CPPREST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}
-    ${ZLIB_INCLUDE_DIRS} ${BERT_INCLUDE_DIRS})
+    ${ZLIB_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${CPPREST_LIBRARIES} ${Boost_LIBRARIES}
-    ${OPENSSL_LIBRARIES} ${CMAKE_DL_LIBS} ${ZLIB_LIBRARIES}
-    ${BERT_LIBRARIES})
+    ${OPENSSL_LIBRARIES} ${CMAKE_DL_LIBS} ${ZLIB_LIBRARIES})
 
 set(SOURCE_FILES rest/api_client.cpp rest/route.cpp api/bucket_info.cpp
 api/multipart_field.cpp api/multipart_request.cpp api/multipart_file.cpp
@@ -39,7 +37,7 @@ rest/models/edit_message_args.cpp rest/models/bulk_delete_message_args.cpp
 rest/models/edit_channel_permissions_args.cpp
 rest/models/create_channel_invite_args.cpp
 rest/models/add_dm_recipient_args.cpp models/gateway_info.cpp
-ws/api_client.cpp ws/client.cpp ws/models/gateway_model.cpp)
+ws/api_client.cpp ws/client.cpp ws/models/frame.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
