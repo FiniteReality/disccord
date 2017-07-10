@@ -25,6 +25,12 @@ namespace disccord
             private:
                 disccord::rest::internal::rest_api_client rest_api_client;
                 disccord::ws::internal::ws_api_client ws_api_client;
+
+                pplx::cancellation_token_source heartbeat_cancel_token;
+                pplx::task<void> heartbeat_task;
+
+                pplx::task<void> handle_frame(const disccord::ws::models::frame* frame);
+                pplx::task<void> heartbeat_loop(int wait_millis);
         };
     }
 }

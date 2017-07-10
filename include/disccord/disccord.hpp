@@ -1,9 +1,6 @@
 #ifndef _disccord_hpp_
 #define _disccord_hpp_
 
-// For maximum ETF compat, ensure that libbert does not try to use ETF extensions
-#define LIBBERT_NO_EXTENSION
-
 #define DISCCORD_VERSION "1.0.0-alpha"
 #define DISCCORD_PROJECT_URL "https://github.com/FiniteReality/disccord"
 

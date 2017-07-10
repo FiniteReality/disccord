@@ -1,10 +1,10 @@
 #include <iostream>
 
+#include <cpprest/interopstream.h>
+
 #include <disccord/disccord.hpp>
 #include <disccord/rest/api_client.hpp>
 #include <disccord/ws/api_client.hpp>
-
-#include <disccord/ws/models/gateway_model.hpp>
 
 // This is purely for my sanity. Don't ever do this, ever.
 using namespace web::websockets::client;
@@ -23,25 +23,13 @@ namespace disccord
                 //headers.add("User-Agent", DISCORD_USER_AGENT);
             }
 
-            ws_api_client::ws_api_client(const web::uri& base_uri, disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type)
-                : ws_client(), token(acct_token), token_type(type), rest_api_client(rest_api)
-            {
-                //setup_headers(ws_client);
-                ws_client.set_message_handler([this](const websocket_incoming_message& msg)
-                {
-                    this->handle_message(msg);
-                });
-            }
+            ws_api_client::ws_api_client(disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type)
+                : ws_client(), token(acct_token), token_type(type), rest_api_client(rest_api), message_handler(), read_task(), cancel_token()
+            { }
 
-            ws_api_client::ws_api_client(const web::uri& base_uri, disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type, const websocket_client_config& client_config)
-                : ws_client(client_config), token(acct_token), token_type(type), rest_api_client(rest_api)
-            {
-                //setup_headers(ws_client);
-                ws_client.set_message_handler([this](const websocket_incoming_message& msg)
-                {
-                    this->handle_message(msg);
-                });
-            }
+            ws_api_client::ws_api_client(disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type, const websocket_client_config& client_config)
+                : ws_client(client_config), token(acct_token), token_type(type), rest_api_client(rest_api), message_handler(), read_task(), cancel_token()
+            { }
 
             ws_api_client::~ws_api_client()
             { }
@@ -52,54 +40,64 @@ namespace disccord
                 {
                     auto builder = web::uri_builder(web::uri(info.get_url()));
                     builder
-                        .append_query("encoding", "etf") // TODO: should this be an option?
+                        .append_query("encoding", "json") // TODO: ETF support
                         .append_query("v", DISCORD_GATEWAY_API_VERSION);
                     return ws_client.connect(builder.to_uri());
+                }).then([this]()
+                {
+                    auto func = std::bind(&ws_api_client::read_loop, this);
+                    read_task = pplx::create_task(func, pplx::task_options(cancel_token.get_token()));
                 });
             }
 
-            void ws_api_client::handle_message(const websocket_incoming_message& message)
+            void ws_api_client::set_frame_handler(const std::function<pplx::task<void>(const disccord::ws::models::frame*)>& func)
             {
-                std::cout << "message received: " << (int)message.message_type() << " " << message.length() << " bytes" << std::endl;
+                message_handler = func;
+            }
 
-                Concurrency::streams::istream body = message.body();
+            void ws_api_client::read_loop()
+            {
+                while(!pplx::is_task_cancellation_requested())
+                {
+                    ws_client.receive().then([this](const websocket_incoming_message& msg)
+                    {
+                        return this->handle_message(msg);
+                    }).wait();
+                }
 
-                auto buf = body.streambuf();
-                const size_t size = buf.size();
-                std::vector<unsigned char> buffer;
-                buffer.reserve(size);
-                auto range = boost::iterator_range<std::vector<unsigned char>::iterator>(buffer.begin(), buffer.end());
+                pplx::cancel_current_task();
+            }
 
+            pplx::task<void> ws_api_client::handle_message(const websocket_incoming_message& message)
+            {
                 switch (message.message_type())
                 {
                     case websocket_message_type::binary_message:
-                        buf.getn(buffer.data(), size).then([&range, size](size_t read)
-                        {
-                            assert(read == size); //TODO: better validation for this
-                            return bert::parse(range);
-                        }).then([](std::vector<bert::value> values)
-                        {
-                            for (auto& value : values)
-                            {
-                                std::cout << "ETF type: " << (int)value.get_type() << std::endl;
-                            }
-
-                            //disccord::ws::models::gateway_model model;
-                            //model.decode(values.front());
-
-                            //return model;
-                        }).wait();
+                    {
+                        // TODO: compressed packet/ETF support
                         break;
+                    }
                     case websocket_message_type::text_message:
-                        break;
-                    case websocket_message_type::close:
-                        // TODO: handle closes
-                        break;
-                    case websocket_message_type::ping:
-                    case websocket_message_type::pong:
-                        // TODO: handle ping/pong
-                        break;
+                    {
+                        auto raw_stream = message.body();
+                        Concurrency::streams::async_istream<char> body_stream{raw_stream};
+
+                        web::json::value body = web::json::value::parse(body_stream);
+
+                        models::frame* frame = new models::frame();
+                        frame->decode(body);
+
+                        models::frame const* frame_c = frame;
+                        return message_handler(frame_c).then([frame]()
+                        {
+                            delete frame;
+                        });
+                    }
+                    default:
+                        std::cout << "unhandled ws message type: " << (int)message.message_type() << std::endl;
                 }
+
+                return pplx::create_task([](){});
             }
         }
     }
