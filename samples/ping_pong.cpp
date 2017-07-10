@@ -59,5 +59,11 @@ int main()
 
     pplx::task_completion_event<void> event;
 
+    Concurrency::streams::stdio_istream<std::istream::char_type> cin{std::cin};
+    cin.read().then([&event](Concurrency::streams::stdio_istream<std::istream::char_type>::int_type c)
+    {
+        event.set();
+    });
+
     pplx::create_task(event).wait();
 }
