@@ -13,6 +13,8 @@ option(DISCCORD_BUILD_TESTS "build disccord tests" ON)
 option(DISCCORD_BUILD_SAMPLES "build disccord samples" ON)
 option(DISCCORD_IGNORE_UNSAFE_TESTS "ignore tests which may cause errors" OFF)
 
+add_subdirectory(models)
+
 add_subdirectory(lib)
 
 if(DISCCORD_BUILD_TESTS)
