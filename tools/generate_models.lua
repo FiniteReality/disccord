@@ -63,6 +63,15 @@ local generate do -- Code generation
 end
 
 do -- DSL definitions
+    function converter(data)
+        if type(data) ~= "table" then
+            error("argument 1 to converter() is not a table", 2)
+        end
+
+        local converter = {from = data.from, to = data.to, body = data[1]}
+        __CONVERTERS__[#__CONVERTERS__+1] = converter
+    end
+
     function model(data)
         if type(data) ~= "table" then
             error("argument 1 to model() is not a table", 2)
@@ -97,17 +106,132 @@ do -- DSL definitions
     end
 end
 
-local read_file, write_file do -- Helpers
+local read_file, write_file, read_file_safe do -- Helpers
+    function read_file_safe(file)
+        local f, err = io.open(file, "r")
+        if f then
+            local data, err = f:read("*a")
+            f:close()
+            return data, err
+        end
+        return nil, err
+    end
     function read_file(file)
         local f = assert(io.open(file, "r"))
         local data = assert(f:read("*a"))
-        assert(f:close())
+        f:close()
         return data
     end
     function write_file(file, contents)
         local f = assert(io.open(file, "w"))
         assert(f:write(contents))
-        assert(f:close())
+        f:close()
+    end
+end
+
+local generate_encode_body, generate_decode_body do
+    local function get_encoder(member)
+        if member.prop_type == "std::string" or
+        member.prop_type == "disccord::discriminator" or
+        member.prop_type == "disccord::snowflake" or
+        member.prop_type == "bool" or
+        member.prop_type:find("u?int%d+_t") then
+            return member.name
+        else
+            -- TODO: handle multiple converters from this type
+            for _, converter in ipairs(__CONVERTERS__) do
+                if converter.from == member.prop_type then
+                    return converter.body:format(member.name)
+                end
+            end
+        end
+
+        error(("get_encoder: unknown type %s"):format(member.prop_type), 2)
+    end
+    function generate_encode_body(model)
+        local result = {"std::vector<std::pair<std::string, web::json::value>> info;"}
+
+        for _, member in ipairs(model.members) do
+            if member.type == "property" then
+                if member.prop_type:find("util::optional") then
+                    result[#result+1] = ("info.push_back(std::make_pair(\"%s\", %s.get_json()));"):format(member.name, member.name)
+                else
+                    result[#result+1] = ("info.push_back(std::make_pair(\"%s\", web::json::value(%s)));"):format(member.name, get_encoder(member))
+                end
+            end
+        end
+
+        result[#result+1] = "return web::json::value::object(info);"
+        return table.concat(result, "\n")
+    end
+
+    local function get_decoder(prop_type, err)
+        if prop_type:find("std::string") then
+            return "field.as_string()";
+
+        elseif prop_type:find("snowflake") then
+            return "field.as_number().to_uint64()"
+        elseif prop_type:find("discriminator") then
+            return ("static_cast<%s>(field.as_number().to_uint32())"):format(prop_type)
+
+        elseif prop_type:find("u?int%d+_t") then
+            local int_type = prop_type:match("(u?int%d+)_t")
+            if int_type:find("int64") then
+                return ("field.as_number().to_%s()"):format(int_type)
+            elseif int_type:find("int32") then
+                return ("field.as_number().to_%s()"):format(int_type)
+            else
+                return ("static_cast<%s>(field.as_number().to_uint64())"):format(int_type)
+            end
+
+        elseif prop_type:find("bool") then
+            return "field.as_bool()"
+        else
+            for _, converter in ipairs(__CONVERTERS__) do
+                if converter.to == prop_type then
+                    local value = get_decoder(converter.from, false)
+                    if value then
+                        return converter.body:format(value)
+                    end
+                end
+            end
+
+            if not err then
+                error(("get_decoder: unknown type %s"):format(prop_type), 2)
+            end
+        end
+    end
+    function generate_decode_body(model)
+        local result = {}
+
+        for _, member in ipairs(model.members) do
+            if member.type == "property" then
+                if member.prop_type:find("util::optional") then
+
+                    result[#result+1] = ([[
+if (!json.has_field("%s"))
+    %s = disccord::util::optional<%s::value_type>();
+if (json.at("%s").is_null())
+    %s = disccord::util::optional<%s::value_type>::no_value();
+else
+{
+    auto field = json.at("%s");
+    %s = disccord::util::optional<%s::value_type>(%s);
+}]]):format(member.name, member.name, member.prop_type, member.name, member.name, member.prop_type, member.name, member.name, member.prop_type, get_decoder(member.prop_type))
+
+                else
+
+                    result[#result+1] = ([[
+{
+    auto field = json.at("%s");
+    %s = %s;
+}]]):format(member.name, member.name, get_decoder(member.prop_type))
+
+                end
+            end
+        end
+
+        return table.concat(result, "\n")
     end
 end
 
@@ -124,6 +248,7 @@ local code_output = args[4].."/"
 
 for i = 5, nargs do
     __MODELS__ = {}
+    __CONVERTERS__ = {}
     dofile(args[i])
 
     local env = {
@@ -143,11 +268,37 @@ for i = 5, nargs do
     end)
 
     for j = 1, #__MODELS__ do
-        local header, code = generate(__MODELS__[j])
+        local model = __MODELS__[j]
+        model.members[#model.members+1] = {
+            type = "method",
+            name = "encode",
+            return_type = "web::json::value",
+            body = generate_encode_body(model),
+            params = {}
+        }
+        model.members[#model.members+1] = {
+            type = "method",
+            name = "decode",
+            return_type = "void",
+            body = generate_decode_body(model),
+            params = {{name = "json", param_type = "web::json::value"}}
+        }
+
+        local header, code = generate(model)
         header = header_template:format(header)
         code = code_template:format(code)
 
-        write_file(header_output..args[i]:gsub("%.lua$", ".hpp"), header)
-        write_file(code_output..args[i]:gsub("%.lua$", ".cpp"), code)
+        local header_loc = header_output..args[i]:gsub("%.lua$", ".hpp")
+        local code_loc = code_output..args[i]:gsub("%.lua$", ".cpp")
+
+        local orig_header, err = read_file_safe(header_loc)
+        local orig_code, err = read_file_safe(code_loc)
+
+        print(err, code_loc)
+
+        if err or orig_header ~= header or orig_code ~= code then
+            write_file(header_loc, header)
+            write_file(code_loc, code)
+        end
     end
 end
