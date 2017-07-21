@@ -227,7 +227,7 @@ namespace disccord
 
             pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages_before(uint64_t channel_id, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages?before={message}&limit=limit", std::to_string(channel_id), std::to_string(message_id));
+                auto route = get_route("GET", "/channels/{channel.id}/messages?before={message}&limit={limit}", std::to_string(channel_id), std::to_string(message_id), std::to_string(limit));
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
@@ -269,7 +269,7 @@ namespace disccord
 
             pplx::task<void> rest_api_client::delete_user_reaction(uint64_t channel_id, uint64_t message_id, uint64_t user_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/"+util::url_encode(emoji)+"/{user_id}", std::to_string(channel_id), std::to_string(message_id), std::to_string(user_id));
+                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/"+util::url_encode(emoji)+"/{user.id}", std::to_string(channel_id), std::to_string(message_id), std::to_string(user_id));
                 return request(route, token);
             }
 
@@ -417,7 +417,7 @@ namespace disccord
 
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members_before(uint64_t guild_id, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/members?before={user}&limit={limit}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = get_route("GET", "/guilds/{guild.id}/members?before={user}&limit={limit}", std::to_string(guild_id), std::to_string(user_id), std::to_string(limit));
                 return request_multi_json<disccord::models::guild_member>(route, token);
             }
 
