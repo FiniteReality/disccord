@@ -1,3 +1,3 @@
 model{"entity",
-    property {"id", "snowflake"}
+    property {"id", "disccord::snowflake"}
 }
