@@ -4,6 +4,9 @@
 *.db-wal
 *.db-shm
 
+# Models
+include/disccord/models/*.hpp
+
 # External Dependencies
 casablanca/*
 
