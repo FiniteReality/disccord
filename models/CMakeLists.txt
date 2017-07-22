@@ -14,13 +14,9 @@ foreach(MODEL IN ITEMS ${MODELS})
     set(MODELS_OUTPUT_HEADER ${MODELS_OUTPUT_HEADER} ${MODEL}.hpp)
 endforeach()
 
-add_custom_target(
-    generate_models ALL
-    DEPENDS ${MODELS_OUTPUT_SOURCE} ${MODELS_OUTPUT_HEADER}
-)
-
 add_custom_command(
-    OUTPUT ${MODELS_OUTPUT_SOURCE} ${MODELS_OUTPUT_HEADER}
+    OUTPUT models
+    BYPRODUCTS ${MODELS_OUTPUT_SOURCE} ${MODELS_OUTPUT_HEADER}
     COMMAND lua ${CMAKE_SOURCE_DIR}/tools/generate_models.lua
         ${CMAKE_SOURCE_DIR}/tools/header_template.tpp
         ${CMAKE_SOURCE_DIR}/tools/code_template.tpp
@@ -33,6 +29,11 @@ add_custom_command(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Generating models"
     VERBATIM)
+
+add_custom_target(
+    generate_models ALL
+    DEPENDS models
+)
 
 add_library(disccord_models STATIC ${MODELS_OUTPUT_SOURCE})
 add_dependencies(disccord_models generate_models)
