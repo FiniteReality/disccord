@@ -53,6 +53,16 @@ SCENARIO("correct route info is returned") {
         REQUIRE(myRoute.bucket_url == "/guilds/1234567890/emojis/{emoji.id}");
     }
 
+    WHEN("we provide a single major parameter and multiple minor parameters") {
+        auto myRoute = build_route<4>(
+            "DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/{user.id}",
+            {"1234567890", "0987654321", "1234567890", "0987654321"});
+
+        REQUIRE(myRoute.method == "DELETE");
+        REQUIRE(myRoute.full_url == "/channels/1234567890/messages/0987654321/reactions/1234567890/0987654321");
+        REQUIRE(myRoute.bucket_url == "/channels/1234567890/messages/{message.id}/reactions/{emoji}/{user.id}");
+    }
+
     WHEN("we provide a single minor parameter") {
         auto myRoute = build_route<1>(
             "GET", "/emojis/{emoji.id}", {"1234567890"});

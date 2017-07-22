@@ -23,13 +23,14 @@ namespace disccord
             std::string bucket{route};
             std::string url{route};
 
-            std::string::size_type end{};
+            std::string::size_type start{std::string::npos};
 
-            for (auto param : params)
+            for (auto i = params.rbegin(); i != params.rend(); i++)
             {
-                // Use url as it has the most substitutions and is longer
-                auto start = url.find('{', end);
-                end = url.find('}', end);
+                auto param = *i;
+
+                auto end = route.rfind('}', start - 1);
+                start = route.rfind('{', start - 1);
 
                 if (start == std::string::npos || end == std::string::npos)
                     throw new std::range_error{"invalid route"};
