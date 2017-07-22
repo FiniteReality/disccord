@@ -9,7 +9,7 @@ include_directories(${CPPREST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}
 set(LIBS ${LIBS} ${CPPREST_LIBRARIES} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES}
     ${CMAKE_DL_LIBS} ${ZLIB_LIBRARIES} disccord_models)
 
-set(SOURCE_FILES rest/api_client.cpp rest/route.cpp api/bucket_info.cpp
+set(SOURCE_FILES rest/api_client.cpp api/bucket_info.cpp
 api/multipart_field.cpp api/multipart_request.cpp api/multipart_file.cpp
 api/request_info.cpp rest/client.cpp util/semaphore.cpp ws/api_client.cpp
 ws/client.cpp)
