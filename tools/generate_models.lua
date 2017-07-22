@@ -131,10 +131,10 @@ end
 
 local generate_encode_body, generate_decode_body do
     local function get_encoder(member)
-        if member.prop_type == "std::string" or
-        member.prop_type == "disccord::discriminator" or
-        member.prop_type == "disccord::snowflake" or
-        member.prop_type == "bool" or
+        if member.prop_type:find("std::string") or
+        member.prop_type:find("disccord::discriminator") or
+        member.prop_type:find("disccord::snowflake") or
+        member.prop_type:find("bool") or
         member.prop_type:find("u?int%d+_t") then
             return member.name
         else
@@ -294,7 +294,7 @@ for i = 5, nargs do
         local orig_header, err = read_file_safe(header_loc)
         local orig_code, err = read_file_safe(code_loc)
 
-        print(err, code_loc)
+        --print(err, code_loc)
 
         if err or orig_header ~= header or orig_code ~= code then
             write_file(header_loc, header)
