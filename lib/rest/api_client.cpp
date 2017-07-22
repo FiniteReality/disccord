@@ -113,7 +113,7 @@ namespace disccord
 
             pplx::task<disccord::models::gateway_info> rest_api_client::get_gateway(const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/gateway");
+                auto route = build_route<0>("GET", "/gateway", {});
                 return request_json<disccord::models::gateway_info>(route, token);
             }
 
@@ -122,20 +122,20 @@ namespace disccord
                 if (token_type != disccord::token_type::Bot)
                     throw new std::runtime_error("token_type must be disccord::token_type::Bot"); // TODO: custom exception type?
                 
-                auto route = get_route("GET", "/gateway/bot");
+                auto route = build_route<0>("GET", "/gateway/bot", {});
                 return request_json<disccord::models::gateway_info>(route, token);
             }
 
             // User API
             pplx::task<disccord::models::user> rest_api_client::get_current_user(const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/@me");
+                auto route = build_route<0>("GET", "/users/@me", {});
                 return request_json<disccord::models::user>(route, token);
             }
 
             pplx::task<disccord::models::user> rest_api_client::get_user(uint64_t user_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/{user.id}", std::to_string(user_id));
+                auto route = build_route<1>("GET", "/users/{user.id}", {std::to_string(user_id)});
                 return request_json<disccord::models::user>(route, token);
             }
 
@@ -143,309 +143,309 @@ namespace disccord
 
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds(uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/@me/guilds?limit={limit}", std::to_string(limit));
+                auto route = build_route<1>("GET", "/users/@me/guilds?limit={limit}", {std::to_string(limit)});
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds_before(uint64_t guild_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/@me/guilds?before={guild}&limit={limit}", std::to_string(guild_id), std::to_string(limit));
+                auto route = build_route<2>("GET", "/users/@me/guilds?before={guild}&limit={limit}", {std::to_string(guild_id), std::to_string(limit)});
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::user_guild>> rest_api_client::get_current_user_guilds_after(uint64_t guild_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/@me/guilds?after={guild}&limit={limit}", std::to_string(guild_id), std::to_string(limit));
+                auto route = build_route<2>("GET", "/users/@me/guilds?after={guild}&limit={limit}", {std::to_string(guild_id), std::to_string(limit)});
                 return request_multi_json<disccord::models::user_guild>(route, token);
             }
 
             pplx::task<void> rest_api_client::leave_guild(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/users/@me/guilds/{guild.id}", std::to_string(guild_id));
+                auto route = build_route<1>("DELETE", "/users/@me/guilds/{guild.id}", {std::to_string(guild_id)});
                 return request(route, token);
             }
 
             pplx::task<std::vector<disccord::models::channel>> rest_api_client::get_user_dms(const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/@me/channels");
+                auto route = build_route<0>("GET", "/users/@me/channels", {});
                 return request_multi_json<disccord::models::channel>(route, token);
             }
 
             pplx::task<disccord::models::channel> rest_api_client::create_dm_channel(uint64_t recipient_id, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::create_dm_channel_args args{recipient_id};
-                auto route = get_route("POST", "/users/@me/channels");
+                auto route = build_route<0>("POST", "/users/@me/channels", {});
                 return request_json<disccord::models::channel>(route, args, token);
             }
 
             pplx::task<disccord::models::channel> rest_api_client::create_group_dm(std::unordered_map<uint64_t, std::string> nicks, std::vector<std::string> access_tokens, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::create_group_dm_args args{nicks, access_tokens};
-                auto route = get_route("POST", "/users/@me/channels");
+                auto route = build_route<0>("POST", "/users/@me/channels", {});
                 return request_json<disccord::models::channel>(route, args, token);
             }
 
             pplx::task<std::vector<disccord::models::connection>> rest_api_client::get_user_connections(const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/users/@me/connections");
+                auto route = build_route<0>("GET", "/users/@me/connections", {});
                 return request_multi_json<disccord::models::connection>(route, token);
             }
 
             // Invite API
             pplx::task<disccord::models::invite> rest_api_client::get_invite(std::string invite_code, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/invites/{invite.code}", invite_code);
+                auto route = build_route<1>("GET", "/invites/{invite.code}", {invite_code});
                 return request_json<disccord::models::invite>(route, token);
             }
 
             pplx::task<disccord::models::invite> rest_api_client::delete_invite(std::string invite_code, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/invites/{invite.code}", invite_code);
+                auto route = build_route<1>("DELETE", "/invites/{invite.code}", {invite_code});
                 return request_json<disccord::models::invite>(route, token);
             }
 
             pplx::task<disccord::models::invite> rest_api_client::accept_invite(std::string invite_code, const pplx::cancellation_token& token)
             {
-                auto route = get_route("POST", "/invites/{invite.code}", invite_code);
+                auto route = build_route<1>("POST", "/invites/{invite.code}", {invite_code});
                 return request_json<disccord::models::invite>(route, token);
             }
 
             // Channel API
             pplx::task<disccord::models::channel> rest_api_client::get_channel(uint64_t channel_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}", std::to_string(channel_id));
+                auto route = build_route<1>("GET", "/channels/{channel.id}", {std::to_string(channel_id)});
                 return request_json<disccord::models::channel>(route, token);
             }
 
             pplx::task<disccord::models::channel> rest_api_client::modify_channel(uint64_t channel_id, disccord::rest::models::modify_channel_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PATCH", "/channels/{channel.id}", std::to_string(channel_id));
+                auto route = build_route<1>("PATCH", "/channels/{channel.id}", {std::to_string(channel_id)});
                 return request_json<disccord::models::channel>(route, args, token);
             }
 
             pplx::task<disccord::models::channel> rest_api_client::delete_channel(uint64_t channel_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}", std::to_string(channel_id));
+                auto route = build_route<1>("DELETE", "/channels/{channel.id}", {std::to_string(channel_id)});
                 return request_json<disccord::models::channel>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages(uint64_t channel_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages?limit={limit}", std::to_string(channel_id), std::to_string(limit));
+                auto route = build_route<2>("GET", "/channels/{channel.id}/messages?limit={limit}", {std::to_string(channel_id), std::to_string(limit)});
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages_before(uint64_t channel_id, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages?before={message}&limit=limit", std::to_string(channel_id), std::to_string(message_id));
+                auto route = build_route<2>("GET", "/channels/{channel.id}/messages?before={message}&limit=limit", {std::to_string(channel_id), std::to_string(message_id)});
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::message>> rest_api_client::get_channel_messages_after(uint64_t channel_id, uint64_t message_id, uint8_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages?after={message}&limit={limit}", std::to_string(channel_id), std::to_string(message_id), std::to_string(limit));
+                auto route = build_route<3>("GET", "/channels/{channel.id}/messages?after={message}&limit={limit}", {std::to_string(channel_id), std::to_string(message_id), std::to_string(limit)});
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
             pplx::task<disccord::models::message> rest_api_client::get_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages/{message_id}", std::to_string(channel_id), std::to_string(message_id));
+                auto route = build_route<2>("GET", "/channels/{channel.id}/messages/{message.id}", {std::to_string(channel_id), std::to_string(message_id)});
                 return request_json<disccord::models::message>(route, token);
             }
 
             pplx::task<disccord::models::message> rest_api_client::create_message(uint64_t channel_id, disccord::rest::models::create_message_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("POST", "/channels/{channel.id}/messages", std::to_string(channel_id));
+                auto route = build_route<1>("POST", "/channels/{channel.id}/messages", {std::to_string(channel_id)});
                 return request_json<disccord::models::message>(route, args, token);
             }
 
             pplx::task<disccord::models::message> rest_api_client::create_message(uint64_t channel_id, disccord::api::multipart_request args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("POST", "/channels/{channel.id}/messages", std::to_string(channel_id));
+                auto route = build_route<1>("POST", "/channels/{channel.id}/messages", {std::to_string(channel_id)});
                 return request_multipart<disccord::models::message>(route, args, token);
             }
 
             pplx::task<void> rest_api_client::create_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", std::to_string(channel_id), std::to_string(message_id), emoji);
+                auto route = build_route<3>("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", {std::to_string(channel_id), std::to_string(message_id), emoji});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::delete_own_reaction(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", std::to_string(channel_id), emoji, std::to_string(message_id));
+                auto route = build_route<3>("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", {std::to_string(channel_id), emoji, std::to_string(message_id)});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::delete_user_reaction(uint64_t channel_id, uint64_t message_id, uint64_t user_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/{user_id}", std::to_string(channel_id), std::to_string(message_id), emoji, std::to_string(user_id));
+                auto route = build_route<4>("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/{user.id}", {std::to_string(channel_id), std::to_string(message_id), emoji, std::to_string(user_id)});
                 return request(route, token);
             }
 
             pplx::task<std::vector<disccord::models::user>> rest_api_client::get_reactions(uint64_t channel_id, uint64_t message_id, std::string emoji, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}", std::to_string(channel_id), std::to_string(message_id), emoji);
+                auto route = build_route<3>("GET", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}", {std::to_string(channel_id), std::to_string(message_id), emoji});
                 return request_multi_json<disccord::models::user>(route, token);
             }
 
             pplx::task<void> rest_api_client::delete_all_reactions(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions", std::to_string(channel_id), std::to_string(message_id));
+                auto route = build_route<2>("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions", {std::to_string(channel_id), std::to_string(message_id)});
                 return request(route, token);
             }
 
             pplx::task<disccord::models::message> rest_api_client::edit_message(uint64_t channel_id, uint64_t message_id, disccord::rest::models::edit_message_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PATCH", "/channels/{channel.id}/messages/{message_id}", std::to_string(channel_id), std::to_string(message_id));
+                auto route = build_route<2>("PATCH", "/channels/{channel.id}/messages/{message.id}", {std::to_string(channel_id), std::to_string(message_id)});
                 return request_json<disccord::models::message>(route, args, token);
             }
 
             pplx::task<void> rest_api_client::delete_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/{message.id}", std::to_string(channel_id), std::to_string(message_id));
+                auto route = build_route<2>("DELETE", "/channels/{channel.id}/messages/{message.id}", {std::to_string(channel_id), std::to_string(message_id)});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::bulk_delete_messages(uint64_t channel_id, std::vector<uint64_t> message_ids, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::bulk_delete_message_args args{message_ids};
-                auto route = get_route("DELETE", "/channels/{channel.id}/messages/bulk-delete", std::to_string(channel_id));
+                auto route = build_route<1>("DELETE", "/channels/{channel.id}/messages/bulk-delete", {std::to_string(channel_id)});
                 return request_json(route, args, token);
             }
 
             pplx::task<void> rest_api_client::edit_channel_permissions(uint64_t channel_id, uint64_t overwrite_id, uint32_t allow, uint32_t deny, std::string type, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::edit_channel_permissions_args args{allow, deny, type};
-                auto route = get_route("PUT", "/channels/{channel.id}/permissions/{overwrite_id}", std::to_string(channel_id), std::to_string(overwrite_id));
+                auto route = build_route<2>("PUT", "/channels/{channel.id}/permissions/{overwrite.id}", {std::to_string(channel_id), std::to_string(overwrite_id)});
                 return request_json(route, args, token);
             }
 
             pplx::task<std::vector<disccord::models::invite>> rest_api_client::get_channel_invites(uint64_t channel_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/invites", std::to_string(channel_id));
+                auto route = build_route<1>("GET", "/channels/{channel.id}/invites", {std::to_string(channel_id)});
                 return request_multi_json<disccord::models::invite>(route, token);
             }
 
             pplx::task<disccord::models::invite> rest_api_client::create_channel_invite(uint64_t channel_id, disccord::rest::models::create_channel_invite_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("POST", "/channels/{channel.id}/invites", std::to_string(channel_id));
+                auto route = build_route<1>("POST", "/channels/{channel.id}/invites", {std::to_string(channel_id)});
                 return request_json<disccord::models::invite>(route, args, token);
             }
 
             pplx::task<void> rest_api_client::delete_channel_permissions(uint64_t channel_id, uint64_t overwrite_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/permissions/{overwrite_id}", std::to_string(channel_id), std::to_string(overwrite_id));
+                auto route = build_route<2>("DELETE", "/channels/{channel.id}/permissions/{overwrite.id}", {std::to_string(channel_id), std::to_string(overwrite_id)});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::trigger_typing(uint64_t channel_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("POST", "/channels/{channel.id}/typing", std::to_string(channel_id));
+                auto route = build_route<1>("POST", "/channels/{channel.id}/typing", {std::to_string(channel_id)});
                 return request(route, token);
             }
 
             pplx::task<std::vector<disccord::models::message>> rest_api_client::get_pinned_messages(uint64_t channel_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/channels/{channel.id}/pins", std::to_string(channel_id));
+                auto route = build_route<1>("GET", "/channels/{channel.id}/pins", {std::to_string(channel_id)});
                 return request_multi_json<disccord::models::message>(route, token);
             }
 
             pplx::task<void> rest_api_client::pin_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PUT", "/channels/{channel.id}/pins/{message_id}", std::to_string(channel_id), std::to_string(message_id));
+                auto route = build_route<2>("PUT", "/channels/{channel.id}/pins/{message.id}", {std::to_string(channel_id), std::to_string(message_id)});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::unpin_message(uint64_t channel_id, uint64_t message_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/pins/{message_id}", std::to_string(channel_id), std::to_string(message_id));
+                auto route = build_route<2>("DELETE", "/channels/{channel.id}/pins/{message.id}", {std::to_string(channel_id), std::to_string(message_id)});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::add_dm_recipient(uint64_t channel_id, uint64_t user_id, std::string access_token, std::string nick, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::add_dm_recipient_args args{access_token, nick};
-                auto route = get_route("PUT", "/channels/{channel.id}/recipients/{user_id}", std::to_string(channel_id), std::to_string(user_id));
+                auto route = build_route<2>("PUT", "/channels/{channel.id}/recipients/{user.id}", {std::to_string(channel_id), std::to_string(user_id)});
                 return request_json(route, args, token);
             }
 
             pplx::task<void> rest_api_client::remove_dm_recipient(uint64_t channel_id, uint64_t user_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/channels/{channel.id}/recipients/{user_id}", std::to_string(channel_id), std::to_string(user_id));
+                auto route = build_route<2>("DELETE", "/channels/{channel.id}/recipients/{user.id}", {std::to_string(channel_id), std::to_string(user_id)});
                 return request(route, token);
             }
 
             // Guild API
             pplx::task<disccord::models::guild> rest_api_client::get_guild(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}", std::to_string(guild_id));
+                auto route = build_route<1>("GET", "/guilds/{guild.id}", {std::to_string(guild_id)});
                 return request_json<disccord::models::guild>(route, token);
             }
 
             pplx::task<disccord::models::guild> rest_api_client::modify_guild(uint64_t guild_id, disccord::rest::models::modify_guild_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PATCH", "/guilds/{guild.id}", std::to_string(guild_id));
+                auto route = build_route<1>("PATCH", "/guilds/{guild.id}", {std::to_string(guild_id)});
                 return request_json<disccord::models::guild>(route, args, token);
             }
 
             pplx::task<disccord::models::guild> rest_api_client::delete_guild(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/guilds/{guild.id}", std::to_string(guild_id));
+                auto route = build_route<1>("DELETE", "/guilds/{guild.id}", {std::to_string(guild_id)});
                 return request_json<disccord::models::guild>(route, token);
                 }
 
             pplx::task<std::vector<disccord::models::channel>> rest_api_client::get_guild_channels(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/channels", std::to_string(guild_id));
+                auto route = build_route<1>("GET", "/guilds/{guild.id}/channels", {std::to_string(guild_id)});
                 return request_multi_json<disccord::models::channel>(route, token);
             }
 
             pplx::task<disccord::models::channel> rest_api_client::create_guild_channel(uint64_t guild_id, disccord::rest::models::create_guild_channel_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("POST", "/guilds/{guild.id}/channels", std::to_string(guild_id));
+                auto route = build_route<1>("POST", "/guilds/{guild.id}/channels", {std::to_string(guild_id)});
                 return request_json<disccord::models::channel>(route, args, token);
             }
 
             pplx::task<void> rest_api_client::modify_guild_channel_positions(uint64_t guild_id, disccord::rest::models::modify_positions_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PATCH", "/guilds/{guild.id}/channels", std::to_string(guild_id));
+                auto route = build_route<1>("PATCH", "/guilds/{guild.id}/channels", {std::to_string(guild_id)});
                 return request_json(route, args, token);
             }
 
             pplx::task<disccord::models::guild_member> rest_api_client::get_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/members/{user.id}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = build_route<2>("GET", "/guilds/{guild.id}/members/{user.id}", {std::to_string(guild_id), std::to_string(user_id)});
                 return request_json<disccord::models::guild_member>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members(uint64_t guild_id, uint16_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/members?limit={limit}", std::to_string(guild_id), std::to_string(limit));
+                auto route = build_route<2>("GET", "/guilds/{guild.id}/members?limit={limit}", {std::to_string(guild_id), std::to_string(limit)});
                 return request_multi_json<disccord::models::guild_member>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members_before(uint64_t guild_id, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/members?before={user}&limit={limit}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = build_route<3>("GET", "/guilds/{guild.id}/members?before={user}&limit={limit}", {std::to_string(guild_id), std::to_string(user_id), std::to_string(limit)});
                 return request_multi_json<disccord::models::guild_member>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::guild_member>> rest_api_client::list_guild_members_after(uint64_t guild_id, uint64_t user_id, uint16_t limit, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/members?after={user}&limit={limit}", std::to_string(guild_id), std::to_string(user_id), std::to_string(limit));
+                auto route = build_route<3>("GET", "/guilds/{guild.id}/members?after={user}&limit={limit}", {std::to_string(guild_id), std::to_string(user_id), std::to_string(limit)});
                 return request_multi_json<disccord::models::guild_member>(route, token);
             }
 
             pplx::task<disccord::models::guild_member> rest_api_client::add_guild_member(uint64_t guild_id, uint64_t user_id, disccord::rest::models::add_guild_member_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PUT", "/guilds/{guild.id}/members/{user.id}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = build_route<2>("PUT", "/guilds/{guild.id}/members/{user.id}", {std::to_string(guild_id), std::to_string(user_id)});
                 return request_json<disccord::models::guild_member>(route, args, token);
             }
 
             pplx::task<void> rest_api_client::modify_guild_member(uint64_t guild_id, uint64_t user_id, disccord::rest::models::modify_guild_member_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PATCH", "/guilds/{guild.id}/members/{user.id}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = build_route<2>("PATCH", "/guilds/{guild.id}/members/{user.id}", {std::to_string(guild_id), std::to_string(user_id)});
                 return request_json(route, args, token);
             }
 
@@ -453,68 +453,68 @@ namespace disccord
 
             pplx::task<void> rest_api_client::add_guild_member_role(uint64_t guild_id, uint64_t user_id, uint64_t role_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PUT", "/guilds/{guild.id}/members/{user.id}/roles/{role.id}", std::to_string(guild_id), std::to_string(user_id), std::to_string(role_id));
+                auto route = build_route<3>("PUT", "/guilds/{guild.id}/members/{user.id}/roles/{role.id}", {std::to_string(guild_id), std::to_string(user_id), std::to_string(role_id)});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::remove_guild_member_role(uint64_t guild_id, uint64_t user_id, uint64_t role_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/guilds/{guild.id}/members/{user.id}/roles/{role.id}", std::to_string(guild_id), std::to_string(user_id), std::to_string(role_id));
+                auto route = build_route<3>("DELETE", "/guilds/{guild.id}/members/{user.id}/roles/{role.id}", {std::to_string(guild_id), std::to_string(user_id), std::to_string(role_id)});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::remove_guild_member(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/guilds/{guild.id}/members/{user.id}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = build_route<3>("DELETE", "/guilds/{guild.id}/members/{user.id}", {std::to_string(guild_id), std::to_string(user_id)});
                 return request(route, token);
             }
 
             pplx::task<std::vector<disccord::models::user>> rest_api_client::get_guild_bans(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/bans", std::to_string(guild_id));
+                auto route = build_route<1>("GET", "/guilds/{guild.id}/bans", {std::to_string(guild_id)});
                 return request_multi_json<disccord::models::user>(route, token);
             }
 
             pplx::task<void> rest_api_client::create_guild_ban(uint64_t guild_id, uint64_t user_id, uint8_t delete_message_days, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::create_guild_ban_args args{delete_message_days};
-                auto route = get_route("PUT", "/guilds/{guild.id}/bans/{user.id}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = build_route<2>("PUT", "/guilds/{guild.id}/bans/{user.id}", {std::to_string(guild_id), std::to_string(user_id)});
                 return request_json(route, args, token);
             }
 
             pplx::task<void> rest_api_client::remove_guild_ban(uint64_t guild_id, uint64_t user_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/guilds/{guild.id}/bans/{user.id}", std::to_string(guild_id), std::to_string(user_id));
+                auto route = build_route<2>("DELETE", "/guilds/{guild.id}/bans/{user.id}", {std::to_string(guild_id), std::to_string(user_id)});
                 return request(route, token);
             }
 
             pplx::task<std::vector<disccord::models::role>> rest_api_client::get_guild_roles(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/roles", std::to_string(guild_id));
+                auto route = build_route<1>("GET", "/guilds/{guild.id}/roles", {std::to_string(guild_id)});
                 return request_multi_json<disccord::models::role>(route, token);
             }
 
             pplx::task<disccord::models::role> rest_api_client::create_guild_role(uint64_t guild_id, disccord::rest::models::guild_role_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("POST", "/guilds/{guild.id}/roles", std::to_string(guild_id));
+                auto route = build_route<1>("POST", "/guilds/{guild.id}/roles", {std::to_string(guild_id)});
                 return request_json<disccord::models::role>(route, args, token);
             }
 
             pplx::task<void> rest_api_client::modify_guild_role_positions(uint64_t guild_id, disccord::rest::models::modify_positions_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PATCH", "/guilds/{guild.id}/roles", std::to_string(guild_id));
+                auto route = build_route<1>("PATCH", "/guilds/{guild.id}/roles", {std::to_string(guild_id)});
                 return request_json(route, args, token);
             }
 
             pplx::task<disccord::models::role> rest_api_client::modify_guild_role(uint64_t guild_id, disccord::rest::models::guild_role_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PATCH", "/guilds/{guild.id}/roles", std::to_string(guild_id));
+                auto route = build_route<1>("PATCH", "/guilds/{guild.id}/roles", {std::to_string(guild_id)});
                 return request_json<disccord::models::role>(route, args, token);
             }
 
             pplx::task<void> rest_api_client::delete_guild_role(uint64_t guild_id, uint64_t role_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/guilds/{guild.id}/roles/{role.id}", std::to_string(guild_id), std::to_string(role_id));
+                auto route = build_route<2>("DELETE", "/guilds/{guild.id}/roles/{role.id}", {std::to_string(guild_id), std::to_string(role_id)});
                 return request(route, token);
             }
 
@@ -524,64 +524,64 @@ namespace disccord
 
             pplx::task<std::vector<disccord::models::voice_region>> rest_api_client::get_guild_voice_regions(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/regions", std::to_string(guild_id));
+                auto route = build_route<1>("GET", "/guilds/{guild.id}/regions", {std::to_string(guild_id)});
                 return request_multi_json<disccord::models::voice_region>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::invite>> rest_api_client::get_guild_invites(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/invites", std::to_string(guild_id));
+                auto route = build_route<1>("GET", "/guilds/{guild.id}/invites", {std::to_string(guild_id)});
                 return request_multi_json<disccord::models::invite>(route, token);
             }
 
             pplx::task<std::vector<disccord::models::integration>> rest_api_client::get_guild_integrations(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/integrations", std::to_string(guild_id));
+                auto route = build_route<1>("GET", "/guilds/{guild.id}/integrations", {std::to_string(guild_id)});
                 return request_multi_json<disccord::models::integration>(route, token);
             }
 
             pplx::task<void> rest_api_client::create_guild_integration(uint64_t guild_id, uint64_t integration_id, std::string type, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::create_guild_integration_args args{type, integration_id};
-                auto route = get_route("PATCH", "/guilds/{guild.id}/integrations", std::to_string(guild_id));
+                auto route = build_route<1>("PATCH", "/guilds/{guild.id}/integrations", {std::to_string(guild_id)});
                 return request_json(route, args, token);
             }
 
             pplx::task<void> rest_api_client::modify_guild_integration(uint64_t guild_id, uint64_t integration_id, uint32_t expire_behavior, uint32_t expire_grace_period, bool enable_emoticons, const pplx::cancellation_token& token)
             {
                 disccord::rest::models::modify_guild_integration_args args{expire_behavior, expire_grace_period, enable_emoticons};
-                auto route = get_route("PATCH", "/guilds/{guild.id}/integrations/{integration.id}", std::to_string(guild_id), std::to_string(integration_id));
+                auto route = build_route<2>("PATCH", "/guilds/{guild.id}/integrations/{integration.id}", {std::to_string(guild_id), std::to_string(integration_id)});
                 return request_json(route, args, token);
             }
 
             pplx::task<void> rest_api_client::delete_guild_integration(uint64_t guild_id, uint64_t integration_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("DELETE", "/guilds/{guild.id}/integrations/{integration.id}", std::to_string(guild_id), std::to_string(integration_id));
+                auto route = build_route<2>("DELETE", "/guilds/{guild.id}/integrations/{integration.id}", {std::to_string(guild_id), std::to_string(integration_id)});
                 return request(route, token);
             }
 
             pplx::task<void> rest_api_client::sync_guild_integration(uint64_t guild_id, uint64_t integration_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("POST", "/guilds/{guild.id}/integrations/{integration.id}/sync", std::to_string(guild_id), std::to_string(integration_id));
+                auto route = build_route<2>("POST", "/guilds/{guild.id}/integrations/{integration.id}/sync", {std::to_string(guild_id), std::to_string(integration_id)});
                 return request(route, token);
             }
 
             pplx::task<disccord::models::guild_embed> rest_api_client::get_guild_embed(uint64_t guild_id, const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/guilds/{guild.id}/embed", std::to_string(guild_id));
+                auto route = build_route<1>("GET", "/guilds/{guild.id}/embed", {std::to_string(guild_id)});
                 return request_json<disccord::models::guild_embed>(route, token);
             }
 
             pplx::task<disccord::models::guild_embed> rest_api_client::modify_guild_embed(uint64_t guild_id, disccord::rest::models::modify_guild_embed_args args, const pplx::cancellation_token& token)
             {
-                auto route = get_route("PATCH", "/guilds/{guild.id}/embed", std::to_string(guild_id));
+                auto route = build_route<1>("PATCH", "/guilds/{guild.id}/embed", {std::to_string(guild_id)});
                 return request_json<disccord::models::guild_embed>(route, args, token);
             }
 
             // Voice API
             pplx::task<std::vector<disccord::models::voice_region>> rest_api_client::list_voice_regions(const pplx::cancellation_token& token)
             {
-                auto route = get_route("GET", "/voice/regions");
+                auto route = build_route<0>("GET", "/voice/regions", {});
                 return request_multi_json<disccord::models::voice_region>(route, token);
             }
 
