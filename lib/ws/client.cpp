@@ -29,6 +29,11 @@ namespace disccord
             return ws_api_client.connect(token);
         }
 
+        void discord_ws_client::event(ws::event ev, std::function<void ()> func)
+        {
+            dispatcher.on(static_cast<unsigned int>(ev), func);
+        }
+
         pplx::task<void> discord_ws_client::handle_frame(const disccord::models::ws::frame* frame)
         {
             switch (frame->opcode)
