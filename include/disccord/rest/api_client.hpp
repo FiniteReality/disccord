@@ -10,7 +10,7 @@
 #include <disccord/api/bucket_info.hpp>
 #include <disccord/api/multipart_request.hpp>
 #include <disccord/rest/route.hpp>
-#include <disccord/token_type.hpp>
+#include <disccord/types.hpp>
 
 #include <disccord/models/gateway_info.hpp>
 #include <disccord/models/channel.hpp>

@@ -19,6 +19,8 @@ namespace disccord
             bool _specified;
 
             public:
+                typedef T value_type;
+
                 constexpr optional() : _specified(false) { }
                 constexpr optional(const T& value) : _value(value), _specified(true) { }
 
@@ -29,7 +31,7 @@ namespace disccord
                 constexpr operator T&() { return _value; }
                 constexpr operator T() const { return _value; }
 
-                operator web::json::value() const
+                constexpr web::json::value get_json() const
                 {
                     if (_specified)
                     {
