@@ -44,13 +44,13 @@ SCENARIO("REST api is successful", "[!mayfail]") {
         user_id = "257584807716978688";
     }
 
-    uint64_t id = std::stoull(user_id);
+    disccord::snowflake id = std::stoull(user_id);
 
     GIVEN("an api client with our token and id") {
         auto api_client = rest_api_client(web::uri(DISCORD_API_BASE_URL), token, disccord::token_type::BOT);
 
         WHEN("we retrieve the current user") {
-            uint64_t retrieved_id;
+            disccord::snowflake retrieved_id;
 
             api_client.get_current_user().then([&](user ent)
             {
