@@ -36,11 +36,11 @@ int main()
 
     if (type.empty() || type == "bot")
     {
-        token_type = disccord::token_type::Bot;
+        token_type = disccord::token_type::BOT;
     }
     else if (type == "user")
     {
-        token_type = disccord::token_type::User;
+        token_type = disccord::token_type::USER;
     }
     else
     {

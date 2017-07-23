@@ -1,4 +1,4 @@
-$$NAME = __FILE__:match("/?(.-)$"):gsub("%.", "_")$$
+$$NAME = __FILE__:match("/?([^/]-)$"):gsub("%.", "_")$$
 #ifndef _$$NAME$$_
 #define _$$NAME$$_
 
@@ -8,6 +8,15 @@ $$NAME = __FILE__:match("/?(.-)$"):gsub("%.", "_")$$
 #include <disccord/util/optional.hpp>
 
 $$
+__SUB_NAMESPACES__ = __FILE__:match("(.+)/[^/]-$")
+if __SUB_NAMESPACES__ then
+    local ns = {}
+    for component in __SUB_NAMESPACES__:gmatch("[^/]+") do
+        ns[#ns+1] = ("namespace %s\n{"):format(component)
+    end
+    __SUB_NAMESPACES__ = ns
+end
+
 for i, include_file in ipairs(__INCLUDES__) do
     __INCLUDES__[i] = ("#include <%s>"):format(include_file)
 end
@@ -23,7 +32,9 @@ namespace disccord
 {
 namespace models
 {
+$$__SUB_NAMESPACES__ and table.concat(__SUB_NAMESPACES__, "\n") or ""$$
 %s
+$$__SUB_NAMESPACES__ and ("}\n"):rep(#__SUB_NAMESPACES__) or ""$$
 }
 }
 

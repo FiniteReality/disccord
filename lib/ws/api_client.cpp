@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include <cpprest/interopstream.h>
 
@@ -38,7 +39,7 @@ namespace disccord
             {
                 return rest_api_client.get_gateway(token).then([this](disccord::models::gateway_info info)
                 {
-                    auto builder = web::uri_builder(web::uri(info.get_url()));
+                    auto builder = web::uri_builder(web::uri(info.url));
                     builder
                         .append_query("encoding", "json") // TODO: ETF support
                         .append_query("v", DISCORD_GATEWAY_API_VERSION);
@@ -50,7 +51,7 @@ namespace disccord
                 });
             }
 
-            void ws_api_client::set_frame_handler(const std::function<pplx::task<void>(const disccord::ws::models::frame*)>& func)
+            void ws_api_client::set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func)
             {
                 message_handler = func;
             }
@@ -84,14 +85,12 @@ namespace disccord
 
                         web::json::value body = web::json::value::parse(body_stream);
 
-                        models::frame* frame = new models::frame();
+                        std::unique_ptr<disccord::models::ws::frame> frame = std::make_unique<disccord::models::ws::frame>();
                         frame->decode(body);
 
-                        models::frame const* frame_c = frame;
-                        return message_handler(frame_c).then([frame]()
-                        {
-                            delete frame;
-                        });
+                        disccord::models::ws::frame const* frame_c = frame.get();
+                        return message_handler(frame_c).then([&frame]()
+                        { });
                     }
                     default:
                         std::cout << "unhandled ws message type: " << (int)message.message_type() << std::endl;

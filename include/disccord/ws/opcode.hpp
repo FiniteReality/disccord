@@ -5,25 +5,22 @@ namespace disccord
 {
     namespace ws
     {
-        namespace opcode
+        enum class opcode
         {
-            enum opcode
-            {
-                DISPATCH, //0
-                HEARTBEAT,
-                IDENTIFY,
-                PRESENCE,
-                VOICE_STATE,
-                VOICE_PING,
-                RESUME,
-                RECONNECT,
-                REQUEST_MEMBERS,
-                INVALIDATE_SESSION,
-                HELLO, // 10
-                HEARTBEAT_ACK,
-                GUILD_SYNC
-            };
-        }
+            DISPATCH, //0
+            HEARTBEAT,
+            IDENTIFY,
+            PRESENCE,
+            VOICE_STATE,
+            VOICE_PING,
+            RESUME,
+            RECONNECT,
+            REQUEST_MEMBERS,
+            INVALIDATE_SESSION,
+            HELLO, // 10
+            HEARTBEAT_ACK,
+            GUILD_SYNC
+        };
     }
 }
 

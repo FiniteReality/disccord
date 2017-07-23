@@ -5,11 +5,11 @@ namespace disccord
     namespace rest
     {
         discord_rest_client::discord_rest_client()
-            : api_client(web::uri(DISCORD_BASE_URL), "", disccord::token_type::Bot)
+            : api_client(web::uri(DISCORD_BASE_URL), "", disccord::token_type::BOT)
         { }
 
         discord_rest_client::discord_rest_client(std::string token)
-            : api_client(web::uri(DISCORD_BASE_URL), token, disccord::token_type::Bot)
+            : api_client(web::uri(DISCORD_BASE_URL), token, disccord::token_type::BOT)
         { }
         
         discord_rest_client::discord_rest_client(std::string token, disccord::token_type type)

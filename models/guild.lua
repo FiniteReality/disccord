@@ -1,34 +1,3 @@
-converter{
-    from = "disccord::verification_level",
-    to = "uint32_t",
-    "static_cast<uint32_t>(%s)"
-}
-converter{
-    from = "disccord::notification_level",
-    to = "uint32_t",
-    "static_cast<uint32_t>(%s)"
-}
-converter{
-    from = "disccord::mfa_level",
-    to = "uint32_t",
-    "static_cast<uint32_t>(%s)"
-}
-converter{
-    from = "uint32_t",
-    to = "disccord::verification_level",
-    "static_cast<disccord::verification_level>(%s)"
-}
-converter{
-    from = "uint32_t",
-    to = "disccord::notification_level",
-    "static_cast<disccord::notification_level>(%s)"
-}
-converter{
-    from = "uint32_t",
-    to = "disccord::mfa_level",
-    "static_cast<disccord::mfa_level>(%s)"
-}
-
 model{"guild",
     property{"id", "disccord::snowflake"},
     property{"name", "std::string"},

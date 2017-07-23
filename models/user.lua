@@ -1,4 +1,5 @@
 model{"user",
+    property{"id", "disccord::snowflake"},
     property{"username", "std::string"},
     property{"discriminator", "disccord::discriminator"},
     property{"avatar", "disccord::util::optional<std::string>"},

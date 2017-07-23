@@ -6,8 +6,8 @@
 
 #include <cpprest/ws_client.h>
 
-#include <disccord/token_type.hpp>
-#include <disccord/ws/models/frame.hpp>
+#include <disccord/types.hpp>
+#include <disccord/models/ws/frame.hpp>
 
 namespace disccord
 {
@@ -31,14 +31,14 @@ namespace disccord
 
                     pplx::task<void> connect(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    void set_frame_handler(const std::function<pplx::task<void>(const disccord::ws::models::frame*)>& func);
+                    void set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func);
 
                 private:
                     web::websockets::client::websocket_client ws_client;
                     std::string token;
                     disccord::token_type token_type;
                     disccord::rest::internal::rest_api_client& rest_api_client;
-                    std::function<pplx::task<void>(const disccord::ws::models::frame*)> message_handler;
+                    std::function<pplx::task<void>(const disccord::models::ws::frame*)> message_handler;
 
                     pplx::task<void> read_task;
                     pplx::cancellation_token_source cancel_token;
