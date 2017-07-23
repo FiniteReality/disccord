@@ -32,6 +32,8 @@
 #include <algorithm>
 #include <string>
 
+#include <disccord/ws/event.hpp>
+
 namespace disccord
 {
     namespace ws
@@ -85,14 +87,14 @@ namespace disccord
                 void remove_listener(unsigned int listener_id);
 
                 template <typename... Args>
-                void emit(unsigned int event_id, Args... args)
+                void emit(disccord::ws::event event_id, Args... args)
                 {
                     std::list<std::shared_ptr<listener<Args...>>> handlers;
 
                     {
                         std::lock_guard<std::mutex> lock(mutex);
 
-                        auto range = listeners.equal_range(event_id);
+                        auto range = listeners.equal_range(static_cast<unsigned int>(event_id));
                         handlers.resize(std::distance(range.first, range.second));
                         std::transform(range.first, range.second, handlers.begin(), [] (std::pair<const unsigned int, std::shared_ptr<listenerbase>> p) {
                             auto l = std::dynamic_pointer_cast<listener<Args...>>(p.second);
