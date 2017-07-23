@@ -88,7 +88,17 @@ namespace disccord
                 request->set_method(route.method);
                 request->set_url(web::uri(route.full_url));
 
-                return bucket->enter(http_client, request, token);
+                return bucket->enter(http_client, request, token).then([](web::http::http_response response)
+                {
+                    auto status_code = response.status_code();
+                    if (status_code != 204 && status_code != 200)
+                    {
+                        std::string err = "HTTP Error: ["+std::to_string(response.status_code())+"] "+response.reason_phrase();
+                        throw web::http::http_exception(err);
+                    }
+
+                    return response;
+                });
             }
 
             pplx::task<void> rest_api_client::request(route_info& route, const pplx::cancellation_token& token)

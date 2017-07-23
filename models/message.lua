@@ -2,7 +2,8 @@ include("disccord/models/user.hpp")
 
 model{"message",
     property{"id", "disccord::snowflake"},
-    property{"type", "disccord::message_type"},
+    -- ????? i'm getting json where this is null
+    property{"type", "disccord::util::optional<disccord::message_type>"},
     property{"channel_id", "disccord::snowflake"},
     property{"webhook_id", "disccord::util::optional<disccord::snowflake>"},
     property{"author", "disccord::util::optional<disccord::models::user>"},
