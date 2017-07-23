@@ -9,7 +9,6 @@ namespace disccord
         {
             UNKNOWN, //0
             READY,
-            MESSAGE_CREATE,
             RESUMED,
             CHANNEL_CREATE,
             CHANNEL_UPDATE,
@@ -28,6 +27,7 @@ namespace disccord
             GUILD_ROLE_CREATE,
             GUILD_ROLE_UPDATE,
             GUILD_ROLE_DELETE, //20
+            MESSAGE_CREATE,
             MESSAGE_UPDATE,
             MESSAGE_DELETE,
             MESSAGE_DELETE_BULK,
