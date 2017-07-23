@@ -6,7 +6,7 @@ include_directories(${CPPREST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/include)
 
 set(MODELS user.lua entity.lua gateway_info.lua channel.lua connection.lua
-    guild.lua)
+    guild.lua guild_embed.lua guild_member.lua)
 
 foreach(MODEL IN ITEMS ${MODELS})
     string(REGEX REPLACE "\\.[^.]*$" "" MODEL ${MODEL})

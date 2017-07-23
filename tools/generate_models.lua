@@ -20,7 +20,7 @@ local generate do -- Code generation
 
         if data.type == "model" then
             header[#header+1] = ("class %s {"):format(data.name)
-            header[#header+1] = ("public: %s(); virtual ~%s();"):format(data.name, data.name)
+            header[#header+1] = ("public: %s();"):format(data.name)
 
             local ctor_params = {}
 
@@ -36,7 +36,6 @@ local generate do -- Code generation
             header[#header+1] = "};"
 
             code[#code+1] = ("%s::%s() : %s { }"):format(data.name, data.name, table.concat(ctor_params, ","))
-            code[#code+1] = ("%s::~%s() { }"):format(data.name, data.name)
 
         elseif data.type == "property" then
             header[#header+1] = ("private: %s %s;"):format(data.prop_type, data.name)
@@ -70,6 +69,10 @@ do -- DSL definitions
 
         local converter = {from = data.from, to = data.to, body = data[1]}
         __CONVERTERS__[#__CONVERTERS__+1] = converter
+    end
+
+    function include(file)
+        __INCLUDES__[#__INCLUDES__ + 1] = file
     end
 
     function model(data)
@@ -136,9 +139,32 @@ local generate_encode_body, generate_decode_body do
         member.prop_type:find("disccord::snowflake") or
         member.prop_type:find("bool") or
         member.prop_type:find("u?int%d+_t") then
-            return member.name
+            return ("web::json::value(%s)"):format(member.name)
+
+        elseif member.prop_type:find("util::optional") then
+            local sub_simple, sub_complex = get_encoder{
+                prop_type = member.prop_type:match("%b<>"):sub(2,-2),
+                name = ("%s.get_value()"):format(member.name)
+            }
+
+            if not sub_simple then
+                error("not supported yet", 2)
+            else
+                return nil, ([[
+if (%s.has_value())
+{
+    info.push_back(std::make_pair("%s", %s));
+}
+else if (%s.is_specified())
+{
+    info.push_back(std::make_pair("%s", web::json::value::null()));
+}]]):format(member.name, member.name, sub_simple, member.name, member.name)
+            end
+        elseif member.prop_type:find("models") then
+            return ("%s.encode()"):format(member.name)
         else
             -- TODO: handle multiple converters from this type
+            -- TODO: handle more complex converters
             for _, converter in ipairs(__CONVERTERS__) do
                 if converter.from == member.prop_type then
                     return converter.body:format(member.name)
@@ -153,10 +179,11 @@ local generate_encode_body, generate_decode_body do
 
         for _, member in ipairs(model.members) do
             if member.type == "property" then
-                if member.prop_type:find("util::optional") then
-                    result[#result+1] = ("info.push_back(std::make_pair(\"%s\", %s.get_json()));"):format(member.name, member.name)
+                local simple, complex = get_encoder(member)
+                if not simple then
+                    result[#result+1] = complex
                 else
-                    result[#result+1] = ("info.push_back(std::make_pair(\"%s\", web::json::value(%s)));"):format(member.name, get_encoder(member))
+                    result[#result+1] = ("info.push_back(std::make_pair(\"%s\", web::json::value(%s)));"):format(member.name, simple)
                 end
             end
         end
@@ -186,6 +213,10 @@ local generate_encode_body, generate_decode_body do
 
         elseif prop_type:find("bool") then
             return "field.as_bool()"
+
+        elseif prop_type:find("models") then
+            return "model", ("%s::value_type model; model.decode(field);"):format(prop_type);
+
         else
             for _, converter in ipairs(__CONVERTERS__) do
                 if converter.to == prop_type then
@@ -206,6 +237,7 @@ local generate_encode_body, generate_decode_body do
 
         for _, member in ipairs(model.members) do
             if member.type == "property" then
+                local assigner, decoder = get_decoder(member.prop_type)
                 if member.prop_type:find("util::optional") then
 
                     result[#result+1] = ([[
@@ -216,16 +248,18 @@ if (json.at("%s").is_null())
 else
 {
     auto field = json.at("%s");
+    %s
     %s = disccord::util::optional<%s::value_type>(%s);
-}]]):format(member.name, member.name, member.prop_type, member.name, member.name, member.prop_type, member.name, member.name, member.prop_type, get_decoder(member.prop_type))
+}]]):format(member.name, member.name, member.prop_type, member.name, member.name, member.prop_type, member.name, decoder or "", member.name, member.prop_type, assigner)
 
                 else
 
                     result[#result+1] = ([[
 {
     auto field = json.at("%s");
+    %s
     %s = %s;
-}]]):format(member.name, member.name, get_decoder(member.prop_type))
+}]]):format(member.name, decoder or "", member.name, assigner)
 
                 end
             end
@@ -248,6 +282,7 @@ local code_output = args[4].."/"
 
 for i = 5, nargs do
     __MODELS__ = {}
+    __INCLUDES__ = {}
     __CONVERTERS__ = {}
     dofile(args[i])
 
