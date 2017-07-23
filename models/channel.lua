@@ -2,7 +2,7 @@ model{"channel",
     -- All channels
     property{"id", "disccord::snowflake"},
     -- ????? i'm getting json where this is null
-    property{"type", "disccord::util::optional<disccord::channel_type>"},
+    property{"type", "disccord::channel_type"},
     -- Guild channels
     property{"guild_id", "disccord::util::optional<disccord::snowflake>"},
     property{"position", "disccord::util::optional<int32_t>"},

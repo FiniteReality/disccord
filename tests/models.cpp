@@ -237,7 +237,8 @@ TEST_CASE( "Message model correctly instantiated" ){
         "hoist" : false
     }
     ],
-    "pinned" : false
+    "pinned" : false,
+    "type": 0
 })";
 
     REQUIRE_NOTHROW(test_message.decode(web::json::value::parse(json)));
@@ -247,6 +248,7 @@ TEST_CASE( "Message model correctly instantiated" ){
     REQUIRE(test_message.author.get_value().discriminator == 5734);
     REQUIRE(test_message.author.get_value().bot == false);
     REQUIRE(test_message.id == 1266567890);
+    REQUIRE(test_message.type == disccord::message_type::DEFAULT);
     REQUIRE(test_message.channel_id == 9999999999);
     REQUIRE(test_message.content == std::string{"this is message content"});
     //REQUIRE(test_message.timestamp == "2016-03-31T19:15:39.954000+00:00");
@@ -296,13 +298,15 @@ TEST_CASE( "Channel model correctly instantiated" ){
         "bot": false
     },
     "id": "134552934997426176",
-    "last_message_id" : "153642275539255296"
+    "last_message_id" : "153642275539255296",
+    "type": 1
 })";
 
     REQUIRE_NOTHROW(test_channel.decode(web::json::value::parse(dm_json)));
 
     REQUIRE(test_channel.id == 134552934997426176);
     REQUIRE(test_channel.last_message_id.get_value() == 153642275539255296);
+    REQUIRE(test_channel.type == disccord::channel_type::DM);
 
     /*auto recip = test_channel.recipient.get_value();
     REQUIRE(recip.id == 1234567890);
