@@ -5,7 +5,7 @@
 #define DISCCORD_PROJECT_URL "https://github.com/FiniteReality/disccord"
 
 #ifndef DISCORD_REST_API_VERSION
-#define DISCORD_REST_API_VERSION "6"
+#define DISCORD_REST_API_VERSION "7"
 #endif /*DISCORD_REST_API_VERSION*/
 
 #ifndef DISCORD_GATEWAY_API_VERSION
