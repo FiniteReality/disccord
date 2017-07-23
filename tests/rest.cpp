@@ -47,15 +47,15 @@ SCENARIO("REST api is successful", "[!mayfail]") {
     uint64_t id = std::stoull(user_id);
 
     GIVEN("an api client with our token and id") {
-        auto api_client = rest_api_client(web::uri(DISCORD_API_BASE_URL), token, disccord::token_type::Bot);
+        auto api_client = rest_api_client(web::uri(DISCORD_API_BASE_URL), token, disccord::token_type::BOT);
 
         WHEN("we retrieve the current user") {
             uint64_t retrieved_id;
 
             api_client.get_current_user().then([&](user ent)
             {
-                CAPTURE(ent.get_id());
-                retrieved_id = ent.get_id();
+                CAPTURE(ent.id);
+                retrieved_id = ent.id;
             }).wait();
 
             THEN("the id equals what we are given") {
@@ -85,7 +85,7 @@ SCENARIO("REST api is successful", "[!mayfail]") {
                 << "**Compiler:** " << compiler << "\n";
             }
 
-            disccord::rest::models::create_message_args args{message_builder.str()};
+            disccord::models::rest::create_message_args args{message_builder.str()};
 
             bool success;
 

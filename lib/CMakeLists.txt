@@ -11,8 +11,8 @@ set(LIBS ${LIBS} ${CPPREST_LIBRARIES} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES}
 
 set(SOURCE_FILES rest/api_client.cpp api/bucket_info.cpp
 api/multipart_field.cpp api/multipart_request.cpp api/multipart_file.cpp
-api/request_info.cpp rest/client.cpp util/semaphore.cpp ws/api_client.cpp
-ws/client.cpp ws/dispatcher.cpp)
+api/request_info.cpp rest/client.cpp util/semaphore.cpp util/url_encode.cpp
+ws/api_client.cpp ws/client.cpp ws/dispatcher.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 

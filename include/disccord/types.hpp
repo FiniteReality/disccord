@@ -2,11 +2,13 @@
 #define _types_hpp_
 
 #include <cstdint>
+#include <disccord/permissions.hpp>
 
 namespace disccord
 {
     using snowflake = uint64_t;
     using discriminator = uint16_t;
+    using color = uint32_t;
 
     enum class channel_type
     {
@@ -24,7 +26,6 @@ namespace disccord
         BEARER
     };
 
-    // TODO: verify the order of this
     enum class verification_level
     {
         NONE,
@@ -33,16 +34,28 @@ namespace disccord
         HIGH,
         HIGHER
     };
+
     // TODO: verify the order of this
     enum class notification_level
     {
         ALL,
         MENTIONS
     };
-    // TODO: figure out waht goes here
+
     enum class mfa_level
     {
-        UNKNOWN
+        DISABLED,
+        ENABLED
+    };
+
+    enum class message_type
+    {
+        DEFAULT,
+        RECIPIENT_ADD,
+        RECIPIENT_REMOVE,
+        CHANNEL_NAME_CHANGE,
+        CHANNEL_ICON_CHANGE,
+        CHANNEL_PINNED_MESSAGE
     };
 }
 

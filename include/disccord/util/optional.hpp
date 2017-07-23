@@ -1,11 +1,9 @@
-// Optional<T> class with support for cpprestsdk
-
 #ifndef _optional_hpp_
 #define _optional_hpp_
 
-#include <exception>
-
-#include <cpprest/json.h>
+// Tri-state optional object
+// Has states for when a value is present, when a value is null and when a
+// value is not present.
 
 namespace disccord
 {
@@ -31,28 +29,27 @@ namespace disccord
                 constexpr operator T&() { return _value; }
                 constexpr operator T() const { return _value; }
 
-                constexpr web::json::value get_json() const
-                {
-                    if (_specified)
-                    {
-                        if (_null)
-                            return web::json::value();
-                        else
-                            return web::json::value(_value);
-                    }
-                    else
-                    {
-                        throw std::logic_error("cannot convert to json when not specified");
-                    }
-                }
-
                 constexpr static optional no_value()
                 {
+                    // TODO: move this into the ctor
                     auto val = optional();
                     val._specified = true;
                     val._null = true;
 
                     return val;
+                }
+
+                bool operator==(const optional<T>& rhs) const
+                {
+                    return _null == rhs._null &&
+                           _specified = rhs._specified &&
+                           _value == rhs._value;
+                }
+
+                bool operator==(const T& rhs) const
+                {
+                    return _specified == true &&
+                           _value == rhs;
                 }
         };
     }

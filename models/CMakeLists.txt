@@ -1,12 +1,21 @@
 find_package(cpprest REQUIRED)
-find_package(Boost 1.54.0 REQUIRED COMPONENTS system filesystem atomic chrono
-    random regex)
 
-include_directories(${CPPREST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}
+include_directories(${CPPREST_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/include)
 
 set(MODELS user.lua entity.lua gateway_info.lua channel.lua connection.lua
-    guild.lua)
+guild.lua guild_embed.lua guild_member.lua integration.lua invite.lua
+message.lua role.lua user_guild.lua voice_region.lua
+rest/add_guild_member_args.lua rest/create_channel_invite_args.lua
+rest/create_guild_channel_args.lua rest/create_message_args.lua
+rest/edit_message_args.lua rest/edit_guild_role_args.lua
+rest/edit_channel_args.lua rest/edit_guild_args.lua
+rest/edit_guild_embed_args.lua rest/edit_guild_member_args.lua
+rest/edit_positions_args.lua rest/create_dm_channel_args.lua
+rest/create_group_dm_args.lua rest/create_guild_ban_args.lua
+rest/create_guild_integration_args.lua rest/edit_guild_integration_args.lua
+rest/bulk_delete_message_args.lua rest/edit_channel_permissions_args.lua
+rest/add_dm_recipient_args.lua ws/frame.lua)
 
 foreach(MODEL IN ITEMS ${MODELS})
     string(REGEX REPLACE "\\.[^.]*$" "" MODEL ${MODEL})
@@ -36,4 +45,5 @@ add_custom_target(
 )
 
 add_library(disccord_models STATIC ${MODELS_OUTPUT_SOURCE})
+set_target_properties(disccord_models PROPERTIES POSITION_INDEPENDENT_CODE ON)
 add_dependencies(disccord_models generate_models)

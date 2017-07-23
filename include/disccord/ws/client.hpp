@@ -6,7 +6,8 @@
 #include <cpprest/ws_client.h>
 
 #include <disccord/ws/event.hpp>
-#include <disccord/token_type.hpp>
+
+#include <disccord/types.hpp>
 #include <disccord/rest/api_client.hpp>
 #include <disccord/ws/api_client.hpp>
 #include <disccord/ws/dispatcher.hpp>
@@ -24,12 +25,12 @@ namespace disccord
 
                 pplx::task<void> connect(const pplx::cancellation_token& token = pplx::cancellation_token::none());
                 
-                void event(event::event ev, std::function<void ()> func);
+                void event(ws::event ev, std::function<void ()> func);
 
                 template<typename LambdaType>
-                void event(event::event ev, LambdaType lambda)
+                void event(ws::event ev, LambdaType lambda)
                 {
-                    dispatcher.on(ev, lambda);
+                    dispatcher.on(static_cast<unsigned int>(ev), lambda);
                 }
 
             private:
@@ -41,7 +42,7 @@ namespace disccord
                 pplx::cancellation_token_source heartbeat_cancel_token;
                 pplx::task<void> heartbeat_task;
 
-                pplx::task<void> handle_frame(const disccord::ws::models::frame* frame);
+                pplx::task<void> handle_frame(const disccord::models::ws::frame* frame);
                 pplx::task<void> heartbeat_loop(int wait_millis);
         };
     }

@@ -6,6 +6,8 @@
 
 # Models
 include/disccord/models/*.hpp
+include/disccord/models/ws/*.hpp
+include/disccord/models/rest/*.hpp
 
 # External Dependencies
 casablanca/*
