@@ -15,7 +15,7 @@ namespace disccord
             : rest_api_client(base_uri, token, type), ws_api_client(rest_api_client, token, type),
             heartbeat_cancel_token(), heartbeat_task()
         {
-            ws_api_client.set_frame_handler([this](const disccord::ws::models::frame* frame)
+            ws_api_client.set_frame_handler([this](const disccord::models::ws::frame* frame)
             {
                 return this->handle_frame(frame);
             });
@@ -29,15 +29,15 @@ namespace disccord
             return ws_api_client.connect(token);
         }
 
-        pplx::task<void> discord_ws_client::handle_frame(const disccord::ws::models::frame* frame)
+        pplx::task<void> discord_ws_client::handle_frame(const disccord::models::ws::frame* frame)
         {
-            switch (frame->get_opcode())
+            switch (frame->opcode)
             {
                 case opcode::HELLO:
                     //heartbeat_task = pplx::create_task(std::bind)
                     break;
                 default:
-                    std::cout << "Unhandled opcode " << frame->get_opcode() << std::endl;
+                    std::cout << "Unhandled opcode " << static_cast<uint32_t>(frame->opcode) << std::endl;
             }
 
             return pplx::create_task([](){});

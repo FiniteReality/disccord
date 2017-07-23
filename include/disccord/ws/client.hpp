@@ -5,7 +5,7 @@
 
 #include <cpprest/ws_client.h>
 
-#include <disccord/token_type.hpp>
+#include <disccord/types.hpp>
 #include <disccord/rest/api_client.hpp>
 #include <disccord/ws/api_client.hpp>
 
@@ -29,7 +29,7 @@ namespace disccord
                 pplx::cancellation_token_source heartbeat_cancel_token;
                 pplx::task<void> heartbeat_task;
 
-                pplx::task<void> handle_frame(const disccord::ws::models::frame* frame);
+                pplx::task<void> handle_frame(const disccord::models::ws::frame* frame);
                 pplx::task<void> heartbeat_loop(int wait_millis);
         };
     }
