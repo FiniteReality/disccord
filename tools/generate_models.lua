@@ -285,16 +285,16 @@ else
             return "field.as_string()";
 
         elseif data_type:find("disccord::snowflake") then
-            return "field.as_number().to_uint64()"
+            return "std::stoull(field.as_string())";
         elseif data_type:find("disccord::color") then
             return "field.as_number().to_uint32()"
         elseif data_type:find("disccord::discriminator") then
-            return ("static_cast<%s>(field.as_number().to_uint32())"):format(data_type)
+            return ("static_cast<%s>(std::stoi(field.as_string()))"):format(data_type)
 
         elseif data_type:find("u?int%d+_t") then
             local int_type = data_type:match("(u?int%d+)_t")
             if int_type:find("int64") then
-                return ("field.as_number().to_%s()"):format(int_type)
+                return ("std::stoull(field.as_string())"):format(int_type)
             elseif int_type:find("int32") then
                 return ("field.as_number().to_%s()"):format(int_type)
             else

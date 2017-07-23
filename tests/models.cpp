@@ -376,7 +376,7 @@ TEST_CASE( "Channel model correctly instantiated" ){
     REQUIRE(test_channel3.bitrate.get_value() == 64000);
     REQUIRE(test_channel3.user_limit.get_value() == 0);
     REQUIRE(test_channel3.position.get_value() == 5);
-    REQUIRE(test_channel3.type == disccord::channel_type::GUILD_VOICE);
+    REQUIRE(test_channel3.type == disccord::channel_type::DM);
     REQUIRE(test_channel3.name.get_value() == "ROCKET CHEESE");
     REQUIRE(test_channel3.guild_id.get_value() == 41771983423143937);
 }
@@ -761,7 +761,7 @@ TEST_CASE( "Guild Member model correctly instantiated" ){
 
     REQUIRE_NOTHROW(test_guild_memb.decode(web::json::value::parse(json)));
     
-    auto gmemb = test_guild_memb.member.get_value();
+    auto gmemb = test_guild_memb.user.get_value();
     //auto roles = test_guild_memb.roles.get_value();
     REQUIRE(test_guild_memb.deaf == false);
     //REQUIRE(test_guild_memb.joined_at == "2016-12-11T19:10:41.288000+00:00");
