@@ -702,8 +702,8 @@ TEST_CASE( "Application model correctly instantiated" ){
     "flags": 0,
     "owner": {
         "id": "81062087257755648",
-        "username": "FiniteReality"
-        "discriminator": 5734,
+        "username": "FiniteReality",
+        "discriminator": "5734",
         "bot": false
     }
 })";
