@@ -14,7 +14,7 @@
 //#include <disccord/models/relationship.hpp>
 //#include <disccord/models/ban.hpp>
 //#include <disccord/models/application.hpp>
-//#include <disccord/models/voice_region.hpp>
+#include <disccord/models/voice_region.hpp>
 //#include <disccord/models/voice_state.hpp>
 #include <disccord/util/optional.hpp>
 
@@ -256,9 +256,9 @@ TEST_CASE( "Message model correctly instantiated" ){
     REQUIRE(test_message.mention_everyone == true);
     REQUIRE(test_message.pinned == false);
 
-    /*//mentions array
-    auto m1 = test_message.mentions.get_value()[0];
-    auto m2 = test_message.mentions.get_value()[1];
+    //mentions array
+    auto m1 = test_message.mentions[0];
+    auto m2 = test_message.mentions[1];
     REQUIRE(m1.id == 6789012345);
     REQUIRE(m1.username == "FiniteReality123");
     REQUIRE(m1.discriminator == 6676);
@@ -270,16 +270,16 @@ TEST_CASE( "Message model correctly instantiated" ){
     REQUIRE(m2.bot == true);
 
     //mention_roles array
-    auto mr1 = test_message.mention_roles.get_value()[0];
-    auto mr2 = test_message.mention_roles.get_value()[1];
+    auto mr1 = test_message.mention_roles[0];
+    auto mr2 = test_message.mention_roles[1];
     REQUIRE(mr1.id == 1234567890);
     REQUIRE(mr1.name == "DISCCORD_ROLE");
     REQUIRE(mr1.color == 123456);
-    REQUIRE(mr1.permissions == 0);
+    REQUIRE(mr1.permissions == disccord::permissions::NONE);
     REQUIRE(mr1.position == 3);
     REQUIRE(mr1.managed == false);
     REQUIRE(mr1.mentionable == true);
-    REQUIRE(mr1.hoist == false);*/
+    REQUIRE(mr1.hoist == false);
 
     //TODO: check a few more of these
 }
@@ -389,50 +389,7 @@ TEST_CASE( "Connection model correctly instantiated" ){
     connection test_connection;
 
     std::string json = R"({
-    "integrations": [
-    {
-        "id" : "155101607195836416",
-        "name" : "IntegrateMeBoi",
-        "type" : "twitch",
-        "enabled" : true,
-        "syncing" : false,
-        "role_id" : "958364161551016071",
-        "expire_behavior" : 12345,
-        "expire_grace_period" : 98345,
-        "user" : {
-            "id": "1234567890",
-            "username": "FiniteReality",
-            "discriminator": "5734",
-            "bot": false
-        },
-        "account" : {
-            "id" : "9998",
-            "name" : "IamAccount"
-        },
-        "synced_at" : "2016-03-31T19:15:39.954000+00:00"
-    },
-    {
-        "id" : "195836416155101607",
-        "name" : "IntegrateMeOtherBoi",
-        "type" : "youtube",
-        "enabled" : false,
-        "syncing" : true,
-        "role_id" : "958615510160713641",
-        "expire_behavior" : 45123,
-        "expire_grace_period" : 34985,
-        "user" : {
-            "id": "8901234567",
-            "username": "RealityFinite",
-            "discriminator": "3457",
-            "bot": false
-        },
-        "account" : {
-            "id" : "8889",
-            "name" : "IamNotAccount"
-        },
-        "synced_at" : "2017-03-31T19:35:49.954000+00:00"
-    }
-    ],
+    "integrations": [1234567890,0987654321],
     "id": "13455293",
     "name" : "FiniteReality",
     "type" : "twitch",
@@ -442,43 +399,8 @@ TEST_CASE( "Connection model correctly instantiated" ){
     REQUIRE_NOTHROW(test_connection.decode(web::json::value::parse(json)));
 
     //integrations array
-    /*auto ig1 = test_connection.integrations.get_value()[0];
-    auto ig2 = test_connection.integrations.get_value()[1];
-    REQUIRE(ig1.id == 155101607195836416);
-    REQUIRE(ig1.name == "IntegrateMeBoi");
-    REQUIRE(ig1.type == "twitch");
-    REQUIRE(ig1.enabled == true);
-    REQUIRE(ig1.syncing == false);
-    REQUIRE(ig1.role_id == 958364161551016071);
-    REQUIRE(ig1.expire_behavior == 12345);
-    REQUIRE(ig1.expire_grace_period == 98345);
-    auto usr = ig1.user.get_value();
-    REQUIRE(usr.id == 1234567890);
-    REQUIRE(usr.username == "FiniteReality");
-    REQUIRE(usr.discriminator == 5734);
-    REQUIRE(usr.bot == false);
-    auto accnt = ig1.account.get_value();
-    REQUIRE(accnt.id == 9998);
-    REQUIRE(accnt.name == "IamAccount");
-    REQUIRE(ig1.synced_at == "2016-03-31T19:15:39.954000+00:00");
-
-    REQUIRE(ig2.id == 195836416155101607);
-    REQUIRE(ig2.name == "IntegrateMeOtherBoi");
-    REQUIRE(ig2.type == "youtube");
-    REQUIRE(ig2.enabled == false);
-    REQUIRE(ig2.syncing == true);
-    REQUIRE(ig2.role_id == 958615510160713641);
-    REQUIRE(ig2.expire_behavior == 45123);
-    REQUIRE(ig2.expire_grace_period == 34985);
-    auto usr2 = ig2.user.get_value();
-    REQUIRE(usr2.id == 8901234567);
-    REQUIRE(usr2.username == "RealityFinite");
-    REQUIRE(usr2.discriminator == 3457);
-    REQUIRE(usr2.bot == false);
-    auto accnt2 = ig2.account.get_value();
-    REQUIRE(accnt2.id == 8889);
-    REQUIRE(accnt2.name == "IamNotAccount");
-    REQUIRE(ig2.synced_at == "2017-03-31T19:35:49.954000+00:00");*/
+    REQUIRE(test_connection.integrations[0] == 1234567890);
+    REQUIRE(test_connection.integrations[1] ==  987654321);
 
     REQUIRE(test_connection.id == "13455293");
     REQUIRE(test_connection.name == "FiniteReality");
@@ -646,8 +568,7 @@ TEST_CASE( "Guild model correctly instantiated" ){
     REQUIRE(test_guild.default_message_notifications == disccord::notification_level::MENTIONS);
     REQUIRE(test_guild.embed_enabled == true);
 
-    /*auto gfeats = test_guild.features[0];
-    REQUIRE(gfeats == "INVITE_SPLASH");*/
+    REQUIRE(test_guild.features[0] == "INVITE_SPLASH");
 
     //only testing the composites/fields that still need code coverage
     /*auto gpresc = test_guild.presences.get_value()[0]; //just going to test one value in vector for now
@@ -766,15 +687,15 @@ TEST_CASE( "Guild Member model correctly instantiated" ){
     REQUIRE_NOTHROW(test_guild_memb.decode(web::json::value::parse(json)));
     
     auto gmemb = test_guild_memb.user.get_value();
-    //auto roles = test_guild_memb.roles.get_value();
+    auto roles = test_guild_memb.roles;
     REQUIRE(test_guild_memb.deaf == false);
     //REQUIRE(test_guild_memb.joined_at == "2016-12-11T19:10:41.288000+00:00");
     REQUIRE(gmemb.username == "Disccord test bot");
     REQUIRE(gmemb.discriminator == 3071);
     REQUIRE(gmemb.bot == true);
     REQUIRE(gmemb.id == 257584807716978688);
-    //REQUIRE(roles[0] == 230773182120984577);
-    //REQUIRE(roles[1] == 257584964726423554);
+    REQUIRE(roles[0] == 230773182120984577);
+    REQUIRE(roles[1] == 257584964726423554);
     REQUIRE(test_guild_memb.mute == false);
 }
 
@@ -814,37 +735,31 @@ TEST_CASE( "Guild Member model correctly instantiated" ){
     REQUIRE(test_app.rpc_origins.get_value()[0] == "WHAT");
     REQUIRE(test_app.rpc_origins.get_value()[1] == "THIS");
     REQUIRE(test_app.rpc_origins.get_value()[2] == "APPLICATION");
-}
+}*/
 
 TEST_CASE( "Voice region model correctly instantiated" ){
     voice_region test_vr;
-    if (!test_vr.id.empty()  && !test_vr.name.empty() &&
-        test_vr.vip && test_vr.optimal &&
-        test_vr.deprecated && test_vr.custom)
-    {
-        FAIL("Default constructor for Voice region model not correctly instantiated");
-    }
 
     std::string json = R"({
+    "id": "london-1",
     "name": "London",
-    "deprecated": true,
-    "custom": false,
-    "vip": false,
-    "optimal": true,
-    "id": "london"
+    "vip": true,
+    "optimal": false,
+    "sample_hostname": "london-1.discord-meme.com",
+    "sample_port": 6969
 })";
 
     REQUIRE_NOTHROW(test_vr.decode(web::json::value::parse(json)));
 
-    REQUIRE(test_vr.id == "london");
+    REQUIRE(test_vr.id == "london-1");
     REQUIRE(test_vr.name == "London");
-    REQUIRE(test_vr.vip == false);
-    REQUIRE(test_vr.optimal == true);
-    REQUIRE(test_vr.deprecated == true);
-    REQUIRE(test_vr.custom == false);
+    REQUIRE(test_vr.vip == true);
+    REQUIRE(test_vr.optimal == false);
+    REQUIRE(test_vr.sample_hostname == "london-1.discord-meme.com");
+    REQUIRE(test_vr.sample_port == 6969);
 }
 
-TEST_CASE( "Voice state model correctly instantiated" ){
+/*TEST_CASE( "Voice state model correctly instantiated" ){
     voice_state test_vs;
     if (test_vs.channel_id != 0 && test_vs.user_id != 0 &&
         !test_vs.session_id.empty()  && test_vs.deaf &&

@@ -1,6 +1,4 @@
 model{"edit_guild_args",
-    -- ????
-    property{"username", "disccord::util::optional<std::string>"},
     property{"name", "disccord::util::optional<std::string>"},
     property{"region", "disccord::util::optional<std::string>"},
     property{"verification_level", "disccord::util::optional<disccord::verification_level>"},

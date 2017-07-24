@@ -169,21 +169,31 @@ local generate_encode_body, generate_decode_body do
         ["disccord::notification_level"] = "uint32_t",
         ["disccord::mfa_level"] = "uint32_t",
         ["disccord::message_type"] = "uint32_t",
-        ["disccord::permissions"] = "uint64_t",
+        ["disccord::permissions"] = "uint32_t",
         ["disccord::ws::opcode"] = "uint32_t"
     }
     local function get_encoder(member)
-        if member.data_type == "web::json::value" then
-            return member.name
+        if member.data_type:find("std::vector") then
+            local sub_data_type = member.data_type:match("%b<>"):sub(2,-2)
+            local sub_simple, sub_complex = get_encoder{
+                data_type = sub_data_type,
+                name = "item"
+            }
 
-        elseif member.data_type:find("std::string") or
-        member.data_type:find("disccord::discriminator") or
-        member.data_type:find("disccord::snowflake") or
-        member.data_type:find("disccord::color") or
-        member.data_type:find("bool") or
-        member.data_type:find("u?int%d+_t") then
-            return ("web::json::value(%s)"):format(member.name)
-
+            if not sub_simple then
+                error("not supported", 2)
+            else
+                return nil, ([[
+{
+    std::vector<web::json::value> items;
+    std::transform(%s.begin(), %s.end(), std::back_inserter(items), [](%s item)
+    {
+        return %s;
+    });
+    info.push_back(std::make_pair("%s", web::json::value::array(items)));
+}]]):format(member.name, member.name, sub_data_type, sub_simple, member.name);
+            end
+        
         elseif member.data_type:find("util::optional") then
             local sub_simple, sub_complex = get_encoder{
                 data_type = member.data_type:match("%b<>"):sub(2,-2),
@@ -203,6 +213,18 @@ else if (%s.is_specified())
     info.push_back(std::make_pair("%s", web::json::value::null()));
 }]]):format(member.name, member.name, sub_simple, member.name, member.name)
             end
+
+        elseif member.data_type == "web::json::value" then
+            return member.name
+
+        elseif member.data_type:find("std::string") or
+               member.data_type:find("disccord::discriminator") or
+               member.data_type:find("disccord::snowflake") or
+               member.data_type:find("disccord::color") or
+               member.data_type:find("bool") or
+               member.data_type:find("u?int%d+_t") then
+            return ("web::json::value(%s)"):format(member.name)
+
         elseif member.data_type:find("models") then
             return ("%s.encode()"):format(member.name)
         elseif enum_types[member.data_type] then
@@ -264,9 +286,34 @@ else
         if data_type == "web::json::value" then
             return "field"
 
+        elseif data_type:find("std::vector") then
+            local sub_data_type = data_type:match("%b<>"):sub(2,-2)
+            local assigner, decoder = get_decoder(sub_data_type)
+
+            return nil, nil, ([[
+if (!json.has_field("%s"))
+    %s = std::vector<%s>{};
+else
+{
+    auto arr = json.at("%s").as_array();
+    std::vector<%s> items;
+    std::transform(arr.begin(), arr.end(), std::back_inserter(items),[](web::json::value field)
+    {
+        %s
+        return %s;
+    });
+    %s = items;
+}]]):format(prop_name, prop_name, sub_data_type, prop_name, sub_data_type, decoder or "", assigner, prop_name);
+
         elseif data_type:find("util::optional") then
             local sub_data_type = data_type:match("%b<>"):sub(2,-2)
             local assigner, decoder = get_decoder(sub_data_type)
+
+            assigner, decoder = assigner and assigner:format("field"), decoder and decoder:format("field")
+
+            if not assigner and not decoder then
+                error("not supported", 2)
+            end
 
             return nil, nil, ([[
 if (!json.has_field("%s"))
@@ -294,7 +341,8 @@ else
         elseif data_type:find("u?int%d+_t") then
             local int_type = data_type:match("(u?int%d+)_t")
             if int_type:find("int64") then
-                return ("std::stoull(field.as_string())"):format(int_type)
+                return ("field.as_number().to_%s()"):format(int_type)
+                --return "std::stoull(field.as_string())"
             elseif int_type:find("int32") then
                 return ("field.as_number().to_%s()"):format(int_type)
             else
@@ -310,7 +358,7 @@ else
         elseif enum_types[data_type] then
             local assigner, decoder = get_decoder(enum_types[data_type])
 
-            if assigner == "model" then
+            if not assigner or assigner == "model" then
                 error("not supported", 2)
             else
                 return ("static_cast<%s>(%s)"):format(data_type, assigner)

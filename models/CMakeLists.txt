@@ -3,7 +3,7 @@ find_package(cpprest REQUIRED)
 include_directories(${CPPREST_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/include)
 
-set(MODELS user.lua entity.lua gateway_info.lua channel.lua connection.lua
+set(MODELS user.lua gateway_info.lua channel.lua connection.lua
 guild.lua guild_embed.lua guild_member.lua integration.lua invite.lua
 message.lua role.lua user_guild.lua voice_region.lua
 rest/add_guild_member_args.lua rest/create_channel_invite_args.lua

@@ -3,5 +3,5 @@ model{"connection",
     property{"name", "std::string"},
     property{"type", "std::string"},
     property{"revoked", "bool"},
-    --property{"integrations", }
+    property{"integrations", "std::vector<uint64_t>"}
 }
