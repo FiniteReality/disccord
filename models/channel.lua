@@ -1,3 +1,5 @@
+include("disccord/models/user.hpp")
+
 model{"channel",
     -- All channels
     property{"id", "disccord::snowflake"},
@@ -15,7 +17,7 @@ model{"channel",
     property{"bitrate", "disccord::util::optional<int32_t>"},
     property{"user_limit", "disccord::util::optional<int32_t>"},
     -- DM channels
-    --property{"recipients", },
+    property{"recipients", "std::vector<disccord::models::user>"},
     property{"icon", "disccord::util::optional<std::string>"},
     property{"owner_id", "disccord::util::optional<disccord::snowflake>"},
     property{"application_id", "disccord::util::optional<disccord::snowflake>"}

@@ -1,0 +1,11 @@
+model{"voice_state",
+    property{"guild_id", "disccord::util::optional<disccord::snowflake>"},
+    property{"channel_id", "disccord::util::optional<disccord::snowflake>"},
+    property{"user_id", "disccord::snowflake"},
+    property{"session_id", "std::string"},
+    property{"deaf", "bool"},
+    property{"mute", "bool"},
+    property{"self_deaf", "bool"},
+    property{"self_mute", "bool"},
+    property{"suppress", "bool"},
+}
