@@ -27,14 +27,14 @@
 #include <disccord/models/user_guild.hpp>
 #include <disccord/models/voice_region.hpp>
 
-#include <disccord/models/rest/guild_prune.hpp>
-#include <disccord/models/rest/nickname.hpp>
+#include <disccord/models/rest/guild_prune_args.hpp>
+#include <disccord/models/rest/edit_current_user_nick_args.hpp>
 #include <disccord/models/rest/add_guild_member_args.hpp>
 #include <disccord/models/rest/create_channel_invite_args.hpp>
 #include <disccord/models/rest/create_guild_channel_args.hpp>
 #include <disccord/models/rest/create_message_args.hpp>
 #include <disccord/models/rest/edit_message_args.hpp>
-#include <disccord/models/rest/guild_role_args.hpp>
+#include <disccord/models/rest/edit_guild_role_args.hpp>
 #include <disccord/models/rest/edit_channel_args.hpp>
 #include <disccord/models/rest/edit_guild_args.hpp>
 #include <disccord/models/rest/edit_guild_embed_args.hpp>
@@ -65,7 +65,7 @@ namespace disccord
 
                     pplx::task<disccord::models::user> get_user(disccord::snowflake user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::user> edit_current_user(disccord::rest::models::edit_current_user_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::user> edit_current_user(disccord::models::rest::edit_current_user_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::user_guild>> get_current_user_guilds(uint8_t limit = 100, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -170,7 +170,7 @@ namespace disccord
 
                     pplx::task<void> edit_guild_member(disccord::snowflake guild_id, disccord::snowflake user_id, disccord::models::rest::edit_guild_member_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::rest::models::nickname> edit_current_nick(uint64_t guild_id, std::string nick, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::rest::edit_current_user_nick_args> edit_current_user_nick(uint64_t guild_id, std::string nick, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> add_guild_member_role(disccord::snowflake guild_id, disccord::snowflake user_id, disccord::snowflake role_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -194,9 +194,9 @@ namespace disccord
 
                     pplx::task<void> delete_guild_role(disccord::snowflake guild_id, disccord::snowflake role_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::rest::models::guild_prune> get_guild_prune_count(uint64_t guild_id, uint32_t days = 1, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::rest::guild_prune_args> get_guild_prune_count(uint64_t guild_id, uint32_t days = 1, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::rest::models::guild_prune> begin_guild_prune(uint64_t guild_id, uint32_t days = 1, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::rest::guild_prune_args> begin_guild_prune(uint64_t guild_id, uint32_t days = 1, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::voice_region>> get_guild_voice_regions(disccord::snowflake guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 

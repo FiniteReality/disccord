@@ -6,6 +6,7 @@ include_directories(${CPPREST_INCLUDE_DIRS}
 set(MODELS user.lua gateway_info.lua channel.lua connection.lua
 guild.lua guild_embed.lua guild_member.lua integration.lua invite.lua
 message.lua role.lua user_guild.lua voice_region.lua
+
 rest/add_guild_member_args.lua rest/create_channel_invite_args.lua
 rest/create_guild_channel_args.lua rest/create_message_args.lua
 rest/edit_message_args.lua rest/edit_guild_role_args.lua
@@ -15,7 +16,10 @@ rest/edit_positions_args.lua rest/create_dm_channel_args.lua
 rest/create_group_dm_args.lua rest/create_guild_ban_args.lua
 rest/create_guild_integration_args.lua rest/edit_guild_integration_args.lua
 rest/bulk_delete_message_args.lua rest/edit_channel_permissions_args.lua
-rest/add_dm_recipient_args.lua ws/frame.lua)
+rest/add_dm_recipient_args.lua rest/guild_prune_args.lua
+rest/edit_current_user_nick_args.lua rest/edit_current_user_args.lua
+
+ws/frame.lua)
 
 foreach(MODEL IN ITEMS ${MODELS})
     string(REGEX REPLACE "\\.[^.]*$" "" MODEL ${MODEL})

@@ -7,5 +7,4 @@
 #include <disccord/rest/client.hpp>
 
 
-
 #endif /* _rest_hpp_ */
