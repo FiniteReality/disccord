@@ -11,7 +11,7 @@ Join the development server: [![Discord](https://discordapp.com/api/guilds/22669
 
 - [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
 - GCC 5.4+
-- Lua 5.1 (Required for building library)
+- Lua 5.1 (Required for generating models)
 
 ## TODO ##
 
