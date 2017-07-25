@@ -10,9 +10,10 @@ Join the development server: [![Discord](https://discordapp.com/api/guilds/22669
 ## Dependencies ##
 
 - [cpprestsdk](https://github.com/Microsoft/cpprestsdk)
-- GCC 6 (May compile on earlier versions, not tested)
+- GCC 5.4+
+- Lua 5.1 (Required for generating models)
 
 ## TODO ##
 
-- 'friendly' REST interface
-- WebSocket support
+- [Tasks for Initial Release](https://github.com/FiniteReality/disccord/projects/1)
+
