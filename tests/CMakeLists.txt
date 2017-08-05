@@ -12,6 +12,7 @@ macro(add_test_executable name sources)
 endmacro(add_test_executable name sources)
 
 add_test_executable(routes routes.cpp)
-add_test_executable(semaphores semaphores.cpp)
+set(UTIL_TESTS semaphores.cpp url_encoder.cpp)
+add_test_executable(util "${UTIL_TESTS}")
 set(REST_TESTS rest.cpp models.cpp)
 add_test_executable(rest "${REST_TESTS}")
