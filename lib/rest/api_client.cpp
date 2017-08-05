@@ -17,13 +17,13 @@ namespace disccord
     {
         namespace internal
         {
-            rest_api_client::rest_api_client(const web::uri& base_uri, std::string acct_token, disccord::token_type type)
+            rest_api_client::rest_api_client(const web::uri& base_uri, const std::string& acct_token, disccord::token_type type)
                 : http_client(base_uri), buckets(), token(acct_token), token_type(type)
             {
                 setup_discord_handler();
             }
 
-            rest_api_client::rest_api_client(const web::uri& base_uri, std::string acct_token, disccord::token_type type,
+            rest_api_client::rest_api_client(const web::uri& base_uri, const std::string& acct_token, disccord::token_type type,
                 const web::http::client::http_client_config& client_config)
                     : http_client(base_uri, client_config), buckets(), token(acct_token), token_type(type)
             {
@@ -198,19 +198,19 @@ namespace disccord
             }
 
             // Invite API
-            pplx::task<disccord::models::invite> rest_api_client::get_invite(std::string invite_code, const pplx::cancellation_token& token)
+            pplx::task<disccord::models::invite> rest_api_client::get_invite(const std::string& invite_code, const pplx::cancellation_token& token)
             {
                 auto route = build_route<1>("GET", "/invites/{invite.code}", {invite_code});
                 return request_json<disccord::models::invite>(route, token);
             }
 
-            pplx::task<disccord::models::invite> rest_api_client::delete_invite(std::string invite_code, const pplx::cancellation_token& token)
+            pplx::task<disccord::models::invite> rest_api_client::delete_invite(const std::string& invite_code, const pplx::cancellation_token& token)
             {
                 auto route = build_route<1>("DELETE", "/invites/{invite.code}", {invite_code});
                 return request_json<disccord::models::invite>(route, token);
             }
 
-            pplx::task<disccord::models::invite> rest_api_client::accept_invite(std::string invite_code, const pplx::cancellation_token& token)
+            pplx::task<disccord::models::invite> rest_api_client::accept_invite(const std::string& invite_code, const pplx::cancellation_token& token)
             {
                 auto route = build_route<1>("POST", "/invites/{invite.code}", {invite_code});
                 return request_json<disccord::models::invite>(route, token);
@@ -271,25 +271,25 @@ namespace disccord
                 return request_multipart<disccord::models::message>(route, args, token);
             }
 
-            pplx::task<void> rest_api_client::create_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, std::string emoji, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::create_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, const std::string& emoji, const pplx::cancellation_token& token)
             {
                 auto route = build_route<3>("PUT", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", {std::to_string(channel_id), std::to_string(message_id), util::url_encode(emoji)});
                 return request(route, token);
             }
 
-            pplx::task<void> rest_api_client::delete_own_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, std::string emoji, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::delete_own_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, const std::string& emoji, const pplx::cancellation_token& token)
             {
                 auto route = build_route<3>("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me", {std::to_string(channel_id), util::url_encode(emoji), std::to_string(message_id)});
                 return request(route, token);
             }
 
-            pplx::task<void> rest_api_client::delete_user_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, disccord::snowflake user_id, std::string emoji, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::delete_user_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, disccord::snowflake user_id, const std::string& emoji, const pplx::cancellation_token& token)
             {
                 auto route = build_route<4>("DELETE", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/{user.id}", {std::to_string(channel_id), std::to_string(message_id), util::url_encode(emoji), std::to_string(user_id)});
                 return request(route, token);
             }
 
-            pplx::task<std::vector<disccord::models::user>> rest_api_client::get_reactions(disccord::snowflake channel_id, disccord::snowflake message_id, std::string emoji, const pplx::cancellation_token& token)
+            pplx::task<std::vector<disccord::models::user>> rest_api_client::get_reactions(disccord::snowflake channel_id, disccord::snowflake message_id, const std::string& emoji, const pplx::cancellation_token& token)
             {
                 auto route = build_route<3>("GET", "/channels/{channel.id}/messages/{message.id}/reactions/{emoji}", {std::to_string(channel_id), std::to_string(message_id), util::url_encode(emoji)});
                 return request_multi_json<disccord::models::user>(route, token);
@@ -321,7 +321,7 @@ namespace disccord
                 //return request_json(route, args, token);
             }
 
-            pplx::task<void> rest_api_client::edit_channel_permissions(disccord::snowflake channel_id, disccord::snowflake overwrite_id, disccord::permissions allow, disccord::permissions deny, std::string type, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::edit_channel_permissions(disccord::snowflake channel_id, disccord::snowflake overwrite_id, disccord::permissions allow, disccord::permissions deny, const std::string& type, const pplx::cancellation_token& token)
             {
                 disccord::models::rest::edit_channel_permissions_args args{type, allow, deny};
                 auto route = build_route<2>("PUT", "/channels/{channel.id}/permissions/{overwrite.id}", {std::to_string(channel_id), std::to_string(overwrite_id)});
@@ -370,7 +370,7 @@ namespace disccord
                 return request(route, token);
             }
 
-            pplx::task<void> rest_api_client::add_dm_recipient(disccord::snowflake channel_id, disccord::snowflake user_id, std::string access_token, std::string nick, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::add_dm_recipient(disccord::snowflake channel_id, disccord::snowflake user_id, const std::string& access_token, const std::string& nick, const pplx::cancellation_token& token)
             {
                 disccord::models::rest::add_dm_recipient_args args{access_token, nick};
                 auto route = build_route<2>("PUT", "/channels/{channel.id}/recipients/{user.id}", {std::to_string(channel_id), std::to_string(user_id)});
@@ -456,7 +456,7 @@ namespace disccord
                 return request_json(route, args, token);
             }
 
-            pplx::task<disccord::models::rest::edit_current_user_nick_args> rest_api_client::edit_current_user_nick(uint64_t guild_id, std::string nick, const pplx::cancellation_token& token)
+            pplx::task<disccord::models::rest::edit_current_user_nick_args> rest_api_client::edit_current_user_nick(uint64_t guild_id, const std::string& nick, const pplx::cancellation_token& token)
             {
                 disccord::models::rest::edit_current_user_nick_args args{nick};
                 auto route = build_route<1>("PATCH", "/guilds/{guild.id}/members/@me/nick", {std::to_string(guild_id)});
@@ -560,7 +560,7 @@ namespace disccord
                 return request_multi_json<disccord::models::integration>(route, token);
             }
 
-            pplx::task<void> rest_api_client::create_guild_integration(disccord::snowflake guild_id, disccord::snowflake integration_id, std::string type, const pplx::cancellation_token& token)
+            pplx::task<void> rest_api_client::create_guild_integration(disccord::snowflake guild_id, disccord::snowflake integration_id, const std::string& type, const pplx::cancellation_token& token)
             {
                 disccord::models::rest::create_guild_integration_args args{integration_id, type};
                 auto route = build_route<1>("PATCH", "/guilds/{guild.id}/integrations", {std::to_string(guild_id)});

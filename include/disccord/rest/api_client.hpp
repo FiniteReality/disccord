@@ -51,8 +51,8 @@ namespace disccord
             class rest_api_client
             {
                 public:
-                    rest_api_client(const web::uri& base_uri, std::string token, disccord::token_type type);
-                    rest_api_client(const web::uri& base_uri, std::string token, disccord::token_type type, const web::http::client::http_client_config& client_config);
+                    rest_api_client(const web::uri& base_uri, const std::string& token, disccord::token_type type);
+                    rest_api_client(const web::uri& base_uri, const std::string& token, disccord::token_type type, const web::http::client::http_client_config& client_config);
                     virtual ~rest_api_client();
 
                     // Websockets
@@ -84,11 +84,11 @@ namespace disccord
                     pplx::task<std::vector<disccord::models::connection>> get_user_connections(const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     // Invite API
-                    pplx::task<disccord::models::invite> get_invite(std::string invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::invite> get_invite(const std::string& invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::invite> delete_invite(std::string invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::invite> delete_invite(const std::string& invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::invite> accept_invite(std::string invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::invite> accept_invite(const std::string& invite_code, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     // Channel API
                     pplx::task<disccord::models::channel> get_channel(disccord::snowflake channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
@@ -109,13 +109,13 @@ namespace disccord
 
                     pplx::task<disccord::models::message> create_message(disccord::snowflake channel_id, disccord::api::multipart_request args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<void> create_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<void> create_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, const std::string& emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<void> delete_own_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<void> delete_own_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, const std::string& emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<void> delete_user_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, disccord::snowflake user_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<void> delete_user_reaction(disccord::snowflake channel_id, disccord::snowflake message_id, disccord::snowflake user_id, const std::string& emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<std::vector<disccord::models::user>> get_reactions(disccord::snowflake channel_id, disccord::snowflake message_id, std::string emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<std::vector<disccord::models::user>> get_reactions(disccord::snowflake channel_id, disccord::snowflake message_id, const std::string& emoji, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> delete_all_reactions(disccord::snowflake channel_id, disccord::snowflake message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -125,7 +125,7 @@ namespace disccord
 
                     pplx::task<void> bulk_delete_messages(disccord::snowflake channel_id, std::vector<disccord::snowflake> message_ids, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<void> edit_channel_permissions(disccord::snowflake channel_id, disccord::snowflake overwrite_id, disccord::permissions allow, disccord::permissions deny, std::string type, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<void> edit_channel_permissions(disccord::snowflake channel_id, disccord::snowflake overwrite_id, disccord::permissions allow, disccord::permissions deny, const std::string& type, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<std::vector<disccord::models::invite>> get_channel_invites(disccord::snowflake channel_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -141,7 +141,7 @@ namespace disccord
 
                     pplx::task<void> unpin_message(disccord::snowflake channel_id, disccord::snowflake message_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<void> add_dm_recipient(disccord::snowflake channel_id, disccord::snowflake user_id, std::string access_token, std::string nick, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<void> add_dm_recipient(disccord::snowflake channel_id, disccord::snowflake user_id, const std::string& access_token, const std::string& nick, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> remove_dm_recipient(disccord::snowflake channel_id, disccord::snowflake user_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -170,7 +170,7 @@ namespace disccord
 
                     pplx::task<void> edit_guild_member(disccord::snowflake guild_id, disccord::snowflake user_id, disccord::models::rest::edit_guild_member_args args, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<disccord::models::rest::edit_current_user_nick_args> edit_current_user_nick(uint64_t guild_id, std::string nick, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<disccord::models::rest::edit_current_user_nick_args> edit_current_user_nick(uint64_t guild_id, const std::string& nick, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> add_guild_member_role(disccord::snowflake guild_id, disccord::snowflake user_id, disccord::snowflake role_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
@@ -204,7 +204,7 @@ namespace disccord
 
                     pplx::task<std::vector<disccord::models::integration>> get_guild_integrations(disccord::snowflake guild_id, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
-                    pplx::task<void> create_guild_integration(disccord::snowflake guild_id, disccord::snowflake integration_id, std::string type, const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    pplx::task<void> create_guild_integration(disccord::snowflake guild_id, disccord::snowflake integration_id, const std::string& type, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
                     pplx::task<void> edit_guild_integration(disccord::snowflake guild_id, disccord::snowflake integration_id, uint32_t expire_behavior, uint32_t expire_grace_period, bool enable_emoticons, const pplx::cancellation_token& token = pplx::cancellation_token::none());
 
