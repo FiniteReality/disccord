@@ -6,7 +6,7 @@ namespace disccord
 {
     namespace api
     {
-        bucket_info::bucket_info(std::string method)
+        bucket_info::bucket_info(const std::string& method)
             : http_method(method), entry_semaphore(1)
         { }
 
