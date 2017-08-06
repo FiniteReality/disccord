@@ -12,7 +12,7 @@ namespace disccord
             : api_client(web::uri(DISCORD_API_BASE_URL), token, disccord::token_type::BOT)
         { }
         
-        discord_rest_client::discord_rest_client(const std::string& token, disccord::token_type type)
+        discord_rest_client::discord_rest_client(const std::string& token, const disccord::token_type type)
             : api_client(web::uri(DISCORD_API_BASE_URL), token, type)
         { }
 
