@@ -15,9 +15,7 @@ namespace disccord
             boost::asio::deadline_timer t(io, boost::posix_time::milliseconds(ms));
             t.async_wait([&tce](const boost::system::error_code& err){
                 if (err)
-                {
                     tce.set_exception(std::runtime_error(err.message()));
-                }
                 else
                     tce.set();
             });
