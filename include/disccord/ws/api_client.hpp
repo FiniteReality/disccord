@@ -25,8 +25,8 @@ namespace disccord
             class ws_api_client
             {
                 public:
-                    ws_api_client(disccord::rest::internal::rest_api_client& api_client, std::string token, disccord::token_type type);
-                    ws_api_client(disccord::rest::internal::rest_api_client& api_client, std::string token, disccord::token_type type, const web::websockets::client::websocket_client_config& client_config);
+                    ws_api_client(disccord::rest::internal::rest_api_client& api_client, const std::string& token, disccord::token_type type);
+                    ws_api_client(disccord::rest::internal::rest_api_client& api_client, const std::string& token, disccord::token_type type, const web::websockets::client::websocket_client_config& client_config);
                     virtual ~ws_api_client();
 
                     pplx::task<void> connect(const pplx::cancellation_token& token = pplx::cancellation_token::none());

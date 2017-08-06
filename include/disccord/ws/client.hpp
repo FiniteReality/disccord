@@ -17,7 +17,7 @@ namespace disccord
         class discord_ws_client
         {
             public:
-                discord_ws_client(std::string token, disccord::token_type type);
+                discord_ws_client(const std::string& token, disccord::token_type type);
                 virtual ~discord_ws_client();
 
                 pplx::task<void> connect(const pplx::cancellation_token& token = pplx::cancellation_token::none());

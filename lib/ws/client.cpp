@@ -11,7 +11,7 @@ namespace disccord
     {
         static const web::uri base_uri(DISCORD_API_BASE_URL);
 
-        discord_ws_client::discord_ws_client(std::string token, disccord::token_type type)
+        discord_ws_client::discord_ws_client(const std::string& token, disccord::token_type type)
             : rest_api_client(base_uri, token, type), ws_api_client(rest_api_client, token, type),
             heartbeat_cancel_token(), heartbeat_task()
         {

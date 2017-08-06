@@ -24,11 +24,11 @@ namespace disccord
                 //headers.add("User-Agent", DISCORD_USER_AGENT);
             }
 
-            ws_api_client::ws_api_client(disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type)
+            ws_api_client::ws_api_client(disccord::rest::internal::rest_api_client& rest_api, const std::string& acct_token, disccord::token_type type)
                 : ws_client(), token(acct_token), token_type(type), rest_api_client(rest_api), message_handler(), read_task(), cancel_token()
             { }
 
-            ws_api_client::ws_api_client(disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type, const websocket_client_config& client_config)
+            ws_api_client::ws_api_client(disccord::rest::internal::rest_api_client& rest_api, const std::string& acct_token, disccord::token_type type, const websocket_client_config& client_config)
                 : ws_client(client_config), token(acct_token), token_type(type), rest_api_client(rest_api), message_handler(), read_task(), cancel_token()
             { }
 
