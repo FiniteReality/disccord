@@ -7,7 +7,7 @@ namespace disccord
 {
     namespace util
     {
-        pplx::task<void> task_sleep(const uint32_t s);
+        pplx::task<void> task_sleep(const double s);
     } // namespace util
 } // namespace disccord
 
