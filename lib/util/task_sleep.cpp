@@ -7,12 +7,12 @@ namespace disccord
 {
     namespace util
     {
-        pplx::task<void> task_sleep(uint32_t ms)
+        pplx::task<void> task_sleep(uint32_t s)
         {
             pplx::task_completion_event<void> tce;
             // async timer
             boost::asio::io_service io;
-            boost::asio::deadline_timer t(io, boost::posix_time::milliseconds(ms));
+            boost::asio::deadline_timer t(io, boost::posix_time::seconds(s));
             t.async_wait([&tce](const boost::system::error_code& err){
                 if (err)
                     tce.set_exception(std::runtime_error(err.message()));
