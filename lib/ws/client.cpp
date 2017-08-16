@@ -31,13 +31,13 @@ namespace disccord
 
         pplx::task<void> discord_ws_client::handle_frame(const disccord::models::ws::frame* frame)
         {
-            switch (frame->opcode)
+            switch (frame->op)
             {
                 case opcode::HELLO:
                     //heartbeat_task = pplx::create_task(std::bind)
                     break;
                 default:
-                    std::cout << "Unhandled opcode " << static_cast<uint32_t>(frame->opcode) << std::endl;
+                    std::cout << "Unhandled opcode " << static_cast<uint32_t>(frame->op) << std::endl;
             }
 
             return pplx::create_task([](){});
