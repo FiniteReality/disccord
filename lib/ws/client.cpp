@@ -5,6 +5,8 @@
 
 #include <disccord/ws/opcode.hpp>
 
+#include <disccord/models/ws/hello.hpp>
+
 namespace disccord
 {
     namespace ws
@@ -34,8 +36,12 @@ namespace disccord
             switch (frame->op)
             {
                 case opcode::HELLO:
+                {
+                    auto data = frame->get_data<models::ws::hello>();
+
                     //heartbeat_task = pplx::create_task(std::bind)
                     break;
+                }
                 default:
                     std::cout << "Unhandled opcode " << static_cast<uint32_t>(frame->op) << std::endl;
             }
