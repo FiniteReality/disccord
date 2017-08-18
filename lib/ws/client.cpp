@@ -15,7 +15,7 @@ namespace disccord
 
         discord_ws_client::discord_ws_client(std::string token, disccord::token_type type)
             : rest_api_client(base_uri, token, type), ws_api_client(rest_api_client, token, type),
-            heartbeat_cancel_token(), heartbeat_task()
+            heartbeat_cancel_token(), heartbeat_task(), seq(0)
         {
             ws_api_client.set_frame_handler([this](const disccord::models::ws::frame* frame)
             {
@@ -33,6 +33,10 @@ namespace disccord
 
         pplx::task<void> discord_ws_client::handle_frame(const disccord::models::ws::frame* frame)
         {
+            if (frame->s.is_specified())
+                seq = frame->s.get_value();
+
+            // TODO: log the opcodes
             switch (frame->op)
             {
                 case opcode::HELLO:
@@ -41,8 +45,17 @@ namespace disccord
 
                     auto func = std::bind(&discord_ws_client::heartbeat_loop, this, data.heartbeat_interval);
                     heartbeat_task = pplx::create_task(func, pplx::task_options(heartbeat_cancel_token.get_token()));
-                    heartbeat_task.wait();
 
+                    break;
+                }
+                case opcode::HEARTBEAT:
+                {
+                    ws_api_client.send_heartbeat(seq).wait();
+                    break;
+                }
+                case opcode::HEARTBEAT_ACK:
+                {
+                    // TODO: calculate latency
                     break;
                 }
                 default:
@@ -52,18 +65,21 @@ namespace disccord
             return pplx::create_task([](){});
         }
 
-        void discord_ws_client::heartbeat_loop(int wait_millis)
+        pplx::task<void> discord_ws_client::heartbeat_loop(int wait_millis)
         {
-            while(!pplx::is_task_cancellation_requested())
-            {
-                //TODO: send heartbeat
+            return pplx::create_task([wait_millis,this](){
+                while(!pplx::is_task_cancellation_requested())
+                {
+                    // TODO: make sure discord responded to last heartbeat, error/exception checks
 
-                std::cout << "hey\n";
-                auto s = static_cast<double>(wait_millis)/1000;
-                util::task_sleep(s).wait();
-            }
+                    ws_api_client.send_heartbeat(seq).wait();
 
-            pplx::cancel_current_task();
+                    auto s = static_cast<double>(wait_millis)/1000;
+                    util::task_sleep(s).wait();
+                }
+
+                pplx::cancel_current_task();
+            });
         }
     }
 }

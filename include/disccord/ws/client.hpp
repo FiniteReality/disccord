@@ -29,8 +29,10 @@ namespace disccord
                 pplx::cancellation_token_source heartbeat_cancel_token;
                 pplx::task<void> heartbeat_task;
 
+                uint32_t seq;
+
                 pplx::task<void> handle_frame(const disccord::models::ws::frame* frame);
-                void heartbeat_loop(int wait_millis);
+                pplx::task<void> heartbeat_loop(int wait_millis);
         };
     }
 }
