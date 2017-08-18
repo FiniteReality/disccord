@@ -15,7 +15,8 @@ namespace disccord
 
         discord_ws_client::discord_ws_client(std::string token, disccord::token_type type)
             : rest_api_client(base_uri, token, type), ws_api_client(rest_api_client, token, type),
-            heartbeat_cancel_token(), heartbeat_task(), seq(0)
+            heartbeat_cancel_token(), heartbeat_task(), heartbeat_times(), last_message_time(),
+            seq(0), session_id(""), latency(0)
         {
             ws_api_client.set_frame_handler([this](const disccord::models::ws::frame* frame)
             {
@@ -31,10 +32,17 @@ namespace disccord
             return ws_api_client.connect(token);
         }
 
+        uint32_t discord_ws_client::get_latency() const
+        {
+            return latency;
+        }
+
         pplx::task<void> discord_ws_client::handle_frame(const disccord::models::ws::frame* frame)
         {
             if (frame->s.is_specified())
                 seq = frame->s.get_value();
+            
+            last_message_time = std::chrono::high_resolution_clock::now();
 
             // TODO: log the opcodes
             switch (frame->op)
@@ -55,7 +63,32 @@ namespace disccord
                 }
                 case opcode::HEARTBEAT_ACK:
                 {
-                    // TODO: calculate latency
+                    if (!heartbeat_times.empty())
+                    {
+                        auto time = heartbeat_times.front();
+                        auto time_now = std::chrono::high_resolution_clock::now();
+                        heartbeat_times.pop();
+
+                        std::chrono::duration<double, std::milli> time_diff = time_now - time;
+                        auto current_latency = static_cast<uint64_t>(time_diff.count());
+                        //auto previous_latency = latency;
+                        latency = current_latency;
+
+                        // TODO: log previous vs current latency
+                    }
+                    break;
+                }
+                case opcode::INVALIDATE_SESSION:
+                {
+                    break;
+                }
+                case opcode::RECONNECT:
+                {
+                    break;
+                }
+                case opcode::DISPATCH:
+                {
+                    handle_dispatch(frame).wait();
                     break;
                 }
                 default:
@@ -65,21 +98,41 @@ namespace disccord
             return pplx::create_task([](){});
         }
 
-        pplx::task<void> discord_ws_client::heartbeat_loop(int wait_millis)
+        pplx::task<void> discord_ws_client::heartbeat_loop(int wait_ms)
         {
-            return pplx::create_task([wait_millis,this](){
+            return pplx::create_task([wait_ms, this](){
                 while(!pplx::is_task_cancellation_requested())
                 {
-                    // TODO: make sure discord responded to last heartbeat, error/exception checks
+                    // TODO: error/exception checks
+
+                    auto time_now = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double, std::milli> heartbeat_delay = time_now - last_message_time;
+
+                    auto interval = static_cast<uint64_t>(wait_ms);
+                    auto delay = static_cast<uint64_t>(heartbeat_delay.count());
+                    
+                    // check if our last heartbeat was responded to
+                    if (!heartbeat_times.empty() && delay > interval)
+                    {
+                        // TODO: check if we are also still receiving messages (e.g. GUILD_CREATE)
+                    }
+
+                    heartbeat_times.push(time_now);
 
                     ws_api_client.send_heartbeat(seq).wait();
 
-                    auto s = static_cast<double>(wait_millis)/1000;
+                    auto s = static_cast<double>(wait_ms)/1000;
                     util::task_sleep(s).wait();
                 }
 
                 pplx::cancel_current_task();
             });
+        }
+        
+        pplx::task<void> discord_ws_client::handle_dispatch(const disccord::models::ws::frame* frame)
+        {
+            // TODO: handle events
+            return pplx::create_task([](){});
         }
     }
 }
