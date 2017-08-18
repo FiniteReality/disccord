@@ -6,6 +6,8 @@
 
 #include <cpprest/ws_client.h>
 
+#include <disccord/ws/opcode.hpp>
+
 #include <disccord/types.hpp>
 #include <disccord/models/ws/frame.hpp>
 
@@ -30,8 +32,12 @@ namespace disccord
                     virtual ~ws_api_client();
 
                     pplx::task<void> connect(const pplx::cancellation_token& token = pplx::cancellation_token::none());
+                    
+                    pplx::task<void> send(ws::opcode op, web::json::value payload);
 
                     void set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func);
+                    
+                    pplx::task<void> send_heartbeat(const uint32_t sequence = 0);
 
                 private:
                     web::websockets::client::websocket_client ws_client;

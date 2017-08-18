@@ -51,6 +51,14 @@ namespace disccord
                 });
             }
 
+            pplx::task<void> ws_api_client::send(ws::opcode op, web::json::value payload)
+            {
+                payload["op"] = web::json::value(static_cast<int>(op));
+                websocket_outgoing_message gateway_msg;
+                gateway_msg.set_utf8_message(std::move(payload.serialize()));
+                return ws_client.send(gateway_msg);
+            }
+
             void ws_api_client::set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func)
             {
                 message_handler = func;
@@ -97,6 +105,16 @@ namespace disccord
                 }
 
                 return pplx::create_task([](){});
+            }
+            
+            pplx::task<void> ws_api_client::send_heartbeat(const uint32_t sequence)
+            {
+                web::json::value payload;
+                if (!sequence)
+                    payload["d"] = web::json::value::null();
+                else
+                    payload["d"] = web::json::value(sequence);
+                return send(ws::opcode::HEARTBEAT, payload);
             }
         }
     }
