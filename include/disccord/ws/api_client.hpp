@@ -36,6 +36,8 @@ namespace disccord
                     pplx::task<void> send(ws::opcode op, web::json::value payload);
 
                     void set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func);
+                    
+                    pplx::task<void> send_heartbeat(const uint32_t sequence = 0);
 
                 private:
                     web::websockets::client::websocket_client ws_client;

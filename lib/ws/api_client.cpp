@@ -106,6 +106,16 @@ namespace disccord
 
                 return pplx::create_task([](){});
             }
+            
+            pplx::task<void> ws_api_client::send_heartbeat(const uint32_t sequence)
+            {
+                web::json::value payload;
+                if (!sequence)
+                    payload["d"] = web::json::value::null();
+                else
+                    payload["d"] = web::json::value(sequence);
+                return send(ws::opcode::HEARTBEAT, payload);
+            }
         }
     }
 }
