@@ -41,6 +41,8 @@ namespace disccord
                     
                     // TODO: have a default `presence` object
                     pplx::task<void> send_identify(const uint16_t shard_id = 0, const uint16_t shard_count = 1, const bool compress = false, const uint16_t large_threshold = 100);
+                    
+                    pplx::task<void> send_resume(const std::string& session_id, const uint32_t sequence);
 
                 private:
                     web::websockets::client::websocket_client ws_client;

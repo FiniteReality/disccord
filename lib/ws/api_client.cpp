@@ -135,6 +135,16 @@ namespace disccord
                 
                 return send(ws::opcode::IDENTIFY, payload);
             }
+            
+            pplx::task<void> ws_api_client::send_resume(const std::string& session_id, const uint32_t sequence)
+            {
+                web::json::value payload;
+                payload["d"]["token"] = web::json::value(token);
+                payload["d"]["session_id"] = web::json::value(session_id);
+                payload["d"]["seq"] = web::json::value(sequence);
+                
+                return send(ws::opcode::RESUME, payload);
+            }
         }
     }
 }
