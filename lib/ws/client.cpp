@@ -80,10 +80,22 @@ namespace disccord
                 }
                 case opcode::INVALIDATE_SESSION:
                 {
+                    seq = 0;
+                    session_id = "";
+
+                    if (frame->d.as_bool())
+                    {
+                       // TODO: Reconnect here 
+                    }
+                    else 
+                    {
+                       //ws_api_client.send_identify(<stuff>).wait(); 
+                    }
                     break;
                 }
                 case opcode::RECONNECT:
                 {
+                    // TODO: Reconnect here
                     break;
                 }
                 case opcode::DISPATCH:
