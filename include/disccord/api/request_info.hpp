@@ -14,7 +14,7 @@ namespace disccord
         {
             public:
                 request_info();
-                request_info(std::string method, web::uri url);
+                request_info(const std::string& method, const web::uri& url);
                 virtual ~request_info();
 
                 std::string get_method() const;
@@ -24,10 +24,10 @@ namespace disccord
                 std::string get_body() const;
                 std::string get_content_type() const;
 
-                void set_method(std::string method);
-                void set_url(web::uri new_url);
-                void set_header(std::string header, std::string value);
-                void set_body(std::string body, std::string content_type);
+                void set_method(const std::string& method);
+                void set_url(const web::uri& new_url);
+                void set_header(const std::string& header, const std::string& value);
+                void set_body(const std::string& body, const std::string& content_type);
 
                 void set_body(const web::json::value& body);
 

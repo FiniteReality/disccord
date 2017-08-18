@@ -15,7 +15,7 @@ namespace disccord
         class bucket_info
         {
             public:
-                bucket_info(std::string method);
+                bucket_info(const std::string& method);
                 virtual ~bucket_info();
 
                 pplx::task<web::http::http_response> enter(web::http::client::http_client& client,
