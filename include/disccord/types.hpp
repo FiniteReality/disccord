@@ -55,7 +55,8 @@ namespace disccord
         RECIPIENT_REMOVE,
         CHANNEL_NAME_CHANGE,
         CHANNEL_ICON_CHANGE,
-        CHANNEL_PINNED_MESSAGE
+        CHANNEL_PINNED_MESSAGE,
+        GUILD_MEMBER_JOIN
     };
 }
 
