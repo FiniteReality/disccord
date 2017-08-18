@@ -5,6 +5,8 @@
 
 #include <disccord/ws/opcode.hpp>
 
+#include <disccord/util/task_sleep.hpp>
+
 #include <disccord/models/ws/hello.hpp>
 
 namespace disccord
@@ -39,7 +41,10 @@ namespace disccord
                 {
                     auto data = frame->get_data<models::ws::hello>();
 
-                    //heartbeat_task = pplx::create_task(std::bind)
+                    auto func = std::bind(&discord_ws_client::heartbeat_loop, this, data.heartbeat_interval);
+                    heartbeat_task = pplx::create_task(func, pplx::task_options(heartbeat_cancel_token.get_token()));
+                    heartbeat_task.wait();
+
                     break;
                 }
                 default:
@@ -49,10 +54,18 @@ namespace disccord
             return pplx::create_task([](){});
         }
 
-        pplx::task<void> heartbeat_loop(int wait_millis)
+        void discord_ws_client::heartbeat_loop(int wait_millis)
         {
-            /* TODO: this*/
-            return pplx::create_task([](){});
+            while(!pplx::is_task_cancellation_requested())
+            {
+                //TODO: send heartbeat
+
+                std::cout << "hey\n";
+                auto s = static_cast<double>(wait_millis)/1000;
+                util::task_sleep(s).wait();
+            }
+
+            pplx::cancel_current_task();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace disccord
                 pplx::task<void> heartbeat_task;
 
                 pplx::task<void> handle_frame(const disccord::models::ws::frame* frame);
-                pplx::task<void> heartbeat_loop(int wait_millis);
+                void heartbeat_loop(int wait_millis);
         };
     }
 }
