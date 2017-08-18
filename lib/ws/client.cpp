@@ -13,10 +13,10 @@ namespace disccord
     {
         static const web::uri base_uri(DISCORD_API_BASE_URL);
 
-        discord_ws_client::discord_ws_client(std::string token, disccord::token_type type)
+        discord_ws_client::discord_ws_client(std::string token, disccord::token_type type, uint16_t shard_id, uint16_t shard_count)
             : rest_api_client(base_uri, token, type), ws_api_client(rest_api_client, token, type),
             heartbeat_cancel_token(), heartbeat_task(), heartbeat_times(), last_message_time(),
-            seq(0), session_id(""), latency(0)
+            seq(0), session_id(""), shard_id(shard_id), shard_count(shard_count), latency(0)
         {
             ws_api_client.set_frame_handler([this](const disccord::models::ws::frame* frame)
             {
@@ -37,6 +37,11 @@ namespace disccord
             return latency;
         }
 
+        uint32_t discord_ws_client::get_shard_id() const
+        {
+            return shard_id;
+        }
+
         pplx::task<void> discord_ws_client::handle_frame(const disccord::models::ws::frame* frame)
         {
             if (frame->s.is_specified())
@@ -53,6 +58,8 @@ namespace disccord
 
                     auto func = std::bind(&discord_ws_client::heartbeat_loop, this, data.heartbeat_interval);
                     heartbeat_task = pplx::create_task(func, pplx::task_options(heartbeat_cancel_token.get_token()));
+                    
+                    ws_api_client.send_identify(shard_id, shard_count).wait(); 
 
                     break;
                 }
@@ -89,7 +96,7 @@ namespace disccord
                     }
                     else 
                     {
-                       //ws_api_client.send_identify(<stuff>).wait(); 
+                       ws_api_client.send_identify(shard_id, shard_count).wait(); 
                     }
                     break;
                 }

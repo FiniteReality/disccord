@@ -116,6 +116,25 @@ namespace disccord
                     payload["d"] = web::json::value(sequence);
                 return send(ws::opcode::HEARTBEAT, payload);
             }
+            
+            pplx::task<void> ws_api_client::send_identify(const uint16_t shard_id, const uint16_t shard_count, const bool compress, const uint16_t large_threshold)
+            {
+                std::vector<web::json::value> shard_array = {web::json::value(shard_id), web::json::value(shard_count)};
+                
+                web::json::value payload;
+                payload["d"]["token"] = web::json::value(token);
+                payload["d"]["properties"]["$os"] = web::json::value("linux");
+                payload["d"]["properties"]["$browser"] = web::json::value("disccord");
+                payload["d"]["properties"]["$device"] = web::json::value("disccord");
+                payload["d"]["properties"]["$referrer"] = web::json::value("");
+                payload["d"]["properties"]["$referring_domain"] = web::json::value("");
+                payload["d"]["compress"] = web::json::value(compress);
+                payload["d"]["large_threshold"] = web::json::value(large_threshold);
+                payload["d"]["shard"] = web::json::value::array(shard_array);
+                // TODO: payload["d"]["presence"]
+                
+                return send(ws::opcode::IDENTIFY, payload);
+            }
         }
     }
 }
