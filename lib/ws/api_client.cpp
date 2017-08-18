@@ -51,6 +51,14 @@ namespace disccord
                 });
             }
 
+            pplx::task<void> ws_api_client::send(ws::opcode op, web::json::value payload)
+            {
+                payload["op"] = web::json::value(static_cast<int>(op));
+                websocket_outgoing_message gateway_msg;
+                gateway_msg.set_utf8_message(std::move(payload.serialize()));
+                return ws_client.send(gateway_msg);
+            }
+
             void ws_api_client::set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func)
             {
                 message_handler = func;

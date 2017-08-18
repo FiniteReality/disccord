@@ -3,8 +3,6 @@
 #include <disccord/rest.hpp>
 #include <disccord/ws/client.hpp>
 
-#include <disccord/ws/opcode.hpp>
-
 #include <disccord/util/task_sleep.hpp>
 
 #include <disccord/models/ws/hello.hpp>
