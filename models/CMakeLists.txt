@@ -21,7 +21,8 @@ rest/add_dm_recipient_args.lua rest/guild_prune_args.lua
 rest/edit_current_user_nick_args.lua rest/edit_current_user_args.lua
 
 ws/frame.lua ws/hello.lua ws/identify_args.lua ws/resume_args.lua
-ws/status_update_args.lua ws/request_guild_members_args.lua)
+ws/status_update_args.lua ws/request_guild_members_args.lua
+ws/voice_state_update_args.lua)
 
 foreach(MODEL IN ITEMS ${MODELS})
     string(REGEX REPLACE "\\.[^.]*$" "" MODEL ${MODEL})

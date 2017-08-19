@@ -45,9 +45,11 @@ namespace disccord
                     
                     pplx::task<void> send_resume(const std::string& session_id, const uint32_t sequence);
                     
-                    pplx::task<void> send_status_update(const std::string& status, models::game game, bool afk = false, uint64_t since = 0);
+                    pplx::task<void> send_status_update(const std::string& status, const models::game game, const bool afk = false, const uint64_t since = 0);
                     
                     pplx::task<void> send_request_guild_members(const disccord::snowflake guild_id, const std::string& query = "", const uint32_t limit = 0);
+                    
+                    pplx::task<void> send_voice_state_update(const disccord::snowflake guild_id, const bool self_mute = false, const bool self_deaf = false, const disccord::snowflake channel_id = 0);
 
                 private:
                     web::websockets::client::websocket_client ws_client;

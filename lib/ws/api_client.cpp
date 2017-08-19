@@ -11,6 +11,7 @@
 #include <disccord/models/ws/resume_args.hpp>
 #include <disccord/models/ws/status_update_args.hpp>
 #include <disccord/models/ws/request_guild_members_args.hpp>
+#include <disccord/models/ws/voice_state_update_args.hpp>
 
 // This is purely for my sanity. Don't ever do this, ever.
 using namespace web::websockets::client;
@@ -148,14 +149,12 @@ namespace disccord
             
             pplx::task<void> ws_api_client::send_status_update(const std::string& status, models::game game, bool afk, uint64_t since)
             {
-                models::ws::status_update_args args{status, game, afk, since};
+                models::ws::status_update_args args{status, game, afk, util::optional<uint64_t>(since)};
+                if (!since)
+                    args.since = util::optional<uint64_t>::no_value();   
                 
                 web::json::value payload;
                 payload["d"] = args.encode();
-                
-                // models generator doesnt support sending a field as null atm (based on a check), so this is temporary
-                if (!since)
-                    payload["d"]["since"] = web::json::value::null();
                 
                 return send(ws::opcode::PRESENCE, payload);
             }
@@ -168,6 +167,18 @@ namespace disccord
                 payload["d"] = args.encode();
                 
                 return send(ws::opcode::REQUEST_MEMBERS, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_voice_state_update(const disccord::snowflake guild_id, const bool self_mute, const bool self_deaf, const disccord::snowflake channel_id)
+            {
+                models::ws::voice_state_update_args args{guild_id, self_mute, self_deaf, util::optional<disccord::snowflake>(channel_id)};
+                if (!channel_id)
+                    args.channel_id = util::optional<disccord::snowflake>::no_value();
+                
+                web::json::value payload;
+                payload["d"] = args.encode();
+                
+                return send(ws::opcode::VOICE_STATE, payload);
             }
         }
     }
