@@ -10,6 +10,7 @@
 #include <disccord/models/ws/identify_args.hpp>
 #include <disccord/models/ws/resume_args.hpp>
 #include <disccord/models/ws/status_update_args.hpp>
+#include <disccord/models/ws/request_guild_members_args.hpp>
 
 // This is purely for my sanity. Don't ever do this, ever.
 using namespace web::websockets::client;
@@ -157,6 +158,16 @@ namespace disccord
                     payload["d"]["since"] = web::json::value::null();
                 
                 return send(ws::opcode::PRESENCE, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_request_guild_members(const disccord::snowflake guild_id, const std::string& query, const uint32_t limit)
+            {
+                models::ws::request_guild_members_args args{guild_id, query, limit};
+                
+                web::json::value payload;
+                payload["d"] = args.encode();
+                
+                return send(ws::opcode::REQUEST_MEMBERS, payload);
             }
         }
     }
