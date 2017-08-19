@@ -50,6 +50,8 @@ namespace disccord
                     pplx::task<void> send_request_guild_members(const disccord::snowflake guild_id, const std::string& query = "", const uint32_t limit = 0);
                     
                     pplx::task<void> send_voice_state_update(const disccord::snowflake guild_id, const bool self_mute = false, const bool self_deaf = false, const disccord::snowflake channel_id = 0);
+                    
+                    pplx::task<void> send_guild_sync(const std::vector<disccord::snowflake> guild_ids);
 
                 private:
                     web::websockets::client::websocket_client ws_client;

@@ -12,6 +12,7 @@
 #include <disccord/models/ws/status_update_args.hpp>
 #include <disccord/models/ws/request_guild_members_args.hpp>
 #include <disccord/models/ws/voice_state_update_args.hpp>
+#include <disccord/models/ws/guild_sync_args.hpp>
 
 // This is purely for my sanity. Don't ever do this, ever.
 using namespace web::websockets::client;
@@ -179,6 +180,14 @@ namespace disccord
                 payload["d"] = args.encode();
                 
                 return send(ws::opcode::VOICE_STATE, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_guild_sync(const std::vector<disccord::snowflake> guild_ids)
+            {
+                // in this opcode, the `d` key maps to guild_ids
+                models::ws::guild_sync_args args{guild_ids};
+                
+                return send(ws::opcode::GUILD_SYNC, args.encode());
             }
         }
     }
