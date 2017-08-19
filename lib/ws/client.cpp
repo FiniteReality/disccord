@@ -107,7 +107,7 @@ namespace disccord
                 }
                 case opcode::DISPATCH:
                 {
-                    handle_dispatch(frame).wait();
+                    handle_dispatch(frame);
                     break;
                 }
                 default:
@@ -148,10 +148,9 @@ namespace disccord
             });
         }
         
-        pplx::task<void> discord_ws_client::handle_dispatch(const disccord::models::ws::frame* frame)
+        void discord_ws_client::handle_dispatch(const disccord::models::ws::frame* frame)
         {
             // TODO: handle events
-            return pplx::create_task([](){});
         }
     }
 }

@@ -49,7 +49,7 @@ namespace disccord
                 pplx::task<void> handle_frame(const disccord::models::ws::frame* frame);
                 pplx::task<void> heartbeat_loop(int wait_ms);
                 
-                pplx::task<void> handle_dispatch(const disccord::models::ws::frame* frame);
+                void handle_dispatch(const disccord::models::ws::frame* frame);
         };
     }
 }
