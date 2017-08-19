@@ -9,6 +9,7 @@
 #include <disccord/ws/opcode.hpp>
 
 #include <disccord/types.hpp>
+#include <disccord/models/game.hpp>
 #include <disccord/models/ws/frame.hpp>
 
 namespace disccord
@@ -38,6 +39,19 @@ namespace disccord
                     void set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func);
                     
                     pplx::task<void> send_heartbeat(const uint32_t sequence = 0);
+                    
+                    // TODO: have a default `presence` object
+                    pplx::task<void> send_identify(const uint16_t shard_id = 0, const uint16_t shard_count = 1, const bool compress = false, const uint16_t large_threshold = 100);
+                    
+                    pplx::task<void> send_resume(const std::string& session_id, const uint32_t sequence);
+                    
+                    pplx::task<void> send_status_update(const std::string& status, const models::game game, const bool afk = false, const uint64_t since = 0);
+                    
+                    pplx::task<void> send_request_guild_members(const disccord::snowflake guild_id, const std::string& query = "", const uint32_t limit = 0);
+                    
+                    pplx::task<void> send_voice_state_update(const disccord::snowflake guild_id, const bool self_mute = false, const bool self_deaf = false, const disccord::snowflake channel_id = 0);
+                    
+                    pplx::task<void> send_guild_sync(const std::vector<disccord::snowflake> guild_ids);
 
                 private:
                     web::websockets::client::websocket_client ws_client;

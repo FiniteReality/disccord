@@ -58,6 +58,12 @@ namespace disccord
         CHANNEL_PINNED_MESSAGE,
         GUILD_MEMBER_JOIN
     };
+    
+    enum class game_type
+    {
+        GAME,
+        STREAMING
+    };
 }
 
 #endif /* _types_hpp_ */

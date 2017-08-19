@@ -7,6 +7,13 @@
 #include <disccord/rest/api_client.hpp>
 #include <disccord/ws/api_client.hpp>
 
+#include <disccord/models/ws/identify_args.hpp>
+#include <disccord/models/ws/resume_args.hpp>
+#include <disccord/models/ws/status_update_args.hpp>
+#include <disccord/models/ws/request_guild_members_args.hpp>
+#include <disccord/models/ws/voice_state_update_args.hpp>
+#include <disccord/models/ws/guild_sync_args.hpp>
+
 // This is purely for my sanity. Don't ever do this, ever.
 using namespace web::websockets::client;
 
@@ -115,6 +122,72 @@ namespace disccord
                 else
                     payload["d"] = web::json::value(sequence);
                 return send(ws::opcode::HEARTBEAT, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_identify(const uint16_t shard_id, const uint16_t shard_count, const bool compress, const uint16_t large_threshold)
+            {
+                std::vector<web::json::value> shard_array = {web::json::value(shard_id), web::json::value(shard_count)};
+                
+                models::ws::identify_args args{token, compress, large_threshold, shard_array};
+                
+                web::json::value payload;
+                payload["d"] = args.encode();
+                payload["d"]["properties"]["$os"] = web::json::value("linux");
+                payload["d"]["properties"]["$device"] = web::json::value("disccord");
+                
+                return send(ws::opcode::IDENTIFY, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_resume(const std::string& session_id, const uint32_t sequence)
+            {
+                models::ws::resume_args args{token, session_id, sequence};
+                
+                web::json::value payload;
+                payload["d"] = args.encode();
+                
+                return send(ws::opcode::RESUME, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_status_update(const std::string& status, models::game game, bool afk, uint64_t since)
+            {
+                models::ws::status_update_args args{status, game, afk, util::optional<uint64_t>(since)};
+                if (!since)
+                    args.since = util::optional<uint64_t>::no_value();   
+                
+                web::json::value payload;
+                payload["d"] = args.encode();
+                
+                return send(ws::opcode::PRESENCE, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_request_guild_members(const disccord::snowflake guild_id, const std::string& query, const uint32_t limit)
+            {
+                models::ws::request_guild_members_args args{guild_id, query, limit};
+                
+                web::json::value payload;
+                payload["d"] = args.encode();
+                
+                return send(ws::opcode::REQUEST_MEMBERS, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_voice_state_update(const disccord::snowflake guild_id, const bool self_mute, const bool self_deaf, const disccord::snowflake channel_id)
+            {
+                models::ws::voice_state_update_args args{guild_id, self_mute, self_deaf, util::optional<disccord::snowflake>(channel_id)};
+                if (!channel_id)
+                    args.channel_id = util::optional<disccord::snowflake>::no_value();
+                
+                web::json::value payload;
+                payload["d"] = args.encode();
+                
+                return send(ws::opcode::VOICE_STATE, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_guild_sync(const std::vector<disccord::snowflake> guild_ids)
+            {
+                // in this opcode, the `d` key maps to guild_ids
+                models::ws::guild_sync_args args{guild_ids};
+                
+                return send(ws::opcode::GUILD_SYNC, args.encode());
             }
         }
     }
