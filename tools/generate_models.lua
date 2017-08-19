@@ -169,6 +169,7 @@ local generate_encode_body, generate_decode_body do
         ["disccord::notification_level"] = "uint32_t",
         ["disccord::mfa_level"] = "uint32_t",
         ["disccord::message_type"] = "uint32_t",
+        ["disccord::game_type"] = "uint32_t",
         ["disccord::permissions"] = "uint32_t",
         ["disccord::ws::opcode"] = "uint32_t"
     }
