@@ -7,6 +7,10 @@
 #include <disccord/rest/api_client.hpp>
 #include <disccord/ws/api_client.hpp>
 
+#include <disccord/models/ws/identify_args.hpp>
+#include <disccord/models/ws/resume_args.hpp>
+#include <disccord/models/ws/status_update_args.hpp>
+
 // This is purely for my sanity. Don't ever do this, ever.
 using namespace web::websockets::client;
 
@@ -121,29 +125,38 @@ namespace disccord
             {
                 std::vector<web::json::value> shard_array = {web::json::value(shard_id), web::json::value(shard_count)};
                 
+                models::ws::identify_args args{token, compress, large_threshold, shard_array};
+                
                 web::json::value payload;
-                payload["d"]["token"] = web::json::value(token);
+                payload["d"] = args.encode();
                 payload["d"]["properties"]["$os"] = web::json::value("linux");
-                payload["d"]["properties"]["$browser"] = web::json::value("disccord");
                 payload["d"]["properties"]["$device"] = web::json::value("disccord");
-                payload["d"]["properties"]["$referrer"] = web::json::value("");
-                payload["d"]["properties"]["$referring_domain"] = web::json::value("");
-                payload["d"]["compress"] = web::json::value(compress);
-                payload["d"]["large_threshold"] = web::json::value(large_threshold);
-                payload["d"]["shard"] = web::json::value::array(shard_array);
-                // TODO: payload["d"]["presence"]
                 
                 return send(ws::opcode::IDENTIFY, payload);
             }
             
             pplx::task<void> ws_api_client::send_resume(const std::string& session_id, const uint32_t sequence)
             {
+                models::ws::resume_args args{token, session_id, sequence};
+                
                 web::json::value payload;
-                payload["d"]["token"] = web::json::value(token);
-                payload["d"]["session_id"] = web::json::value(session_id);
-                payload["d"]["seq"] = web::json::value(sequence);
+                payload["d"] = args.encode();
                 
                 return send(ws::opcode::RESUME, payload);
+            }
+            
+            pplx::task<void> ws_api_client::send_status_update(const std::string& status, models::game game, bool afk, uint64_t since)
+            {
+                models::ws::status_update_args args{status, game, afk, since};
+                
+                web::json::value payload;
+                payload["d"] = args.encode();
+                
+                // models generator doesnt support sending a field as null atm (based on a check), so this is temporary
+                if (!since)
+                    payload["d"]["since"] = web::json::value::null();
+                
+                return send(ws::opcode::PRESENCE, payload);
             }
         }
     }

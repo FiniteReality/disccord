@@ -9,6 +9,7 @@
 #include <disccord/ws/opcode.hpp>
 
 #include <disccord/types.hpp>
+#include <disccord/models/game.hpp>
 #include <disccord/models/ws/frame.hpp>
 
 namespace disccord
@@ -43,6 +44,8 @@ namespace disccord
                     pplx::task<void> send_identify(const uint16_t shard_id = 0, const uint16_t shard_count = 1, const bool compress = false, const uint16_t large_threshold = 100);
                     
                     pplx::task<void> send_resume(const std::string& session_id, const uint32_t sequence);
+                    
+                    pplx::task<void> send_status_update(const std::string& status, models::game game, bool afk = false, uint64_t since = 0);
 
                 private:
                     web::websockets::client::websocket_client ws_client;

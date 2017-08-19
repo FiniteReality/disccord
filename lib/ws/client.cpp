@@ -59,7 +59,7 @@ namespace disccord
                     auto func = std::bind(&discord_ws_client::heartbeat_loop, this, data.heartbeat_interval);
                     heartbeat_task = pplx::create_task(func, pplx::task_options(heartbeat_cancel_token.get_token()));
                     
-                    ws_api_client.send_identify(shard_id, shard_count).wait(); 
+                    ws_api_client.send_identify(shard_id, shard_count).wait();
 
                     break;
                 }
