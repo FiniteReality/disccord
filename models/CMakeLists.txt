@@ -20,7 +20,7 @@ rest/bulk_delete_message_args.lua rest/edit_channel_permissions_args.lua
 rest/add_dm_recipient_args.lua rest/guild_prune_args.lua
 rest/edit_current_user_nick_args.lua rest/edit_current_user_args.lua
 
-ws/frame.lua ws/hello.lua)
+ws/frame.lua ws/hello.lua ws/identify.lua)
 
 foreach(MODEL IN ITEMS ${MODELS})
     string(REGEX REPLACE "\\.[^.]*$" "" MODEL ${MODEL})

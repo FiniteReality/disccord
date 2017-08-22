@@ -10,5 +10,11 @@ model{"frame",
     method{"get_data", "TModel",
         [[TModel model; model.decode(d); return model;]],
         {pre = "template <typename TModel>", post = "const"}
+    },
+
+    method{"set_data", "void",
+        [[d = model.encode();]],
+        {pre = "template <typename TModel>"},
+        param{"model", "TModel&"}
     }
 }

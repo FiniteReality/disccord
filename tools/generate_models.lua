@@ -33,6 +33,11 @@ local generate do -- Code generation
 
             if hasAnyDefaults then
                 header[#header+1] = ("%s();"):format(data.name)
+                -- Use default implementations; the compiler will delete if appropriate (hopefully)
+                header[#header+1] = ("%s& operator=(const %s&) = default;"):format(data.name, data.name)
+                header[#header+1] = ("%s(%s&&) = default;"):format(data.name, data.name)
+                header[#header+1] = ("%s& operator=(%s&&) = default;"):format(data.name, data.name)
+                header[#header+1] = ("~%s() = default;"):format(data.name())
             end
 
             local ctor_params = {}
@@ -74,7 +79,7 @@ local generate do -- Code generation
                  header[#header+1] = ("%s %s %s(%s) %s{%s}"):format(data.flags.pre or "", data.return_type, data.name, table.concat(params, ","), data.flags.post or "", data.body)
             else
                 header[#header+1] = ("%s %s %s(%s) %s;"):format(data.flags.pre or "", data.return_type, data.name, table.concat(params, ","), data.flags.post or "")
-                code[#code+1] = ("%s %s::%s(%s){%s}"):format(data.return_type, model_name, data.name, table.concat(params, ","), data.body)
+                code[#code+1] = ("%s %s::%s(%s) %s{%s}"):format(data.return_type, model_name, data.name, table.concat(params, ","), data.flags.post or "", data.body)
             end
         end
 
@@ -173,7 +178,7 @@ local generate_encode_body, generate_decode_body do
         ["disccord::ws::opcode"] = "uint32_t"
     }
     local function get_encoder(member)
-        if member.data_type:find("std::vector") then
+        if member.data_type:find("^std::vector") then
             local sub_data_type = member.data_type:match("%b<>"):sub(2,-2)
             local sub_simple, sub_complex = get_encoder{
                 data_type = sub_data_type,
@@ -181,7 +186,7 @@ local generate_encode_body, generate_decode_body do
             }
 
             if not sub_simple then
-                error("not supported", 2)
+                error("encoding a std::vector with a complex type is not supported", 2)
             else
                 return nil, ([[
 {
@@ -194,14 +199,14 @@ local generate_encode_body, generate_decode_body do
 }]]):format(member.name, member.name, sub_data_type, sub_simple, member.name);
             end
         
-        elseif member.data_type:find("util::optional") then
+        elseif member.data_type:find("^disccord::util::optional") then
             local sub_simple, sub_complex = get_encoder{
                 data_type = member.data_type:match("%b<>"):sub(2,-2),
                 name = ("%s.get_value()"):format(member.name)
             }
 
             if not sub_simple then
-                error("not supported yet", 2)
+                error("encoding a disccord::util::optional with a complex type is not supported", 2)
             else
                 return nil, ([[
 if (%s.has_value())
@@ -217,15 +222,15 @@ else if (%s.is_specified())
         elseif member.data_type == "web::json::value" then
             return member.name
 
-        elseif member.data_type:find("std::string") or
-               member.data_type:find("disccord::discriminator") or
-               member.data_type:find("disccord::snowflake") or
-               member.data_type:find("disccord::color") or
-               member.data_type:find("bool") or
-               member.data_type:find("u?int%d+_t") then
+        elseif member.data_type:find("^std::string") or
+               member.data_type:find("^disccord::discriminator") or
+               member.data_type:find("^disccord::snowflake") or
+               member.data_type:find("^disccord::color") or
+               member.data_type:find("^bool") or
+               member.data_type:find("^u?int%d+_t") then
             return ("web::json::value(%s)"):format(member.name)
 
-        elseif member.data_type:find("models") then
+        elseif member.data_type:find("^disccord::models") then
             return ("%s.encode()"):format(member.name)
         elseif enum_types[member.data_type] then
             local sub_simple, sub_complex = get_encoder{
@@ -234,7 +239,7 @@ else if (%s.is_specified())
             }
 
             if not sub_simple then
-                error("not supported yet", 2)
+                error("encoding an enum with a complex type is not supported", 2)
             else
                 return sub_simple
             end
@@ -267,20 +272,6 @@ else if (%s.is_specified())
         result[#result+1] = "return web::json::value::object(info);"
         return table.concat(result, "\n")
     end
-
---[=[
-result[#result+1] = ([[
-if (!json.has_field("%s"))
-    %s = disccord::util::optional<%s::value_type>();
-else if (json.at("%s").is_null())
-    %s = disccord::util::optional<%s::value_type>::no_value();
-else
-{
-    auto field = json.at("%s");
-    %s
-    %s = disccord::util::optional<%s::value_type>(%s);
-}]]):format(member.name, member.name, member.data_type, member.name, member.name, member.data_type, member.name, decoder or "", member.name, member.data_type, assigner)
-]=]
 
     local function get_decoder(data_type, prop_name, err)
         if data_type == "web::json::value" then
@@ -438,7 +429,7 @@ for i = 5, nargs do
             name = "encode",
             return_type = "web::json::value",
             body = generate_encode_body(model),
-            flags = {},
+            flags = {post = "const"},
             params = {}
         }
         model.members[#model.members+1] = {

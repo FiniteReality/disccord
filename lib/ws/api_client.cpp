@@ -7,6 +7,8 @@
 #include <disccord/rest/api_client.hpp>
 #include <disccord/ws/api_client.hpp>
 
+#include <disccord/models/ws/identify.hpp>
+
 // This is purely for my sanity. Don't ever do this, ever.
 using namespace web::websockets::client;
 
@@ -51,12 +53,22 @@ namespace disccord
                 });
             }
 
-            pplx::task<void> ws_api_client::send(ws::opcode op, web::json::value payload)
+            pplx::task<void> ws_api_client::send(const disccord::models::ws::frame& frame)
             {
-                payload["op"] = web::json::value(static_cast<int>(op));
-                websocket_outgoing_message gateway_msg;
-                gateway_msg.set_utf8_message(std::move(payload.serialize()));
-                return ws_client.send(gateway_msg);
+                websocket_outgoing_message message;
+                web::json::value json = frame.encode();
+                message.set_utf8_message(std::move(json.serialize()));
+
+                return ws_client.send(message);
+            }
+
+            pplx::task<void> ws_api_client::send(disccord::models::ws::frame&& frame)
+            {
+                websocket_outgoing_message message;
+                web::json::value json = frame.encode();
+                message.set_utf8_message(std::move(json.serialize()));
+
+                return ws_client.send(message);
             }
 
             void ws_api_client::set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func)
@@ -68,9 +80,9 @@ namespace disccord
             {
                 while(!pplx::is_task_cancellation_requested())
                 {
-                    ws_client.receive().then([this](const websocket_incoming_message& msg)
+                    ws_client.receive().then([&](const websocket_incoming_message& msg)
                     {
-                        return this->handle_message(msg);
+                        return handle_message(msg);
                     }).wait();
                 }
 
@@ -93,12 +105,11 @@ namespace disccord
 
                         web::json::value body = web::json::value::parse(body_stream);
 
-                        std::unique_ptr<disccord::models::ws::frame> frame = std::make_unique<disccord::models::ws::frame>();
+                        auto frame = std::make_unique<disccord::models::ws::frame>();
                         frame->decode(body);
 
                         disccord::models::ws::frame const* frame_c = frame.get();
-                        return message_handler(frame_c).then([&frame]()
-                        { });
+                        return message_handler(frame_c);
                     }
                     default:
                         std::cout << "unhandled ws message type: " << (int)message.message_type() << std::endl;
@@ -106,15 +117,30 @@ namespace disccord
 
                 return pplx::create_task([](){});
             }
-            
-            pplx::task<void> ws_api_client::send_heartbeat(const uint32_t sequence)
+
+            pplx::task<void> ws_api_client::send_heartbeat(uint32_t sequence)
             {
-                web::json::value payload;
-                if (!sequence)
-                    payload["d"] = web::json::value::null();
-                else
-                    payload["d"] = web::json::value(sequence);
-                return send(ws::opcode::HEARTBEAT, payload);
+                disccord::models::ws::frame frame;
+                frame.op = disccord::ws::opcode::HEARTBEAT;
+                frame.s = sequence;
+
+                return send(std::move(frame));
+            }
+
+            pplx::task<void> ws_api_client::send_identify()
+            {
+                disccord::models::ws::frame frame;
+                frame.op = disccord::ws::opcode::IDENTIFY;
+
+                disccord::models::ws::identify payload;
+                // N.B. the token is not prefixed for the gateway
+                payload.token = token;
+                payload.compress = false; // TODO: compressed packet/ETF support
+                payload.large_threshold = 250;
+
+                frame.set_data(payload);
+
+                return send(std::move(frame));
             }
         }
     }

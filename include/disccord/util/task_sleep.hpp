@@ -5,10 +5,13 @@
 
 namespace disccord
 {
-    namespace util
+    namespace pplxtra
     {
-        pplx::task<void> task_sleep(const double s);
-    } // namespace util
-} // namespace disccord
+        namespace task
+        {
+           pplx::task<void> sleep(const int64_t millis);
+        }
+    }
+}
 
 #endif /* _task_sleep_hpp_ */

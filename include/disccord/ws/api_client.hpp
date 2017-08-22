@@ -33,11 +33,13 @@ namespace disccord
 
                     pplx::task<void> connect(const pplx::cancellation_token& token = pplx::cancellation_token::none());
                     
-                    pplx::task<void> send(ws::opcode op, web::json::value payload);
+                    pplx::task<void> send(const disccord::models::ws::frame& frame);
+                    pplx::task<void> send(disccord::models::ws::frame&& frame);
 
                     void set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func);
-                    
-                    pplx::task<void> send_heartbeat(const uint32_t sequence = 0);
+
+                    pplx::task<void> send_heartbeat(uint32_t sequence);
+                    pplx::task<void> send_identify();
 
                 private:
                     web::websockets::client::websocket_client ws_client;
