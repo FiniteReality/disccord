@@ -50,6 +50,55 @@ int main()
 
     discord_ws_client client {token, token_type};
 
+    client.on_message([&](disccord::models::message& message)
+    {
+        disccord::snowflake author_id;
+        std::string author;
+        if (message.author.has_value())
+        {
+            disccord::models::user user = message.author;
+            author = user.username + "#" + std::to_string(user.discriminator);
+            author_id = user.id;
+        }
+        else if (message.webhook_id.has_value())
+        {
+            author = "Webhook " + std::to_string(message.webhook_id);
+        }
+
+        if (message.content.has_value())
+        {
+            std::string content = message.content;
+            std::cout << "Message from '" << author
+                << "': " << content << std::endl;
+
+            if (content.find("!ping") == 0)
+            {
+                if (author_id > 0)
+                {
+                    std::string contents =
+                        "Hi, <@" + std::to_string(author_id) + ">! " +
+                        "Ping: " + std::to_string(client.latency()) + "ms";
+                    return client.rest_api_client.create_message(
+                        message.channel_id,
+                        disccord::models::rest::create_message_args{contents}
+                    ).then([&](pplx::task<disccord::models::message> tsk){
+                        try
+                        {
+                            tsk.get();
+                        }
+                        catch (std::exception e)
+                        {
+                            std::cout << "Exception occured: "
+                                << e.what() << std::endl;
+                        }
+                    });
+                }
+            }
+        }
+
+        return pplx::create_task([] {});
+    });
+
     std::cout << "Connecting..." << std::endl;
 
     client.connect().then([]()

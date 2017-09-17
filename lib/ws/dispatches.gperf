@@ -1,0 +1,44 @@
+%{
+#include <disccord/ws/dispatch.hpp>
+%}
+struct dispatch_mapping {
+    int name;
+	const disccord::ws::dispatch dispatch;
+}
+%%
+READY,disccord::ws::dispatch::READY
+RESUMED,disccord::ws::dispatch::RESUMED
+GUILD_CREATE,disccord::ws::dispatch::GUILD_CREATE
+GUILD_UPDATE,disccord::ws::dispatch::GUILD_UPDATE
+GUILD_EMOJIS_UPDATE,disccord::ws::dispatch::GUILD_EMOJIS_UPDATE
+GUILD_INTEGRATIONS_UPDATE,disccord::ws::dispatch::GUILD_INTEGRATIONS_UPDATE
+GUILD_SYNC,disccord::ws::dispatch::GUILD_SYNC
+GUILD_DELETE,disccord::ws::dispatch::GUILD_DELETE
+GUILD_MEMBER_ADD,disccord::ws::dispatch::GUILD_MEMBER_ADD
+GUILD_MEMBER_UPDATE,disccord::ws::dispatch::GUILD_MEMBER_UPDATE
+GUILD_MEMBER_REMOVE,disccord::ws::dispatch::GUILD_MEMBER_REMOVE
+GUILD_MEMBERS_CHUNK,disccord::ws::dispatch::GUILD_MEMBERS_CHUNK
+GUILD_ROLE_CREATE,disccord::ws::dispatch::GUILD_ROLE_CREATE
+GUILD_ROLE_UPDATE,disccord::ws::dispatch::GUILD_ROLE_UPDATE
+GUILD_ROLE_DELETE,disccord::ws::dispatch::GUILD_ROLE_DELETE
+GUILD_BAN_ADD,disccord::ws::dispatch::GUILD_BAN_ADD
+GUILD_BAN_REMOVE,disccord::ws::dispatch::GUILD_BAN_REMOVE
+CHANNEL_CREATE,disccord::ws::dispatch::CHANNEL_CREATE
+CHANNEL_UPDATE,disccord::ws::dispatch::CHANNEL_UPDATE
+CHANNEL_DELETE,disccord::ws::dispatch::CHANNEL_DELETE
+CHANNEL_PINS_ACK,disccord::ws::dispatch::CHANNEL_PINS_ACK
+CHANNEL_PINS_UPDATE,disccord::ws::dispatch::CHANNEL_PINS_UPDATE
+CHANNEL_RECIPIENT_ADD,disccord::ws::dispatch::CHANNEL_RECIPIENT_ADD
+CHANNEL_RECIPIENT_REMOVE,disccord::ws::dispatch::CHANNEL_RECIPIENT_REMOVE
+MESSAGE_CREATE,disccord::ws::dispatch::MESSAGE_CREATE
+MESSAGE_UPDATE,disccord::ws::dispatch::MESSAGE_UPDATE
+MESSAGE_DELETE,disccord::ws::dispatch::MESSAGE_DELETE
+MESSAGE_DELETE_BULK,disccord::ws::dispatch::MESSAGE_DELETE_BULK
+MESSAGE_ACK,disccord::ws::dispatch::MESSAGE_ACK
+PRESENCE_UPDATE,disccord::ws::dispatch::PRESENCE_UPDATE
+TYPING_START,disccord::ws::dispatch::TYPING_START
+USER_UPDATE,disccord::ws::dispatch::USER_UPDATE
+USER_SETTINGS_UPDATE,disccord::ws::dispatch::USER_SETTINGS_UPDATE
+VOICE_STATE_UPDATE,disccord::ws::dispatch::VOICE_STATE_UPDATE
+VOICE_SERVER_UPDATE,disccord::ws::dispatch::VOICE_SERVER_UPDATE
+%%

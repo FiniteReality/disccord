@@ -9,6 +9,7 @@
 #include <disccord/types.hpp>
 #include <disccord/rest/api_client.hpp>
 #include <disccord/ws/api_client.hpp>
+#include <disccord/ws/dispatch.hpp>
 
 namespace disccord
 {
@@ -34,10 +35,15 @@ namespace disccord
                 pplx::task<void> connect(const pplx::cancellation_token& token
                     = pplx::cancellation_token::none());
 
-            private:
+                void on_message(std::function<pplx::task<void>(disccord::models::message&)> handler);
+
+                // TODO: these should be moved back into the private section!
                 disccord::rest::internal::rest_api_client rest_api_client;
                 disccord::ws::internal::ws_api_client ws_api_client;
 
+                int64_t latency();
+
+            private:
                 pplx::cancellation_token_source heartbeat_cancel_token;
                 pplx::task<void> heartbeat_task;
 
@@ -45,10 +51,15 @@ namespace disccord
                 // same time
                 std::atomic<uint32_t> seq;
                 std::atomic<int64_t> last_heartbeat_time;
-                std::atomic<int64_t> latency;
+                std::atomic<int64_t> _latency;
+
+                std::function<pplx::task<void>(disccord::models::message&)> message_received;
 
                 pplx::task<void> handle_frame(
                     const disccord::models::ws::frame* frame);
+                pplx::task<void> handle_dispatch(
+                    const disccord::models::ws::frame* frame,
+                    disccord::ws::dispatch dispatch);
                 void heartbeat_loop(int wait_millis);
         };
     }
