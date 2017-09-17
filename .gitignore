@@ -1,8 +1,5 @@
-# vscode database stuff
-.vscode/*
-*.db
-*.db-wal
-*.db-shm
+# KDevelop project information
+*.kdev4
 
 # Models
 include/disccord/models/*.hpp
