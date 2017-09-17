@@ -27,29 +27,43 @@ namespace disccord
             }
 
             ws_api_client::ws_api_client(disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type)
-                : ws_client(), token(acct_token), token_type(type), rest_api_client(rest_api), message_handler(), read_task(), cancel_token()
-            { }
+                : ws_client(), token(acct_token), token_type(type), rest_api_client(rest_api), message_handler(), cancel_token()
+            {
+                ws_client.set_message_handler([&](auto& msg)
+                {
+                    handle_message(msg).wait();
+                });
+                ws_client.set_close_handler([&](auto status, auto& reason, auto& code)
+                {
+                    std::cout << "DISC: " << (short)status << " (" << reason << ") (" << code << ")" << std::endl;
+                });
+            }
 
             ws_api_client::ws_api_client(disccord::rest::internal::rest_api_client& rest_api, std::string acct_token, disccord::token_type type, const websocket_client_config& client_config)
-                : ws_client(client_config), token(acct_token), token_type(type), rest_api_client(rest_api), message_handler(), read_task(), cancel_token()
-            { }
+                : ws_client(client_config), token(acct_token), token_type(type), rest_api_client(rest_api), message_handler(), cancel_token()
+            {
+                ws_client.set_message_handler([&](auto& msg)
+                {
+                    handle_message(msg).wait();
+                });
+                ws_client.set_close_handler([&](auto status, auto& reason, auto& code)
+                {
+                    std::cout << "DISC: " << (short)status << " (" << reason << ") (" << code << ")" << std::endl;
+                });
+            }
 
             ws_api_client::~ws_api_client()
             { }
 
             pplx::task<void> ws_api_client::connect(const pplx::cancellation_token &token)
             {
-                return rest_api_client.get_gateway(token).then([this](disccord::models::gateway_info info)
+                return rest_api_client.get_gateway(token).then([&](disccord::models::gateway_info info)
                 {
                     auto builder = web::uri_builder(web::uri(info.url));
                     builder
                         .append_query("encoding", "json") // TODO: ETF support
                         .append_query("v", DISCORD_GATEWAY_API_VERSION);
                     return ws_client.connect(builder.to_uri());
-                }).then([this]()
-                {
-                    auto func = std::bind(&ws_api_client::read_loop, this);
-                    read_task = pplx::create_task(func, pplx::task_options(cancel_token.get_token()));
                 });
             }
 
@@ -57,7 +71,9 @@ namespace disccord
             {
                 websocket_outgoing_message message;
                 web::json::value json = frame.encode();
-                message.set_utf8_message(std::move(json.serialize()));
+                message.set_utf8_message(json.serialize());
+
+                std::cout << "SEND: " << json.serialize() << std::endl;
 
                 return ws_client.send(message);
             }
@@ -66,7 +82,9 @@ namespace disccord
             {
                 websocket_outgoing_message message;
                 web::json::value json = frame.encode();
-                message.set_utf8_message(std::move(json.serialize()));
+                message.set_utf8_message(json.serialize());
+
+                std::cout << "SEND: " << json.serialize() << std::endl;
 
                 return ws_client.send(message);
             }
@@ -74,19 +92,6 @@ namespace disccord
             void ws_api_client::set_frame_handler(const std::function<pplx::task<void>(const disccord::models::ws::frame*)>& func)
             {
                 message_handler = func;
-            }
-
-            void ws_api_client::read_loop()
-            {
-                while(!pplx::is_task_cancellation_requested())
-                {
-                    ws_client.receive().then([&](const websocket_incoming_message& msg)
-                    {
-                        return handle_message(msg);
-                    }).wait();
-                }
-
-                pplx::cancel_current_task();
             }
 
             pplx::task<void> ws_api_client::handle_message(const websocket_incoming_message& message)
@@ -104,6 +109,8 @@ namespace disccord
                         Concurrency::streams::async_istream<char> body_stream{raw_stream};
 
                         web::json::value body = web::json::value::parse(body_stream);
+
+                        std::cout << "RECV: " << body.serialize() << std::endl;
 
                         auto frame = std::make_unique<disccord::models::ws::frame>();
                         frame->decode(body);
@@ -124,7 +131,7 @@ namespace disccord
                 frame.op = disccord::ws::opcode::HEARTBEAT;
                 frame.s = sequence;
 
-                return send(std::move(frame));
+                return send(frame);
             }
 
             pplx::task<void> ws_api_client::send_identify()
@@ -132,15 +139,18 @@ namespace disccord
                 disccord::models::ws::frame frame;
                 frame.op = disccord::ws::opcode::IDENTIFY;
 
-                disccord::models::ws::identify payload;
-                // N.B. the token is not prefixed for the gateway
-                payload.token = token;
-                payload.compress = false; // TODO: compressed packet/ETF support
-                payload.large_threshold = 250;
+                disccord::models::ws::identify payload
+                {
+                    token,
+                    web::json::value::object(),
+                    false,
+                    250,
+                    {0, 1}
+                };
 
                 frame.set_data(payload);
 
-                return send(std::move(frame));
+                return send(frame);
             }
         }
     }

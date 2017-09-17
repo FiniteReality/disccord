@@ -122,7 +122,7 @@ namespace disccord
             {
                 if (token_type != disccord::token_type::BOT)
                     throw new std::runtime_error("token_type must be disccord::token_type::BOT"); // TODO: custom exception type?
-                
+
                 auto route = build_route<0>("GET", "/gateway/bot", {});
                 return request_json<disccord::models::gateway_info>(route, token);
             }

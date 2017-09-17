@@ -32,7 +32,7 @@ namespace disccord
                     virtual ~ws_api_client();
 
                     pplx::task<void> connect(const pplx::cancellation_token& token = pplx::cancellation_token::none());
-                    
+
                     pplx::task<void> send(const disccord::models::ws::frame& frame);
                     pplx::task<void> send(disccord::models::ws::frame&& frame);
 
@@ -42,16 +42,16 @@ namespace disccord
                     pplx::task<void> send_identify();
 
                 private:
-                    web::websockets::client::websocket_client ws_client;
+                    web::websockets::client::websocket_callback_client ws_client;
                     std::string token;
                     disccord::token_type token_type;
                     disccord::rest::internal::rest_api_client& rest_api_client;
                     std::function<pplx::task<void>(const disccord::models::ws::frame*)> message_handler;
 
-                    pplx::task<void> read_task;
+                    //pplx::task<void> read_task;
                     pplx::cancellation_token_source cancel_token;
 
-                    void read_loop();
+                    //void read_loop();
                     pplx::task<void> handle_message(const web::websockets::client::websocket_incoming_message& message);
             };
         }

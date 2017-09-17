@@ -38,7 +38,7 @@ namespace disccord
         pplx::task<void> discord_ws_client::handle_frame(
             const disccord::models::ws::frame* frame)
         {
-            if (frame->s.is_specified())
+            if (frame->s.has_value())
             {
                 uint32_t cur_seq = seq;
                 uint32_t new_seq = frame->s;
@@ -48,11 +48,19 @@ namespace disccord
                             "Resuming may give bad data" << std::endl;
             }
 
+            std::cout << "Got opcode "
+                      << static_cast<uint32_t>(frame->op)
+                      << std::endl;
+
             switch (frame->op)
             {
                 case opcode::HELLO:
                 {
                     auto data = frame->get_data<models::ws::hello>();
+
+                    last_heartbeat_time = duration_cast<milliseconds>(
+                        high_resolution_clock::now().time_since_epoch())
+                        .count();
 
                     auto func = std::bind(&discord_ws_client::heartbeat_loop,
                         this, data.heartbeat_interval);
@@ -73,6 +81,7 @@ namespace disccord
                         .count();
 
                     latency = now - last_heartbeat_time;
+                    last_heartbeat_time = now;
                     break;
                 }
                 default:
@@ -93,9 +102,10 @@ namespace disccord
                 // TODO: this should probably notify the client rather than
                 // throw
                 if (now > last_heartbeat_time + wait_millis)
-                    throw new std::runtime_error("Missed last heartbeat");
-
-                last_heartbeat_time = now;
+                {
+                    std::cout << "missed last heartbeat" << std::endl;
+                    throw std::runtime_error("Missed last heartbeat");
+                }
 
                 ws_api_client.send_heartbeat(seq).then([&]
                 {
