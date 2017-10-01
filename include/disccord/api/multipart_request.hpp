@@ -13,7 +13,8 @@ namespace disccord
         class multipart_request
         {
             public:
-                multipart_request(std::string content_type, std::string boundary = generate_boundary());
+                multipart_request(std::string content_type,
+                                  std::string boundary = generate_boundary());
                 virtual ~multipart_request();
 
                 std::string encode();

@@ -20,10 +20,14 @@ namespace disccord
                     virtual ~modify_current_user_args();
 
                     void set_name(std::string name);
-                    void set_avatar(concurrency::streams::basic_istream<unsigned char> avatar_stream);
+                    void set_avatar(
+                        concurrency::streams::basic_istream<unsigned char>
+                        avatar_stream);
 
                 protected:
-                    virtual void encode_to(std::unordered_map<std::string, web::json::value>& info) override;
+                    virtual void encode_to(
+                        std::unordered_map<std::string, web::json::value>& info
+                    ) override;
 
                 private:
                     util::optional<std::string> name, avatar;

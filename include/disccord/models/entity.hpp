@@ -23,7 +23,9 @@ namespace disccord
                 uint64_t get_id();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 uint64_t id;

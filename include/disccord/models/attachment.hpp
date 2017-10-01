@@ -23,7 +23,9 @@ namespace disccord
                 int32_t get_size();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string,web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string,web::json::value> &info
+                ) override;
 
             private:
                 std::string filename, url;

@@ -21,7 +21,9 @@ namespace disccord
                 util::optional<emoji> get_emoji_();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 uint16_t count;
