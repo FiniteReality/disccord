@@ -40,7 +40,10 @@ namespace disccord
             {
                 auto _roles_array = json.at("roles").as_array();
                 std::vector<uint64_t> roles_array(_roles_array.size());
-                std::transform(_roles_array.begin(), _roles_array.end(), roles_array.begin(), [](web::json::value _role)
+                std::transform(_roles_array.begin(),
+                               _roles_array.end(),
+                               roles_array.begin(),
+                               [](web::json::value _role)
                     {
                         return std::stoull(_role.as_string());
                     });
@@ -50,10 +53,12 @@ namespace disccord
             #undef get_composite_field
         }
 
-        void presence::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void presence::encode_to(std::unordered_map<std::string,
+                                                    web::json::value> &info)
         {
             info["status"] = web::json::value(get_status());
-            info["guild_id"] = web::json::value(std::to_string(get_guild_id()));
+            info["guild_id"] =
+                web::json::value(std::to_string(get_guild_id()));
             if (user.is_specified())
                 info["user"] = get_user().get_value().encode();
             if (game.is_specified())
@@ -61,7 +66,8 @@ namespace disccord
             {
                 auto _roles = get_roles();
                 std::vector<web::json::value> roles_array(_roles.size());
-                std::transform(_roles.begin(), _roles.end(), roles_array.begin(), [](uint64_t role)
+                std::transform(_roles.begin(), _roles.end(),
+                               roles_array.begin(), [](uint64_t role)
                     {
                         return web::json::value(std::to_string(role));
                     });

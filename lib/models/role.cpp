@@ -27,7 +27,8 @@ namespace disccord
             hoist = json.at("hoist").as_bool();
         }
 
-        void role::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void role::encode_to(std::unordered_map<std::string,
+                                                web::json::value> &info)
         {
             entity::encode_to(info);
 

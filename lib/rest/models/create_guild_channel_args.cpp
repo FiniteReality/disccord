@@ -6,14 +6,16 @@ namespace disccord
     {
         namespace models
         {
-            create_guild_channel_args::create_guild_channel_args(std::string _name)
+            create_guild_channel_args::create_guild_channel_args(
+                std::string _name)
             : name(_name)
             { }
 
             create_guild_channel_args::~create_guild_channel_args()
             { }
 
-            void create_guild_channel_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void create_guild_channel_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 info["name"] = web::json::value(name);
 

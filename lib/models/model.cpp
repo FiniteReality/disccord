@@ -15,7 +15,8 @@ namespace disccord
             std::unordered_map<std::string, web::json::value> info;
             encode_to(info);
 
-            std::vector<std::pair<std::string, web::json::value>> fields(info.begin(), info.end());
+            std::vector<std::pair<std::string, web::json::value>>
+                fields(info.begin(), info.end());
 
             return web::json::value::object(fields);
         }
@@ -28,7 +29,8 @@ namespace disccord
         void model::decode(web::json::value json)
         { }
 
-        void model::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void model::encode_to(std::unordered_map<std::string,
+                                                 web::json::value> &info)
         { }
     }
 }

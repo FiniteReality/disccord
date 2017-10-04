@@ -12,7 +12,8 @@ namespace disccord
             create_channel_invite_args::~create_channel_invite_args()
             { }
 
-            void create_channel_invite_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void create_channel_invite_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 #define encode_field(var) \
                     if (var.is_specified()) \

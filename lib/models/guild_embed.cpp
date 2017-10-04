@@ -19,14 +19,16 @@ namespace disccord
             channel_id = std::stoull(json.at("channel_id").as_string());
         }
 
-        void guild_embed::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void guild_embed::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["enabled"] = web::json::value(enabled);
             info["channel_id"] = web::json::value(std::to_string(channel_id));
         }
 
         #define define_get_method(field_name) \
-            decltype(guild_embed::field_name) guild_embed::get_##field_name() { \
+            decltype(guild_embed::field_name) \
+                     guild_embed::get_##field_name() { \
                 return field_name; \
             }
 

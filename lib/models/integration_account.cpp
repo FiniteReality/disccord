@@ -20,7 +20,8 @@ namespace disccord
             name = json.at("name").as_string();
         }
 
-        void integration_account::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void integration_account::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
 
@@ -28,7 +29,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(integration_account::field_name) integration_account::get_##field_name() { \
+            decltype(integration_account::field_name) \
+                     integration_account::get_##field_name() { \
                 return field_name; \
             }
 

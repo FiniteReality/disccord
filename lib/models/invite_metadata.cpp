@@ -39,7 +39,8 @@ namespace disccord
             #undef get_composite_field
         }
 
-        void invite_metadata::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void invite_metadata::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["created_at"] = web::json::value(created_at);
             info["uses"] = web::json::value(uses);
@@ -53,7 +54,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(invite_metadata::field_name) invite_metadata::get_##field_name() { \
+            decltype(invite_metadata::field_name) \
+                     invite_metadata::get_##field_name() { \
                 return field_name; \
             }
 
@@ -68,4 +70,3 @@ namespace disccord
         #undef define_get_method
     }
 }
-

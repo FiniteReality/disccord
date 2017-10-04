@@ -50,7 +50,10 @@ namespace disccord
             {
                 auto _roles_array = json.at("roles").as_array();
                 std::vector<uint64_t> roles_array(_roles_array.size());
-                std::transform(_roles_array.begin(), _roles_array.end(), roles_array.begin(), [](web::json::value _role)
+                std::transform(_roles_array.begin(),
+                               _roles_array.end(),
+                               roles_array.begin(),
+                               [](web::json::value _role)
                     {
                         return std::stoull(_role.as_string());
                     });
@@ -60,7 +63,8 @@ namespace disccord
             #undef get_field
         }
 
-        void guild_member::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void guild_member::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["joined_at"] = web::json::value(joined_at);
             info["deaf"] = web::json::value(deaf);
@@ -73,7 +77,10 @@ namespace disccord
             {
                 auto _roles = get_roles().get_value();
                 std::vector<web::json::value> roles_array(_roles.size());
-                std::transform(_roles.begin(), _roles.end(), roles_array.begin(), [](uint64_t role)
+                std::transform(_roles.begin(),
+                               _roles.end(),
+                               roles_array.begin(),
+                               [](uint64_t role)
                     {
                         return web::json::value(role);
                     });
@@ -82,7 +89,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(guild_member::field_name) guild_member::get_##field_name() { \
+            decltype(guild_member::field_name) \
+                     guild_member::get_##field_name() { \
                 return field_name; \
             }
 

@@ -12,7 +12,8 @@ namespace disccord
             modify_guild_member_args::~modify_guild_member_args()
             { }
 
-            void modify_guild_member_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void modify_guild_member_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
 
                 #define encode_field(var) \
@@ -27,7 +28,8 @@ namespace disccord
                 {
                     auto _roles = roles.get_value();
                     std::vector<web::json::value> roles_array(_roles.size());
-                    std::transform(_roles.begin(), _roles.end(), roles_array.begin(), [](uint64_t role)
+                    std::transform(_roles.begin(), _roles.end(),
+                                   roles_array.begin(), [](uint64_t role)
                         {
                             return web::json::value(std::to_string(role));
                         });

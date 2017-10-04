@@ -55,7 +55,8 @@ namespace disccord
             #undef get_composite_field
         }
 
-        void relationship::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void relationship::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
 
@@ -66,7 +67,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(relationship::field_name) relationship::get_##field_name() { \
+            decltype(relationship::field_name) \
+                     relationship::get_##field_name() { \
                 return field_name; \
             }
 

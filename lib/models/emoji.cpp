@@ -23,12 +23,14 @@ namespace disccord
             }
         }
 
-        void emoji::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void emoji::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["name"] = web::json::value(name);
 
             if (get_id().has_value())
-                info["id"] = web::json::value(std::to_string(get_id().get_value()));
+                info["id"] =
+                    web::json::value(std::to_string(get_id().get_value()));
         }
 
         #define define_get_method(field_name) \
