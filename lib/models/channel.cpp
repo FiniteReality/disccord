@@ -48,7 +48,8 @@ namespace disccord
                 if (json.has_field(#var)) { \
                     auto _fields_array = json.at(#var).as_array(); \
                     std::vector<type> fields_array(_fields_array.size()); \
-                    std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), \
+                    std::transform(_fields_array.begin(), \
+                    _fields_array.end(), fields_array.begin(), \
                     [](web::json::value _field){ \
                         type field; \
                         field.decode(_field); \
@@ -89,7 +90,8 @@ namespace disccord
             #undef get_composite_field_vector
         }
 
-        void channel::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void channel::encode_to(std::unordered_map<std::string,
+                                                   web::json::value> &info)
         {
             entity::encode_to(info);
 
@@ -102,7 +104,8 @@ namespace disccord
             if (bitrate.is_specified())
                 info["bitrate"] = web::json::value(bitrate.get_value());
             if (guild_id.is_specified())
-                info["guild_id"] = web::json::value(std::to_string(guild_id.get_value()));
+                info["guild_id"] =
+                    web::json::value(std::to_string(guild_id.get_value()));
             if (name.is_specified())
                 info["name"] = web::json::value(name.get_value());
             if (type.is_specified())
@@ -111,17 +114,25 @@ namespace disccord
                 info["topic"] = web::json::value(topic.get_value());
             if (recipient.is_specified())
                 info["recipient"] = recipient.get_value().encode();
-            if (last_message_id.is_specified())
-                info["last_message_id"] = web::json::value(std::to_string(last_message_id.get_value()));
+            if (last_message_id.is_specified()) {
+                auto str = std::to_string(last_message_id.get_value());
+                info["last_message_id"] = web::json::value(str);
+            }
             if (permission_overwrites.is_specified())
             {
-                auto _permission_overwrites = permission_overwrites.get_value();
-                std::vector<web::json::value> field_array(_permission_overwrites.size());
-                std::transform(_permission_overwrites.begin(), _permission_overwrites.end(), field_array.begin(), [](overwrite field)
+                auto _permission_overwrites =
+                    permission_overwrites.get_value();
+                std::vector<web::json::value>
+                    field_array(_permission_overwrites.size());
+                std::transform(_permission_overwrites.begin(),
+                               _permission_overwrites.end(),
+                               field_array.begin(),
+                               [](overwrite field)
                     {
                         return field.encode();
                     });
-                info["permission_overwrites"] = web::json::value::array(field_array);
+                info["permission_overwrites"] =
+                    web::json::value::array(field_array);
             }
         }
 

@@ -29,7 +29,9 @@ namespace disccord
                 util::optional<integration_account> get_account();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 uint64_t role_id;

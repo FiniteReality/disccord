@@ -49,7 +49,8 @@ namespace disccord
 
         }
 
-        void integration::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void integration::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
 
@@ -57,7 +58,8 @@ namespace disccord
             info["role_id"] = web::json::value(std::to_string(get_role_id()));
             info["synced_at"] = web::json::value(get_synced_at());
             info["expire_behavior"] = web::json::value(get_expire_behavior());
-            info["expire_grace_period"] = web::json::value(get_expire_grace_period());
+            info["expire_grace_period"] =
+                web::json::value(get_expire_grace_period());
             info["enabled"] = web::json::value(get_enabled());
             info["syncing"] = web::json::value(get_syncing());
             info["type"] = web::json::value(get_type());
@@ -69,7 +71,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(integration::field_name) integration::get_##field_name() { \
+            decltype(integration::field_name) \
+                     integration::get_##field_name() { \
                 return field_name; \
             }
 

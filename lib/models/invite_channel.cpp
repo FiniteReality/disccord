@@ -21,7 +21,8 @@ namespace disccord
             type = json.at("type").as_integer();
         }
 
-        void invite_channel::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void invite_channel::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
 
@@ -30,7 +31,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(invite_channel::field_name) invite_channel::get_##field_name() { \
+            decltype(invite_channel::field_name) \
+                     invite_channel::get_##field_name() { \
                 return field_name; \
             }
 

@@ -19,7 +19,10 @@ namespace disccord
 
                 std::string get_method() const;
                 web::uri get_url() const;
-                std::unordered_map<std::string, std::string> get_headers() const;
+                std::unordered_map<
+                    std::string,
+                    std::string
+                > get_headers() const;
                 bool get_has_body() const;
                 std::string get_body() const;
                 std::string get_content_type() const;

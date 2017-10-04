@@ -22,7 +22,9 @@ namespace disccord
                 web::json::value encode();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info);
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                );
         };
     }
 }

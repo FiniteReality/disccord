@@ -19,7 +19,9 @@ namespace disccord
                 util::optional<uint64_t> get_last_message_id();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 uint32_t mention_count;

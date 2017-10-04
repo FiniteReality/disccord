@@ -23,7 +23,8 @@ namespace disccord
                 if (json.has_field(#var)) { \
                     auto _fields_array = json.at(#var).as_array(); \
                     std::vector<type> fields_array(_fields_array.size()); \
-                    std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), \
+                    std::transform(_fields_array.begin(), \
+                    _fields_array.end(), fields_array.begin(), \
                     [](web::json::value _field){ \
                         type field; \
                         field.decode(_field); \
@@ -39,7 +40,8 @@ namespace disccord
             #undef get_composite_field_vector
         }
 
-        void connection::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void connection::encode_to(std::unordered_map<std::string,
+                                                      web::json::value> &info)
         {
             info["name"] = web::json::value(name);
             info["id"] = web::json::value(id);
@@ -48,8 +50,12 @@ namespace disccord
             if (integrations.is_specified())
             {
                 auto _integrations = integrations.get_value();
-                std::vector<web::json::value> field_array(_integrations.size());
-                std::transform(_integrations.begin(), _integrations.end(), field_array.begin(), [](integration field)
+                std::vector<web::json::value>
+                    field_array(_integrations.size());
+                std::transform(_integrations.begin(),
+                               _integrations.end(),
+                               field_array.begin(),
+                               [](integration field)
                     {
                         return field.encode();
                     });

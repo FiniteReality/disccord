@@ -44,14 +44,17 @@ namespace disccord
                 util::optional<std::vector<presence>> get_presences();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string,web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string,web::json::value> &info
+                ) override;
 
             private:
                 std::string name, region;
                 util::optional<std::string> icon, splash;
                 uint64_t owner_id;
                 util::optional<uint64_t> afk_channel_id, embed_channel_id;
-                int32_t afk_timeout, mfa_level, verification_level, default_message_notifications;
+                int32_t afk_timeout, mfa_level, verification_level;
+                int32_t default_message_notifications;
                 bool embed_enabled;
                 util::optional<std::vector<voice_state>> voice_states;
                 std::vector<std::string> features;

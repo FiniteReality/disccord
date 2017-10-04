@@ -33,7 +33,8 @@ namespace disccord
             #undef get_field
         }
 
-        void game::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void game::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["name"] = web::json::value::string(name);
             if (url.is_specified())

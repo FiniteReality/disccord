@@ -12,7 +12,8 @@ namespace disccord
             edit_message_args::~edit_message_args()
             { }
 
-            void edit_message_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void edit_message_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 #define encode_field(var) \
                     if (var.is_specified()) \

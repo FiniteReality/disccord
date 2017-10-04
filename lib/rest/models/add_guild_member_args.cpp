@@ -6,14 +6,16 @@ namespace disccord
     {
         namespace models
         {
-            add_guild_member_args::add_guild_member_args(std::string _access_token)
+            add_guild_member_args::add_guild_member_args(
+                std::string _access_token)
             : access_token(_access_token)
             { }
 
             add_guild_member_args::~add_guild_member_args()
             { }
 
-            void add_guild_member_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void add_guild_member_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 info["access_token"] = web::json::value(access_token);
 
@@ -28,7 +30,8 @@ namespace disccord
                 {
                     auto _roles = roles.get_value();
                     std::vector<web::json::value> roles_array(_roles.size());
-                    std::transform(_roles.begin(), _roles.end(), roles_array.begin(), [](uint64_t role)
+                    std::transform(_roles.begin(), _roles.end(),
+                                   roles_array.begin(), [](uint64_t role)
                         {
                             return web::json::value(std::to_string(role));
                         });

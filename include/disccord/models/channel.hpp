@@ -29,10 +29,13 @@ namespace disccord
                 util::optional<std::string> get_topic();
                 util::optional<bool> get_is_private();
                 util::optional<user> get_recipient();
-                util::optional<std::vector<overwrite>> get_permission_overwrites();
+                util::optional<std::vector<overwrite>>
+                get_permission_overwrites();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 util::optional<uint64_t> guild_id, last_message_id;

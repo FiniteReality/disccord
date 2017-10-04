@@ -6,14 +6,16 @@ namespace disccord
     {
         namespace models
         {
-            create_guild_integration_args::create_guild_integration_args(std::string _type, uint64_t _id)
+            create_guild_integration_args::create_guild_integration_args(
+                std::string _type, uint64_t _id)
             : type(_type), id(_id)
             { }
 
             create_guild_integration_args::~create_guild_integration_args()
             { }
 
-            void create_guild_integration_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void create_guild_integration_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 info["type"] = web::json::value(get_type());
                 info["id"] = web::json::value(get_id());

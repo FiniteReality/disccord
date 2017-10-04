@@ -36,11 +36,12 @@ namespace disccord
 
             get_field(sample_hostname, as_string);
             get_field(sample_port, as_integer);
-            
+
             #undef get_field
         }
 
-        void voice_region::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void voice_region::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["id"] = web::json::value(id);
             info["name"] = web::json::value(name);
@@ -49,13 +50,16 @@ namespace disccord
             info["deprecated"] = web::json::value(deprecated);
             info["custom"] = web::json::value(custom);
             if (sample_hostname.is_specified())
-                info["sample_hostname"] = web::json::value(sample_hostname.get_value());
+                info["sample_hostname"] =
+                    web::json::value(sample_hostname.get_value());
             if (sample_port.is_specified())
-                info["sample_port"] = web::json::value(sample_port.get_value());
+                info["sample_port"] =
+                    web::json::value(sample_port.get_value());
         }
 
         #define define_get_method(field_name) \
-            decltype(voice_region::field_name) voice_region::get_##field_name() { \
+            decltype(voice_region::field_name) \
+                     voice_region::get_##field_name() { \
                 return field_name; \
             }
 

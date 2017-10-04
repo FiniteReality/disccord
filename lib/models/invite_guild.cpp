@@ -37,7 +37,8 @@ namespace disccord
             #undef get_field
         }
 
-        void invite_guild::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void invite_guild::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
 
@@ -49,7 +50,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(invite_guild::field_name) invite_guild::get_##field_name() { \
+            decltype(invite_guild::field_name) \
+                     invite_guild::get_##field_name() { \
                 return field_name; \
             }
 
