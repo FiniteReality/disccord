@@ -35,7 +35,8 @@ namespace disccord
             #undef get_composite_field
         }
 
-        void reaction::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void reaction::encode_to(std::unordered_map<std::string,
+                                                    web::json::value> &info)
         {
             info["count"] = web::json::value(count);
             info["me"] = web::json::value(me);

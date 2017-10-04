@@ -12,7 +12,8 @@ namespace disccord
             modify_guild_args::~modify_guild_args()
             { }
 
-            void modify_guild_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void modify_guild_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 #define encode_field(var) \
                     if (var.is_specified()) \

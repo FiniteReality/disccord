@@ -5,10 +5,20 @@ namespace disccord
     namespace api
     {
         request_info::request_info()
-            : method("GET"), url(), headers(), has_body(false), body(""), body_content_type("")
+            : method("GET"),
+              url(),
+              headers(),
+              has_body(false),
+              body(""),
+              body_content_type("")
         { }
         request_info::request_info(std::string r_method, web::uri r_url)
-            : method(r_method), url(r_url), headers(), has_body(false), body(""), body_content_type("")
+            : method(r_method),
+              url(r_url),
+              headers(),
+              has_body(false),
+              body(""),
+              body_content_type("")
         { }
 
         request_info::~request_info()
@@ -25,7 +35,8 @@ namespace disccord
             return url;
         }
 
-        std::unordered_map<std::string, std::string> request_info::get_headers() const
+        std::unordered_map<std::string, std::string>
+        request_info::get_headers() const
         {
             return headers;
         }
@@ -56,12 +67,14 @@ namespace disccord
             url = r_url;
         }
 
-        void request_info::set_header(std::string r_header, std::string r_value)
+        void request_info::set_header(std::string r_header,
+                                      std::string r_value)
         {
             headers[r_header] = r_value;
         }
 
-        void request_info::set_body(std::string r_body, std::string r_content_type)
+        void request_info::set_body(std::string r_body,
+                                    std::string r_content_type)
         {
             has_body = true;
             body = r_body;

@@ -36,13 +36,15 @@ namespace disccord
             #undef get_id_field
         }
 
-        void read_state::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void read_state::encode_to(std::unordered_map<std::string,
+                                                      web::json::value> &info)
         {
             entity::encode_to(info);
 
             info["mention_count"] = web::json::value(get_mention_count());
             if (get_last_message_id().is_specified())
-                info["last_message_id"] = web::json::value(get_last_message_id().get_value());
+                info["last_message_id"] =
+                    web::json::value(get_last_message_id().get_value());
         }
 
         #define define_get_method(field_name) \

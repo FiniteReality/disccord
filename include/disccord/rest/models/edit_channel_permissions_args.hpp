@@ -9,14 +9,19 @@ namespace disccord
     {
         namespace models
         {
-            class edit_channel_permissions_args : public disccord::models::model
+            class edit_channel_permissions_args : public
+                                                  disccord::models::model
             {
                 public:
-                    edit_channel_permissions_args(uint32_t allow, uint32_t deny, std::string type);
+                    edit_channel_permissions_args(uint32_t allow,
+                                                  uint32_t deny,
+                                                  std::string type);
                     virtual ~edit_channel_permissions_args();
 
                 protected:
-                    virtual void encode_to(std::unordered_map<std::string, web::json::value>& info) override;
+                    virtual void encode_to(
+                        std::unordered_map<std::string, web::json::value>& info
+                    ) override;
 
                 private:
                     uint32_t allow, deny;

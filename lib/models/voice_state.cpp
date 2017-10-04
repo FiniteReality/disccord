@@ -37,11 +37,12 @@ namespace disccord
                 }
 
             get_field(guild_id, as_integer);
-            
+
             #undef get_field
         }
 
-        void voice_state::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void voice_state::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["channel_id"] = web::json::value(std::to_string(channel_id));
             info["user_id"] = web::json::value(std::to_string(user_id));
@@ -56,7 +57,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(voice_state::field_name) voice_state::get_##field_name() { \
+            decltype(voice_state::field_name) \
+                     voice_state::get_##field_name() { \
                 return field_name; \
             }
 

@@ -12,7 +12,8 @@ namespace disccord
             guild_role_args::~guild_role_args()
             { }
 
-            void guild_role_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void guild_role_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
 
                 #define encode_field(var) \

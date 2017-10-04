@@ -20,13 +20,15 @@ namespace disccord
                 days = json.at("days").as_integer();
             }
 
-            void guild_prune::encode_to(std::unordered_map<std::string, web::json::value> &info)
+            void guild_prune::encode_to(
+                std::unordered_map<std::string, web::json::value> &info)
             {
                 info["days"] = web::json::value(get_days());
             }
 
             #define define_get_method(field_name) \
-                decltype(guild_prune::field_name) guild_prune::get_##field_name() { \
+                decltype(guild_prune::field_name) \
+                         guild_prune::get_##field_name() { \
                     return field_name; \
                 }
 

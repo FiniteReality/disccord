@@ -19,8 +19,10 @@ namespace disccord
             entity::decode(json);
 
             username = json.at("username").as_string();
-            // HACK: use boost::lexical_cast here since it safely validates values
-            discriminator = boost::lexical_cast<uint16_t>(json.at("discriminator").as_string());
+            // HACK: use boost::lexical_cast here since it safely
+            // validates values
+            auto str_js = json.at("discriminator");
+            discriminator = boost::lexical_cast<uint16_t>(str_js.as_string());
 
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
@@ -44,12 +46,14 @@ namespace disccord
             #undef get_field
         }
 
-        void user::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void user::encode_to(std::unordered_map<std::string,
+                                                web::json::value> &info)
         {
             entity::encode_to(info);
 
             info["username"] = web::json::value(get_username());
-            info["discriminator"] = web::json::value(std::to_string(get_discriminator()));
+            info["discriminator"] =
+                web::json::value(std::to_string(get_discriminator()));
             if (get_avatar().is_specified())
                 info["avatar"] = get_avatar();
             info["bot"] = web::json::value(get_bot());
@@ -78,7 +82,9 @@ namespace disccord
         {
             if (get_avatar().is_specified())
             {
-                std::string url = "https://cdn.discordapp.com/avatars/"+std::to_string(get_id())+"/"+get_avatar().get_value()+".png?size=1024";
+                std::string url = "https://cdn.discordapp.com/avatars/" + 
+                                  std::to_string(get_id()) + "/" +
+                                  get_avatar().get_value()+".png?size=1024";
                 return util::optional<std::string>(url);
             }
             else

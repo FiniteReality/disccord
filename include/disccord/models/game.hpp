@@ -20,7 +20,9 @@ namespace disccord
                 util::optional<uint8_t> get_type();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 std::string name;

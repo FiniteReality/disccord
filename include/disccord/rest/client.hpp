@@ -11,8 +11,11 @@ namespace disccord
         {
             public:
                 discord_rest_client();
-                discord_rest_client(std::string token); //will default token type to 'Bot'
-                discord_rest_client(std::string token, disccord::token_type type); 
+                //will default token type to 'Bot'
+                discord_rest_client(std::string token);
+                discord_rest_client(
+                    std::string token,
+                    disccord::token_type type);
                 virtual ~discord_rest_client();
 
             private:

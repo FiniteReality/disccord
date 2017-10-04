@@ -13,7 +13,8 @@ namespace disccord
             create_dm_channel_args::~create_dm_channel_args()
             { }
 
-            void create_dm_channel_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void create_dm_channel_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 info["recipient_id"] = web::json::value(get_recipient_id());
             }
