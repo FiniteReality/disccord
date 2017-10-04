@@ -27,7 +27,9 @@ namespace disccord
                 bool get_suppress();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 util::optional<uint64_t> guild_id;

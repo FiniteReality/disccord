@@ -20,9 +20,11 @@ namespace disccord
 
             public:
                 constexpr optional() : _specified(false) { }
-                constexpr optional(const T& value) : _value(value), _specified(true) { }
+                constexpr optional(const T& value) : _value(value),
+                                                    _specified(true) { }
 
-                constexpr bool has_value() const { return _specified && !_null; }
+                constexpr bool has_value() const { return _specified &&
+                                                          !_null; }
                 constexpr bool is_specified() const { return _specified; }
                 constexpr T get_value() const { return _value; }
 
@@ -40,7 +42,8 @@ namespace disccord
                     }
                     else
                     {
-                        throw std::logic_error("cannot convert to json when not specified");
+                        throw std::logic_error("cannot convert to json when"
+                                               "not specified");
                     }
                 }
 

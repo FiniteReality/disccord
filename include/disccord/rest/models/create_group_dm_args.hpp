@@ -15,14 +15,19 @@ namespace disccord
             class create_group_dm_args : public disccord::models::model
             {
                 public:
-                    create_group_dm_args(std::unordered_map<uint64_t, std::string> nicks, std::vector<std::string> access_tokens);
+                    create_group_dm_args(
+                        std::unordered_map<uint64_t, std::string> nicks,
+                        std::vector<std::string> access_tokens);
+
                     virtual ~create_group_dm_args();
 
                     std::unordered_map<uint64_t, std::string> get_nicks();
                     std::vector<std::string> get_access_tokens();
 
                 protected:
-                    virtual void encode_to(std::unordered_map<std::string, web::json::value>& info) override;
+                    virtual void encode_to(
+                        std::unordered_map<std::string, web::json::value>& info
+                    ) override;
 
                 private:
                     std::unordered_map<uint64_t, std::string> nicks;

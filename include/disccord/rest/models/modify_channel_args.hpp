@@ -23,7 +23,9 @@ namespace disccord
                     void set_bitrate(uint32_t bitrate);
 
                 protected:
-                    virtual void encode_to(std::unordered_map<std::string, web::json::value>& info) override;
+                    virtual void encode_to(
+                        std::unordered_map<std::string, web::json::value>& info
+                    ) override;
 
                 private:
                     util::optional<std::string> name, topic;

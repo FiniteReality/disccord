@@ -28,7 +28,8 @@ using namespace disccord::models;
 
 TEST_CASE( "User model correctly instantiated" ){
     user test_user;
-    if (!test_user.get_username().empty() && test_user.get_discriminator() != 0 && !test_user.get_bot())
+    if (!test_user.get_username().empty() &&
+        test_user.get_discriminator() != 0 && !test_user.get_bot())
     {
         FAIL("Default constructor for embed model not correctly instantiated");
     }
@@ -51,7 +52,8 @@ TEST_CASE( "User model correctly instantiated" ){
 TEST_CASE( "Embed model correctly instantiated" ){
     //Embed Model
     embed test_embed;
-    if (!test_embed.get_title().empty() && test_embed.get_type() != "rich" && test_embed.get_color() != 0)
+    if (!test_embed.get_title().empty() &&
+        test_embed.get_type() != "rich" && test_embed.get_color() != 0)
     {
         FAIL("Default constructor for embed model not correctly instantiated");
     }
@@ -105,7 +107,8 @@ TEST_CASE( "Invite model correctly instantiated" ){
     invite test_invite;
     if (!test_invite.get_code().empty())
     {
-        FAIL("Default constructor for invite model not correctly instantiated");
+        FAIL("Default constructor for invite model not correctly "
+             "instantiated");
     }
     std::string json = R"({
     "code": "asdfh487yed",
@@ -126,11 +129,14 @@ TEST_CASE( "Invite model correctly instantiated" ){
 
     // When splash/icon are null
     REQUIRE(test_invite.get_code() == "asdfh487yed");
-    REQUIRE(test_invite.get_channel().get_value().get_id() == 165176875973476352);
+    REQUIRE(test_invite.get_channel().get_value().get_id() ==
+            165176875973476352);
     REQUIRE(test_invite.get_channel().get_value().get_name() == "illuminati");
     REQUIRE(test_invite.get_channel().get_value().get_type() == 0);
-    REQUIRE(test_invite.get_guild().get_value().get_id() == 165176875973476352);
-    REQUIRE(test_invite.get_guild().get_value().get_name() == "CS:GO Fraggers Only");
+    REQUIRE(test_invite.get_guild().get_value().get_id() ==
+            165176875973476352);
+    REQUIRE(test_invite.get_guild().get_value().get_name() == "CS:GO Fraggers"
+                                                              " Only");
 
     std::string json2 = R"({
     "code": "asdfh487yed",
@@ -150,17 +156,22 @@ TEST_CASE( "Invite model correctly instantiated" ){
     REQUIRE_NOTHROW(test_invite.decode(web::json::value::parse(json2)));
 
     // When splash/icon have values
-    REQUIRE(test_invite.get_guild().get_value().get_splash().get_value() == "9de5c5675676fdabbc54c52ca03860a1");
-    REQUIRE(test_invite.get_guild().get_value().get_icon().get_value() == "197d87a0caa9ea666b14e0938606aa2d");
+    REQUIRE(test_invite.get_guild().get_value().get_splash().get_value() ==
+            "9de5c5675676fdabbc54c52ca03860a1");
+    REQUIRE(test_invite.get_guild().get_value().get_icon().get_value() ==
+            "197d87a0caa9ea666b14e0938606aa2d");
 }
 
 TEST_CASE( "Invite Metadata model correctly instantiated" ){
     invite_metadata test_invite_md;
-    if (!test_invite_md.get_created_at().empty() && test_invite_md.get_uses() != 0 && 
-        !test_invite_md.get_max_uses() != 0 && !test_invite_md.get_max_age() != 0 && 
+    if (!test_invite_md.get_created_at().empty() &&
+        test_invite_md.get_uses() != 0 &&
+        !test_invite_md.get_max_uses() != 0 &&
+        !test_invite_md.get_max_age() != 0 &&
         test_invite_md.get_temporary() && test_invite_md.get_revoked())
     {
-        FAIL("Default constructor for invite metadata model not correctly instantiated");
+        FAIL("Default constructor for invite metadata model not"
+             " correctly instantiated");
     }
     std::string json = R"({
     "inviter": {
@@ -180,10 +191,13 @@ TEST_CASE( "Invite Metadata model correctly instantiated" ){
     REQUIRE_NOTHROW(test_invite_md.decode(web::json::value::parse(json)));
 
     REQUIRE(test_invite_md.get_inviter().get_value().get_id() == 1234567890);
-    REQUIRE(test_invite_md.get_inviter().get_value().get_username() == "FiniteReality");
-    REQUIRE(test_invite_md.get_inviter().get_value().get_discriminator() == 5734);
+    REQUIRE(test_invite_md.get_inviter().get_value().get_username() ==
+            "FiniteReality");
+    REQUIRE(test_invite_md.get_inviter().get_value().get_discriminator() ==
+            5734);
     REQUIRE(test_invite_md.get_inviter().get_value().get_bot() == false);
-    REQUIRE(test_invite_md.get_created_at() == "2016-03-31T19:15:39.954000+00:00");
+    REQUIRE(test_invite_md.get_created_at() ==
+            "2016-03-31T19:15:39.954000+00:00");
     REQUIRE(test_invite_md.get_uses() == 42);
     REQUIRE(test_invite_md.get_max_uses() == 345000);
     REQUIRE(test_invite_md.get_max_age() == 7200);
@@ -194,10 +208,13 @@ TEST_CASE( "Invite Metadata model correctly instantiated" ){
 TEST_CASE( "Message model correctly instantiated" ){
     message test_message;
     if (test_message.get_id() != 0 && test_message.get_channel_id() != 0 && 
-        !test_message.get_content().empty() && !test_message.get_timestamp().empty() && 
-        test_message.get_tts() && test_message.get_mention_everyone() && test_message.get_pinned())
+        !test_message.get_content().empty() &&
+        !test_message.get_timestamp().empty() &&
+        test_message.get_tts() &&
+        test_message.get_mention_everyone() && test_message.get_pinned())
     {
-        FAIL("Default constructor for message model not correctly instantiated");
+        FAIL("Default constructor for message model"
+             " not correctly instantiated");
     }
 
     std::string json = R"({
@@ -255,13 +272,15 @@ TEST_CASE( "Message model correctly instantiated" ){
     REQUIRE_NOTHROW(test_message.decode(web::json::value::parse(json)));
 
     REQUIRE(test_message.get_author().get_value().get_id() == 1234567890);
-    REQUIRE(test_message.get_author().get_value().get_username() == "FiniteReality");
+    REQUIRE(test_message.get_author().get_value().get_username() ==
+            "FiniteReality");
     REQUIRE(test_message.get_author().get_value().get_discriminator() == 5734);
     REQUIRE(test_message.get_author().get_value().get_bot() == false);
     REQUIRE(test_message.get_id() == 1266567890);
     REQUIRE(test_message.get_channel_id() == 9999999999);
     REQUIRE(test_message.get_content() == "this is message content");
-    REQUIRE(test_message.get_timestamp() == "2016-03-31T19:15:39.954000+00:00");
+    REQUIRE(test_message.get_timestamp() ==
+            "2016-03-31T19:15:39.954000+00:00");
     REQUIRE(test_message.get_tts() == false);
     REQUIRE(test_message.get_mention_everyone() == true);
     REQUIRE(test_message.get_pinned() == false);
@@ -298,10 +317,12 @@ TEST_CASE( "Channel model correctly instantiated" ){
     channel test_channel;
     channel test_channel2;
     channel test_channel3;
-    if (test_channel.get_id() != 0 && test_channel.get_last_message_id() != 0 && 
+    if (test_channel.get_id() != 0 &&
+        test_channel.get_last_message_id() != 0 &&
         test_channel.get_guild_id() != 0 && !test_channel.get_is_private())
     {
-        FAIL("Default constructor for channel model not correctly instantiated");
+        FAIL("Default constructor for channel model not"
+             " correctly instantiated");
     }
 
     //Build a DM Channel
@@ -321,7 +342,8 @@ TEST_CASE( "Channel model correctly instantiated" ){
 
     REQUIRE(test_channel.get_id() == 134552934997426176);
     REQUIRE(test_channel.get_is_private().get_value() == true);
-    REQUIRE(test_channel.get_last_message_id().get_value() == 153642275539255296);
+    REQUIRE(test_channel.get_last_message_id().get_value() ==
+            153642275539255296);
 
     auto recip = test_channel.get_recipient().get_value();
     REQUIRE(recip.get_id() == 1234567890);
@@ -356,12 +378,15 @@ TEST_CASE( "Channel model correctly instantiated" ){
     "last_message_id": "155117677105512449"
 })";
 
-    REQUIRE_NOTHROW(test_channel2.decode(web::json::value::parse(textguild_json)));
+    REQUIRE_NOTHROW(test_channel2.decode(web::json::value::parse(
+                    textguild_json)));
 
     REQUIRE(test_channel2.get_id() == 41771983423143937);
     REQUIRE(test_channel2.get_is_private().get_value() == false);
-    REQUIRE(test_channel2.get_last_message_id().get_value() == 155117677105512449);
-    REQUIRE(test_channel2.get_topic().get_value() == "24/7 chat about how to gank Mike #2");
+    REQUIRE(test_channel2.get_last_message_id().get_value() ==
+            155117677105512449);
+    REQUIRE(test_channel2.get_topic().get_value() == "24/7 chat about how to"
+                                                     " gank Mike #2");
     REQUIRE(test_channel2.get_position().get_value() == 6);
     REQUIRE(test_channel2.get_type().get_value() == 0);
     REQUIRE(test_channel2.get_name().get_value() == "general");
@@ -392,7 +417,8 @@ TEST_CASE( "Channel model correctly instantiated" ){
     "user_limit": 0
 })";
 
-    REQUIRE_NOTHROW(test_channel3.decode(web::json::value::parse(voiceguild_json)));
+    REQUIRE_NOTHROW(test_channel3.decode(web::json::value::parse(
+                    voiceguild_json)));
 
     REQUIRE(test_channel3.get_id() == 155101607195836416);
     REQUIRE(test_channel3.get_is_private().get_value() == false);
@@ -406,10 +432,12 @@ TEST_CASE( "Channel model correctly instantiated" ){
 
 TEST_CASE( "Connection model correctly instantiated" ){
     connection test_connection;
-    if (!test_connection.get_id().empty() && !test_connection.get_name().empty() && 
+    if (!test_connection.get_id().empty() &&
+        !test_connection.get_name().empty() &&
         !test_connection.get_type().empty() && !test_connection.get_revoked())
     {
-        FAIL("Default constructor for connection model not correctly instantiated");
+        FAIL("Default constructor for connection model not correctly"
+             " instantiated");
     }
 
     std::string json = R"({
@@ -514,8 +542,10 @@ TEST_CASE( "Guild model correctly instantiated" ){
     guild test_guild;
     if (test_guild.get_owner_id() != 0 && test_guild.get_afk_timeout() != 0 && 
         !test_guild.get_region().empty() && !test_guild.get_name().empty() && 
-        test_guild.get_embed_enabled() && test_guild.get_verification_level() != 0
-        && test_guild.get_mfa_level() != 0 && test_guild.get_default_message_notifications() != 0)
+        test_guild.get_embed_enabled() &&
+        test_guild.get_verification_level() != 0
+        && test_guild.get_mfa_level() != 0 &&
+        test_guild.get_default_message_notifications() != 0)
     {
         FAIL("Default constructor for guild model not correctly instantiated");
     }
@@ -668,11 +698,13 @@ TEST_CASE( "Guild model correctly instantiated" ){
     REQUIRE(test_guild.get_id() == 41771983423143937);
     REQUIRE(test_guild.get_name() == "Discord Developers");
     REQUIRE(test_guild.get_region() == "us-east");
-    REQUIRE(test_guild.get_icon().get_value() == "SEkgTU9NIElUUyBBTkRSRUkhISEhISEh");
+    REQUIRE(test_guild.get_icon().get_value() ==
+            "SEkgTU9NIElUUyBBTkRSRUkhISEhISEh");
     CAPTURE(test_guild.get_splash().get_value());
     REQUIRE(test_guild.get_owner_id() == 80351110224678912);
     REQUIRE(test_guild.get_afk_channel_id().get_value()  == 42072017402331136);
-    REQUIRE(test_guild.get_embed_channel_id().get_value()  == 41771983444115456);
+    REQUIRE(test_guild.get_embed_channel_id().get_value()  ==
+            41771983444115456);
     REQUIRE(test_guild.get_afk_timeout() == 300);
     REQUIRE(test_guild.get_mfa_level() == 1);
     REQUIRE(test_guild.get_verification_level() == 1);
@@ -683,13 +715,16 @@ TEST_CASE( "Guild model correctly instantiated" ){
     REQUIRE(gfeats == "INVITE_SPLASH");
 
     //only testing the composites/fields that still need code coverage
-    auto gpresc = test_guild.get_presences().get_value()[0]; //just going to test one value in vector for now
+    //just going to test one value in vector for now
+    auto gpresc = test_guild.get_presences().get_value()[0];
     REQUIRE(gpresc.get_game().get_value().get_name() == "Rocket League");
-    REQUIRE(gpresc.get_game().get_value().get_url().get_value() == "https://www.twitch.tv/123");
+    REQUIRE(gpresc.get_game().get_value().get_url().get_value() ==
+            "https://www.twitch.tv/123");
     REQUIRE(gpresc.get_game().get_value().get_type().get_value() == 1);
     REQUIRE(gpresc.get_guild_id() == 34177198143936423);
     REQUIRE(gpresc.get_status() == "offline");
-    auto gmembs = test_guild.get_members().get_value()[0]; //just going to test one value in vector for now
+    //just going to test one value in vector for now
+    auto gmembs = test_guild.get_members().get_value()[0];
     REQUIRE(gmembs.get_nick().get_value() == "NOT API SUPPORT");
     REQUIRE(gmembs.get_joined_at() == "2015-04-26T06:26:56.936000+00:00");
     REQUIRE(gmembs.get_deaf() == false);
@@ -698,9 +733,11 @@ TEST_CASE( "Guild model correctly instantiated" ){
 
 TEST_CASE( "Guild Embed model correctly instantiated" ){
     guild_embed test_guild_embed;
-    if (test_guild_embed.get_channel_id() != 0 && test_guild_embed.get_enabled())
+    if (test_guild_embed.get_channel_id() != 0 &&
+        test_guild_embed.get_enabled())
     {
-        FAIL("Default constructor for guild embed model not correctly instantiated");
+        FAIL("Default constructor for guild embed model not"
+             " correctly instantiated");
     }
 
     std::string json = R"({
@@ -716,9 +753,11 @@ TEST_CASE( "Guild Embed model correctly instantiated" ){
 
 TEST_CASE( "Read State model correctly instantiated" ){
     read_state test_read_state;
-    if (test_read_state.get_id() != 0 && test_read_state.get_mention_count() != 0)
+    if (test_read_state.get_id() != 0 &&
+        test_read_state.get_mention_count() != 0)
     {
-        FAIL("Default constructor for read state model not correctly instantiated");
+        FAIL("Default constructor for read state model"
+             " not correctly instantiated");
     }
 
     std::string json = R"({
@@ -731,14 +770,16 @@ TEST_CASE( "Read State model correctly instantiated" ){
 
     REQUIRE(test_read_state.get_id() == 64234381439317719);
     REQUIRE(test_read_state.get_mention_count() == 13);
-    REQUIRE(test_read_state.get_last_message_id().get_value() == 64281439334317719);
+    REQUIRE(test_read_state.get_last_message_id().get_value() ==
+            64281439334317719);
 }
 
 TEST_CASE( "Relationship model correctly instantiated" ){
     relationship test_relationship;
     if (test_relationship.get_id() != 0)
     {
-        FAIL("Default constructor for relationship model not correctly instantiated");
+        FAIL("Default constructor for relationship model not"
+             " correctly instantiated");
     }
 
     std::string json = R"({
@@ -805,7 +846,8 @@ TEST_CASE( "Guild Member model correctly instantiated" ){
     auto gmemb = test_guild_memb.get_member().get_value();
     auto roles = test_guild_memb.get_roles().get_value();
     REQUIRE(test_guild_memb.get_deaf() == false);
-    REQUIRE(test_guild_memb.get_joined_at() == "2016-12-11T19:10:41.288000+00:00");
+    REQUIRE(test_guild_memb.get_joined_at() ==
+            "2016-12-11T19:10:41.288000+00:00");
     REQUIRE(gmemb.get_username() == "Disccord test bot");
     REQUIRE(gmemb.get_discriminator() == 3071);
     REQUIRE(gmemb.get_bot() == true);
@@ -820,7 +862,8 @@ TEST_CASE( "Application model correctly instantiated" ){
     if (test_app.get_id() != 0  && !test_app.get_name().empty() &&
         test_app.get_bot_public() && test_app.get_bot_requires_code_grant())
     {
-        FAIL("Default constructor for application model not correctly instantiated");
+        FAIL("Default constructor for application model not"
+             " correctly instantiated");
     }
 
     std::string json = R"({
@@ -859,7 +902,8 @@ TEST_CASE( "Voice region model correctly instantiated" ){
         test_vr.get_vip() && test_vr.get_optimal() &&
         test_vr.get_deprecated() && test_vr.get_custom())
     {
-        FAIL("Default constructor for Voice region model not correctly instantiated");
+        FAIL("Default constructor for Voice region model not"
+             " correctly instantiated");
     }
 
     std::string json = R"({
@@ -888,7 +932,8 @@ TEST_CASE( "Voice state model correctly instantiated" ){
         test_vs.get_mute() && test_vs.get_self_deaf() &&
         test_vs.get_self_mute() && test_vs.get_suppress())
     {
-        FAIL("Default constructor for Voice state model not correctly instantiated");
+        FAIL("Default constructor for Voice state model not"
+             " correctly instantiated");
     }
 
     std::string json = R"({

@@ -33,7 +33,8 @@ namespace disccord
             #undef get_field
         }
 
-        void embed_video::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void embed_video::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["url"] = web::json::value(get_url());
             if (get_height().is_specified())

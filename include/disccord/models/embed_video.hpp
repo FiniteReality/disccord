@@ -20,7 +20,9 @@ namespace disccord
                 util::optional<int> get_width();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 std::string url;

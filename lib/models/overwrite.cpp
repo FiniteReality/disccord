@@ -22,7 +22,8 @@ namespace disccord
             type = json.at("type").as_string();
         }
 
-        void overwrite::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void overwrite::encode_to(std::unordered_map<std::string,
+                                                     web::json::value> &info)
         {
             entity::encode_to(info);
 

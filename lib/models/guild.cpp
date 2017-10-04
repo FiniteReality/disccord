@@ -9,9 +9,9 @@ namespace disccord
         guild::guild()
             : entity(), name(""), region(""), icon(), splash(), owner_id(0),
             afk_channel_id(), embed_channel_id(), afk_timeout(0),
-            mfa_level(0), verification_level(0), default_message_notifications(0),
-            embed_enabled(false), features(), roles(), 
-            emojis(), members(), channels(), presences()
+            mfa_level(0), verification_level(0),
+            default_message_notifications(0), embed_enabled(false),
+            features(), roles(), emojis(), members(), channels(), presences()
         { }
 
         guild::~guild()
@@ -47,7 +47,8 @@ namespace disccord
                 if (json.has_field(#var)) { \
                     auto _fields_array = json.at(#var).as_array(); \
                     std::vector<type> fields_array(_fields_array.size()); \
-                    std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), \
+                    std::transform(_fields_array.begin(), \
+                    _fields_array.end(), fields_array.begin(), \
                     [](web::json::value _field){ \
                         type field; \
                         field.decode(_field); \
@@ -67,7 +68,8 @@ namespace disccord
             afk_timeout = json.at("afk_timeout").as_integer();
             mfa_level = json.at("mfa_level").as_integer();
             verification_level = json.at("verification_level").as_integer();
-            default_message_notifications = json.at("default_message_notifications").as_integer();
+            default_message_notifications =
+                json.at("default_message_notifications").as_integer();
             embed_enabled = json.at("embed_enabled").as_bool();
             get_id_field(embed_channel_id);
             get_composite_field_vector(roles, role);
@@ -79,8 +81,12 @@ namespace disccord
             if (json.has_field("features"))
             {
                 auto _features_array = json.at("features").as_array();
-                std::vector<std::string> features_array(_features_array.size());
-                std::transform(_features_array.begin(), _features_array.end(), features_array.begin(), [](web::json::value _feature)
+                std::vector<std::string>
+                    features_array(_features_array.size());
+                std::transform(_features_array.begin(),
+                               _features_array.end(),
+                               features_array.begin(),
+                               [](web::json::value _feature)
                     {
                         return _feature.as_string();
                     });
@@ -92,7 +98,8 @@ namespace disccord
             #undef get_composite_field_vector
         }
 
-        void guild::encode_to(std::unordered_map<std::string,web::json::value> &info)
+        void guild::encode_to(std::unordered_map<std::string,
+                                                 web::json::value> &info)
         {
             entity::encode_to(info);
 
@@ -101,22 +108,31 @@ namespace disccord
                 info["icon"] = get_icon();
             if (get_splash().is_specified())
                 info["splash"] = get_splash();
-            info["owner_id"] = web::json::value::string(std::to_string(get_owner_id()));
+            info["owner_id"] =
+                web::json::value::string(std::to_string(get_owner_id()));
             info["region"] = web::json::value(get_region());
-            if (get_afk_channel_id().is_specified())
-                info["afk_channel_id"] = web::json::value(std::to_string(get_afk_channel_id().get_value()));
+            if (get_afk_channel_id().is_specified()) {
+                auto afk_ch = std::to_string(get_afk_channel_id().get_value());
+                info["afk_channel_id"] = web::json::value(afk_ch);
+            }
             info["afk_timeout"] = web::json::value(get_afk_timeout());
             info["mfa_level"] = web::json::value(mfa_level);
             info["verification_level"] = web::json::value(verification_level);
-            info["default_message_notifications"] = web::json::value(default_message_notifications);
+            info["default_message_notifications"] =
+                web::json::value(default_message_notifications);
             info["embed_enabled"] = web::json::value(get_embed_enabled());
-            if (get_embed_channel_id().is_specified())
-                info["embed_channel_id"] = web::json::value(std::to_string(get_embed_channel_id().get_value()));
+            if (get_embed_channel_id().is_specified()) {
+                auto e_ch = std::to_string(get_embed_channel_id().get_value());
+                info["embed_channel_id"] = web::json::value(e_ch);
+            }
 
             {
                 auto _features = get_features();
                 std::vector<web::json::value> features_array(_features.size());
-                std::transform(_features.begin(), _features.end(), features_array.begin(), [](std::string feature)
+                std::transform(_features.begin(),
+                               _features.end(),
+                               features_array.begin(),
+                               [](std::string feature)
                     {
                         return web::json::value(feature);
                     });
@@ -127,7 +143,8 @@ namespace disccord
                 if (var.is_specified()) { \
                     auto _array = get_##var().get_value(); \
                     std::vector<web::json::value> array(_array.size()); \
-                    std::transform(_array.begin(), _array.end(), array.begin(), \
+                    std::transform(_array.begin(), \
+                     _array.end(), array.begin(), \
                     [](type _field){ \
                         return _field.encode(); \
                     }); \

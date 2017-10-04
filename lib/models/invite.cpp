@@ -35,7 +35,8 @@ namespace disccord
             #undef get_composite_field
         }
 
-        void invite::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void invite::encode_to(std::unordered_map<std::string,
+                                                  web::json::value> &info)
         {
             info["code"] = web::json::value(code);
 

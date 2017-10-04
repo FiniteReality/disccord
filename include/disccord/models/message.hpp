@@ -39,7 +39,9 @@ namespace disccord
                 util::optional<std::vector<reaction>> get_reactions();
 
             protected:
-                virtual void encode_to(std::unordered_map<std::string, web::json::value> &info) override;
+                virtual void encode_to(
+                    std::unordered_map<std::string, web::json::value> &info
+                ) override;
 
             private:
                 util::optional<user> author;

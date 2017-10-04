@@ -58,7 +58,8 @@ namespace disccord
                 if (json.has_field(#var)) { \
                     auto _fields_array = json.at(#var).as_array(); \
                     std::vector<type> fields_array(_fields_array.size()); \
-                    std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), \
+                    std::transform(_fields_array.begin(), \
+                    _fields_array.end(), fields_array.begin(), \
                     [](web::json::value _field){ \
                         type field; \
                         field.decode(_field); \
@@ -86,23 +87,28 @@ namespace disccord
             #undef get_composite_field_vector
         }
 
-        void message::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void message::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             entity::encode_to(info);
 
-            info["channel_id"] = web::json::value(std::to_string(get_channel_id()));
+            info["channel_id"] =
+                web::json::value(std::to_string(get_channel_id()));
             info["content"] = web::json::value(get_content());
             info["timestamp"] = web::json::value(get_timestamp());
             info["tts"] = web::json::value(get_tts());
-            info["mention_everyone"] = web::json::value(get_mention_everyone());
+            info["mention_everyone"] =
+                web::json::value(get_mention_everyone());
             info["pinned"] = web::json::value(get_pinned());
 
             if (edited_timestamp.is_specified())
-                info["edited_timestamp"] = web::json::value(get_edited_timestamp().get_value());
+                info["edited_timestamp"] =
+                    web::json::value(get_edited_timestamp().get_value());
             if (nonce.is_specified())
                 info["nonce"] = web::json::value(get_nonce().get_value());
             if (webhook_id.is_specified())
-                info["webhook_id"] = web::json::value(get_webhook_id().get_value());
+                info["webhook_id"] =
+                    web::json::value(get_webhook_id().get_value());
             if (author.is_specified())
                 info["author"] = get_author().get_value().encode();
 
@@ -110,7 +116,8 @@ namespace disccord
                 if (var.is_specified()) { \
                     auto _array = get_##var().get_value(); \
                     std::vector<web::json::value> array(_array.size()); \
-                    std::transform(_array.begin(), _array.end(), array.begin(), \
+                    std::transform(_array.begin(), \
+                                   _array.end(), array.begin(), \
                     [](type _field){ \
                         return _field.encode(); \
                     }); \

@@ -18,7 +18,9 @@ namespace disccord
                     uint8_t get_delete_message_days();
 
                 protected:
-                    virtual void encode_to(std::unordered_map<std::string, web::json::value>& info) override;
+                    virtual void encode_to(
+                        std::unordered_map<std::string, web::json::value>& info
+                    ) override;
 
                 private:
                     uint8_t delete_message_days;
