@@ -6,7 +6,8 @@ namespace disccord
 {
     namespace api
     {
-        multipart_field::multipart_field(std::string field_name, std::string type)
+        multipart_field::multipart_field(std::string field_name,
+                                         std::string type)
             : name(field_name), content_type(type)
         { }
 
@@ -20,7 +21,8 @@ namespace disccord
 
         std::string multipart_field::get_content()
         {
-            throw new std::runtime_error("multipart_field::get_content() not overloaded!");
+            throw new std::runtime_error("multipart_field::get_content()"
+                                         "not overloaded!");
         }
 
         std::string multipart_field::get_name()
@@ -28,7 +30,8 @@ namespace disccord
             return name;
         }
 
-        std::unordered_map<std::string, std::string> multipart_field::get_attributes()
+        std::unordered_map<std::string, std::string>
+        multipart_field::get_attributes()
         {
             std::unordered_map<std::string, std::string> attributes;
 

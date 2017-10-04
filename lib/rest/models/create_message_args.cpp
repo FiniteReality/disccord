@@ -13,7 +13,8 @@ namespace disccord
             create_message_args::~create_message_args()
             { }
 
-            void create_message_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void create_message_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 info["content"] = web::json::value(content);
                 #define encode_field(var) \

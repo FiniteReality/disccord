@@ -41,7 +41,8 @@ namespace disccord
             #undef get_field
         }
 
-        void attachment::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void attachment::encode_to(std::unordered_map<std::string,
+                                                      web::json::value> &info)
         {
             entity::encode_to(info);
 

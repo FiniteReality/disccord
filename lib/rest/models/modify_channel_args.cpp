@@ -12,7 +12,8 @@ namespace disccord
             modify_channel_args::~modify_channel_args()
             { }
 
-            void modify_channel_args::encode_to(std::unordered_map<std::string, web::json::value>& info)
+            void modify_channel_args::encode_to(
+                std::unordered_map<std::string, web::json::value>& info)
             {
                 #define encode_field(var) \
                     if (var.is_specified()) \

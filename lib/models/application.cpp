@@ -21,7 +21,8 @@ namespace disccord
 
             name = json.at("name").as_string();
             bot_public = json.at("bot_public").as_bool();
-            bot_requires_code_grant = json.at("bot_requires_code_grant").as_bool();
+            bot_requires_code_grant =
+                json.at("bot_requires_code_grant").as_bool();
 
             #define get_field(var, conv) \
                 if (json.has_field(#var)) { \
@@ -51,7 +52,8 @@ namespace disccord
                 if (json.has_field(#var)) { \
                     auto _fields_array = json.at(#var).as_array(); \
                     std::vector<type> fields_array(_fields_array.size()); \
-                    std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), \
+                    std::transform(_fields_array.begin(), \
+                    _fields_array.end(), fields_array.begin(), \
                     [&json](web::json::value _field){ \
                         type field; \
                         field = _field.conv(); \
@@ -72,25 +74,31 @@ namespace disccord
             #undef get_field_vector
         }
 
-        void application::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void application::encode_to(std::unordered_map<std::string,
+                                                       web::json::value> &info)
         {
             entity::encode_to(info);
 
             info["name"] = web::json::value(name);
             info["bot_public"] = web::json::value(bot_public);
-            info["bot_requires_code_grant"] = web::json::value(bot_requires_code_grant);
+            info["bot_requires_code_grant"] =
+                web::json::value(bot_requires_code_grant);
 
             if (icon.is_specified())
                 info["icon"] = web::json::value(icon.get_value());
             if (description.is_specified())
-                info["description"] = web::json::value(description.get_value());
+                info["description"] =
+                    web::json::value(description.get_value());
             if (owner.is_specified())
                 info["owner"] = owner.get_value().encode();
             if (rpc_origins.is_specified())
             {
                 auto _rpc_origins = rpc_origins.get_value();
                 std::vector<web::json::value> field_array(_rpc_origins.size());
-                std::transform(_rpc_origins.begin(), _rpc_origins.end(), field_array.begin(), [](std::string field)
+                std::transform(_rpc_origins.begin(),
+                               _rpc_origins.end(),
+                               field_array.begin(),
+                               [](std::string field)
                     {
                         return web::json::value(field);
                     });
@@ -99,7 +107,8 @@ namespace disccord
         }
 
         #define define_get_method(field_name) \
-            decltype(application::field_name) application::get_##field_name() { \
+            decltype(application::field_name) \
+                     application::get_##field_name() { \
                 return field_name; \
             }
 

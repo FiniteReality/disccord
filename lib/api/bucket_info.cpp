@@ -28,23 +28,30 @@ namespace disccord
                 // TODO: handle global ratelimits
                 throw new std::runtime_error("encountered a global ratelimit");
             }
-            else if (limit.empty() || remaining.empty() || reset.empty() || retry_after.empty())
+            else if (limit.empty() || remaining.empty() ||
+                     reset.empty() || retry_after.empty())
             {
                 // No ratelimit information
-                entry_semaphore.set_maximum_count(5); // Set a sensible limit for safety
+                // Set a sensible limit for safety
+                entry_semaphore.set_maximum_count(5);
             }
             else
             {
-                utility::datetime date = utility::datetime::from_string(headers.date());
+                utility::datetime
+                date = utility::datetime::from_string(headers.date());
 
                 reset_in = (date - std::stoull(reset)).to_interval();
                 entry_semaphore.set_maximum_count(std::stoi(limit));
             }
         }
 
-        pplx::task<web::http::http_response> bucket_info::enter(web::http::client::http_client& client, disccord::api::request_info* info, const pplx::cancellation_token& token)
+        pplx::task<web::http::http_response>
+        bucket_info::enter(web::http::client::http_client& client,
+                           disccord::api::request_info* info,
+                           const pplx::cancellation_token& token)
         {
-            return entry_semaphore.enter().then([this,&client,info,&token](bool success)
+            return entry_semaphore.enter().then(
+            [this,&client,info,&token](bool success)
             {
                 if (!success)
                     throw new std::runtime_error("failed to enter semaphore");
@@ -53,7 +60,8 @@ namespace disccord
                 request.set_request_uri(info->get_url());
                 if (info->get_has_body())
                 {
-                    request.set_body(info->get_body(), info->get_content_type());
+                    request.set_body(info->get_body(),
+                                     info->get_content_type());
                 }
 
                 auto headers = request.headers();
@@ -66,7 +74,8 @@ namespace disccord
                 return req;
             }).then([this,info](web::http::http_response response)
             {
-                // only delete the request info once the request has completed to prevent memory corruption
+                // only delete the request info once the request
+                // has completed to prevent memory corruption
                 delete info;
                 // TODO: assert result was successful
                 parse_headers(response.headers());

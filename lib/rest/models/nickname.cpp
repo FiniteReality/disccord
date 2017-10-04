@@ -20,7 +20,8 @@ namespace disccord
                 nick = json.at("nick").as_string();
             }
 
-            void nickname::encode_to(std::unordered_map<std::string, web::json::value> &info)
+            void nickname::encode_to(
+                std::unordered_map<std::string, web::json::value> &info)
             {
                 info["nick"] = web::json::value(get_nick());
             }

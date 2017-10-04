@@ -16,7 +16,8 @@ namespace disccord
     namespace models
     {
         embed::embed()
-            : title(""), type("rich"), description(), url(), //default to rich embed, and default color (should enum)
+            //default to rich embed, and default color (should enum)
+            : title(""), type("rich"), description(), url(),
             timestamp(), color(0), footer(),image(),thumbnail(),
             video(),provider(),author(),fields()
         { }
@@ -70,7 +71,10 @@ namespace disccord
             {
                 auto _fields_array = json.at("fields").as_array();
                 std::vector<embed_field> fields_array(_fields_array.size());
-                std::transform(_fields_array.begin(), _fields_array.end(), fields_array.begin(), [](web::json::value _field)
+                std::transform(_fields_array.begin(),
+                               _fields_array.end(),
+                               fields_array.begin(),
+                               [](web::json::value _field)
                     {
                         embed_field field;
                         field.decode(_field);
@@ -83,7 +87,8 @@ namespace disccord
             #undef get_composite_field
         }
 
-        void embed::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void embed::encode_to(std::unordered_map<std::string,
+                                                 web::json::value> &info)
         {
             info["title"] = web::json::value(get_title());
             info["type"] = web::json::value(get_type());
@@ -108,7 +113,10 @@ namespace disccord
             {
                 auto _fields = get_fields().get_value();
                 std::vector<web::json::value> field_array(_fields.size());
-                std::transform(_fields.begin(), _fields.end(), field_array.begin(), [](embed_field field)
+                std::transform(_fields.begin(),
+                               _fields.end(),
+                               field_array.begin(),
+                               [](embed_field field)
                     {
                         return field.encode();
                     });

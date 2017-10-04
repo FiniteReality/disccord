@@ -34,7 +34,8 @@ namespace disccord
             #undef get_composite_field
         }
 
-        void ban::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void ban::encode_to(std::unordered_map<std::string,
+                                               web::json::value> &info)
         {
             info["reason"] = web::json::value(reason);
             if (user.is_specified())

@@ -33,7 +33,8 @@ namespace disccord
             #undef get_field
         }
 
-        void embed_footer::encode_to(std::unordered_map<std::string, web::json::value> &info)
+        void embed_footer::encode_to(
+            std::unordered_map<std::string, web::json::value> &info)
         {
             info["text"] = web::json::value(get_text());
             if (get_icon_url().is_specified())
