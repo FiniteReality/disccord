@@ -35,7 +35,8 @@ SCENARIO("REST api is successful", "[!mayfail]") {
 
     if (token.empty())
     {
-        FAIL("Pass a **BOT** token through the environment variable `DISCCORD_TEST_TOKEN`");
+        FAIL("Pass a **BOT** token through the environment variable"
+             " `DISCCORD_TEST_TOKEN`");
     }
 
     if (user_id.empty())
@@ -47,7 +48,9 @@ SCENARIO("REST api is successful", "[!mayfail]") {
     uint64_t id = std::stoull(user_id);
 
     GIVEN("an api client with our token and id") {
-        auto api_client = rest_api_client(web::uri("https://discordapp.com/api/v6"), token, disccord::token_type::Bot);
+        auto api_client = rest_api_client(web::uri("https://discordapp.com/"
+                                          "api/v6"), token,
+                                          disccord::token_type::Bot);
 
         WHEN("we retrieve the current user") {
             uint64_t retrieved_id;
@@ -85,11 +88,13 @@ SCENARIO("REST api is successful", "[!mayfail]") {
                 << "**Compiler:** " << compiler << "\n";
             }
 
-            disccord::rest::models::create_message_args args{message_builder.str()};
+            disccord::rest::models::create_message_args
+            args{message_builder.str()};
 
             bool success;
 
-            api_client.create_message(237990708101775361, args).then([&](pplx::task<message> message_task)
+            api_client.create_message(237990708101775361, args).then(
+            [&](pplx::task<message> message_task)
             {
                 try
                 {
