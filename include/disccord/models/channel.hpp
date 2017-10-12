@@ -39,7 +39,7 @@ namespace disccord
                 ) override;
 
             private:
-                util::optional<uint64_t> guild_id, last_message_id, parent_id;
+                util::optional<uint64_t> guild_id, parent_id, last_message_id;
                 util::optional<uint32_t> position, bitrate, user_limit;
                 util::optional<uint8_t> type;
                 util::optional<std::string> name, topic;
