@@ -7,9 +7,9 @@ namespace disccord
     namespace models
     {
         channel::channel()
-            : entity(), guild_id(), last_message_id(),
-            position(), bitrate(), user_limit(),
-            type(), name(), topic(),
+            : entity(), guild_id(), parent_id(), 
+            last_message_id(), position(), bitrate(),
+            user_limit(), type(), name(), topic(),
             is_private(),  recipient(), permission_overwrites()
         { }
 
@@ -72,6 +72,7 @@ namespace disccord
                 }
 
             get_id_field(guild_id);
+            get_id_field(parent_id);
             get_id_field(last_message_id);
             get_field(position, as_integer);
             get_field(user_limit, as_integer);
@@ -106,6 +107,9 @@ namespace disccord
             if (guild_id.is_specified())
                 info["guild_id"] =
                     web::json::value(std::to_string(guild_id.get_value()));
+            if (parent_id.is_specified())
+                info["parent_id"] = 
+                    web::json::value(std::to_string(parent_id.get_value()));
             if (name.is_specified())
                 info["name"] = web::json::value(name.get_value());
             if (type.is_specified())
@@ -142,6 +146,7 @@ namespace disccord
             }
 
         define_get_method(guild_id)
+        define_get_method(parent_id)
         define_get_method(last_message_id)
         define_get_method(position)
         define_get_method(bitrate)

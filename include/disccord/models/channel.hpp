@@ -21,6 +21,7 @@ namespace disccord
 
                 util::optional<uint64_t> get_last_message_id();
                 util::optional<uint64_t> get_guild_id();
+                util::optional<uint64_t> get_parent_id();
                 util::optional<uint32_t> get_position();
                 util::optional<uint32_t> get_bitrate();
                 util::optional<uint32_t> get_user_limit();
@@ -38,7 +39,7 @@ namespace disccord
                 ) override;
 
             private:
-                util::optional<uint64_t> guild_id, last_message_id;
+                util::optional<uint64_t> guild_id, parent_id, last_message_id;
                 util::optional<uint32_t> position, bitrate, user_limit;
                 util::optional<uint8_t> type;
                 util::optional<std::string> name, topic;
