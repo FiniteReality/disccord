@@ -8,6 +8,8 @@ model{"channel",
     property{"guild_id", "disccord::util::optional<disccord::snowflake>"},
     property{"position", "disccord::util::optional<int32_t>"},
     property{"name", "disccord::util::optional<std::string>"},
+    property{"parent_id", "disccord::util::optional<disccord::snowflake>"},
+    property{"nsfw", "disccord::util::optional<bool>"},
     --property{"permission_overwrites", "std::vector<disccord::models::pemrission_overwrite>"},
     -- Text channels
     property{"topic", "disccord::util::optional<std::string>"},
